@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:ignore="HardcodedText">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -19,32 +20,75 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
-            android:text="Type 1"
-            tools:ignore="HardcodedText" />
+            android:text="Type 1" />
 
         <Button
             android:id="@+id/btnType2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
-            android:text="Type 2"
-            tools:ignore="HardcodedText" />
+            android:text="Type 2" />
 
         <Button
             android:id="@+id/btnType3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
-            android:text="Type 3"
-            tools:ignore="HardcodedText" />
+            android:text="Type 3" />
 
         <Button
             android:id="@+id/btnType4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
-            android:text="Type 4"
-            tools:ignore="HardcodedText" />
+            android:text="Type 4" />
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lyPermission"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:checked="true"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:text="Notification Permission"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/btnPermission"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Request \n Permission" />
+
+        <TextView
+            android:id="@+id/tvPermission"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:text="Not granted" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Only for Android 13.0+"
+        app:layout_constraintEnd_toEndOf="@+id/lyPermission"
+        app:layout_constraintStart_toStartOf="@+id/lyPermission"
+        app:layout_constraintTop_toBottomOf="@+id/lyPermission" />
+
+    <Button
+        android:id="@+id/btnSetting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="32dp"
+        android:text="App Settings"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
