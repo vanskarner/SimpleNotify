@@ -7,23 +7,22 @@ import android.content.pm.PackageManager
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
-import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.vanskarner.simplenotify.R
 
-class NotificationConfig(internal val context: Context) {
+class NotifyConfig(internal val context: Context) {
     internal var basicData = BasicData()
     internal var channelId = "default_channel"
-    private lateinit var notifyBuilder: NotificationCompat.Builder
+    private val notifyBuilder = NotifyBuilder(this)
 
-    fun asBasic(content: BasicData.() -> Unit): NotificationConfig {
+    fun asBasic(content: BasicData.() -> Unit): NotifyConfig {
         basicData = BasicData().apply(content)
         return this
     }
 
     fun show() {
-        notifyBuilder = buildSimpleNotify(this)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) createNotificationChannel(channelId)
-
+        val notifyBuilder = notifyBuilder.basic()
         val notificationId = 12
         with(NotificationManagerCompat.from(context)) {
             if (ActivityCompat.checkSelfPermission(
@@ -38,7 +37,7 @@ class NotificationConfig(internal val context: Context) {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun createNotificationChannel(channelId: String = "default_chanel") {
+    private fun createNotificationChannel(channelId: String) {
         val name = getText(R.string.chanel_name)
         val descriptionText = getText(R.string.chanel_text)
         val importance = NotificationManager.IMPORTANCE_DEFAULT

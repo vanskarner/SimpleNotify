@@ -41,7 +41,20 @@ class MainActivity : AppCompatActivity() {
             }
         }
         findViewById<Button>(R.id.btnSetting).setOnClickListener { openSettings() }
-        findViewById<Button>(R.id.btnType1).setOnClickListener { notificationType1() }
+        findViewById<Button>(R.id.btnType1).setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+            val pendingIntent =
+                PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+            SimpleNotify.with(this)
+                .asBasic {
+                    title = "Some title"
+                    text = "Any description"
+//                    click = pendingIntent
+                }
+                .show()
+        }
         findViewById<Button>(R.id.btnType2).setOnClickListener { notificationType2() }
         findViewById<Button>(R.id.btnType3).setOnClickListener { notificationType3() }
         findViewById<Button>(R.id.btnType4).setOnClickListener { notificationType4() }
@@ -85,7 +98,7 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
-        val pendingIntent: PendingIntent =
+        val pendingIntent =
             PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
 
         val builder = NotificationCompat.Builder(this, channelId)
