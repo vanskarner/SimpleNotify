@@ -1,4 +1,4 @@
-package com.vanskarner.simplenotify
+package com.vanskarner.samplenotify
 
 import androidx.core.app.NotificationCompat
 

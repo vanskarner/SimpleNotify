@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.vanskarner.simplenotify"
+    namespace = "com.vanskarner.samplenotify"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.vanskarner.simplenotify"
+        applicationId = "com.vanskarner.samplenotify"
         minSdk = 24
         targetSdk = 35
         versionCode = 1
