@@ -20,8 +20,6 @@ internal abstract class Notify<T : Data>(val notifyData: NotifyData<T>) {
     }
     private val builder = NotificationCompat.Builder(notifyData.context, DEFAULT_CHANNEL_ID)
 
-    abstract fun applyData(builder: NotificationCompat.Builder)
-
     fun show() {
         applyData(builder)
         applyPending()
@@ -38,6 +36,8 @@ internal abstract class Notify<T : Data>(val notifyData: NotifyData<T>) {
             notify(notifyData.data.id?: Random.nextInt(), builder.build())
         }
     }
+
+    abstract fun applyData(builder: NotificationCompat.Builder)
 
     private fun applyPending() {
         builder.setContentIntent(notifyData.data.pending)

@@ -3,8 +3,8 @@ package com.vanskarner.samplenotify.internal
 import androidx.core.app.NotificationCompat
 import com.vanskarner.samplenotify.Data
 
-internal class BigTextNotify(payLoad: NotifyData<Data.BigTextData>) :
-    Notify<Data.BigTextData>(payLoad) {
+internal class BigTextNotify(notifyData: NotifyData<Data.BigTextData>) :
+    Notify<Data.BigTextData>(notifyData) {
 
     override fun applyData(builder: NotificationCompat.Builder) {
         builder.setSmallIcon(notifyData.data.smallIcon)

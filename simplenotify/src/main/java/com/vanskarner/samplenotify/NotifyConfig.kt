@@ -26,30 +26,21 @@ class NotifyConfig(private val context: Context) {
         return this
     }
 
-    fun show() = filter(data).show()
+    fun show() = filterNotify(data).show()
 
-    private fun filter(data: Data): Notify<*> {
+    private fun filterNotify(data: Data): Notify<*> {
         return when (data) {
-            is Data.BasicData -> {
-                BasicNotify(
-                    NotifyData(
-                        context = context,
-                        data = data,
-                        actions = actions
-                    )
-                )
-            }
-
-            is Data.BigTextData -> {
-                BigTextNotify(
-                    NotifyData(
-                        context = context,
-                        data = data,
-                        actions = actions
-                    )
-                )
-            }
+            is Data.BasicData -> BasicNotify(createNotifyData(data))
+            is Data.BigTextData -> BigTextNotify(createNotifyData(data))
         }
+    }
+
+    private fun <T : Data> createNotifyData(data: T): NotifyData<T> {
+        return NotifyData(
+            context = context,
+            data = data,
+            actions = actions
+        )
     }
 
 }
