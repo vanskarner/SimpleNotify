@@ -6,17 +6,19 @@ import com.vanskarner.samplenotify.Data
 internal class BigTextNotify(payLoad: NotifyData<Data.BigTextData>) :
     Notify<Data.BigTextData>(payLoad) {
 
-    override fun applyData() {
-        builder.setSmallIcon(payLoad.data.smallIcon)
-            .setContentTitle(payLoad.data.title)
-            .setContentText(payLoad.data.text)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+    override fun applyData(builder: NotificationCompat.Builder) {
+        builder.setSmallIcon(notifyData.data.smallIcon)
+            .setContentTitle(notifyData.data.title)
+            .setContentText(notifyData.data.collapsedText)
+            .setContentIntent(notifyData.data.pending)
+            .setAutoCancel(notifyData.data.autoCancel)
+            .setPriority(notifyData.data.importance)
+            .setSound(notifyData.data.sound)
             .setStyle(
                 NotificationCompat.BigTextStyle()
-                    .bigText(payLoad.data.largeText)
+                    .bigText(notifyData.data.bigText)
+                    .setSummaryText(notifyData.data.summaryText)
             )
-            .setAutoCancel(true)
     }
-
 
 }

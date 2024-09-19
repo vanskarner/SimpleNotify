@@ -11,40 +11,40 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.vanskarner.samplenotify.Data
 import com.vanskarner.simplenotify.R
+import kotlin.random.Random
 
-internal abstract class Notify<T : Data>(val payLoad: NotifyData<T>) {
+internal abstract class Notify<T : Data>(val notifyData: NotifyData<T>) {
     companion object {
         private const val DEFAULT_CHANNEL_ID = "defaultId"
         private const val MAXIMUM_ACTIONS = 3
     }
+    private val builder = NotificationCompat.Builder(notifyData.context, DEFAULT_CHANNEL_ID)
 
-    protected val builder = NotificationCompat.Builder(payLoad.context, DEFAULT_CHANNEL_ID)
-
-    abstract fun applyData()
+    abstract fun applyData(builder: NotificationCompat.Builder)
 
     fun show() {
-        applyData()
+        applyData(builder)
         applyPending()
-        applyChannel()
         applyActions()
-        with(NotificationManagerCompat.from(payLoad.context)) {
+        applyChannel()
+        with(NotificationManagerCompat.from(notifyData.context)) {
             if (ActivityCompat.checkSelfPermission(
-                    payLoad.context,
+                    notifyData.context,
                     android.Manifest.permission.POST_NOTIFICATIONS
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
                 return@with
             }
-            notify(12, builder.build())
+            notify(notifyData.data.id?: Random.nextInt(), builder.build())
         }
     }
 
     private fun applyPending() {
-        builder.setContentIntent(payLoad.pending)
+        builder.setContentIntent(notifyData.data.pending)
     }
 
     private fun applyActions() =
-        payLoad.actions
+        notifyData.actions
             .takeLast(MAXIMUM_ACTIONS)
             .filterNotNull()
             .forEach { action -> builder.addAction(action.icon, action.name, action.pending) }
@@ -65,8 +65,8 @@ internal abstract class Notify<T : Data>(val payLoad: NotifyData<T>) {
     }
 
     private fun getNotificationManager() =
-        payLoad.context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        notifyData.context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 
-    private fun getString(stringId: Int) = payLoad.context.getString(stringId)
+    private fun getString(stringId: Int) = notifyData.context.getString(stringId)
 
 }

@@ -2,20 +2,27 @@ package com.vanskarner.samplenotify
 
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.net.Uri
 import androidx.core.app.NotificationCompat
 import com.vanskarner.simplenotify.R
 
 sealed class Data {
+    var id: Int? = null
     var smallIcon: Int = R.drawable.baseline_notifications_24
     var title: String? = null
-    var text: String? = null
+    var importance: Int = NotificationCompat.PRIORITY_DEFAULT
+    var pending: PendingIntent? = null
+    var autoCancel: Boolean = true
+    var sound: Uri? = null
 
     data class BasicData(
-        var importance: Int = NotificationCompat.PRIORITY_DEFAULT
+        var text: String? = null
     ) : Data()
 
     data class BigTextData(
-        var largeText: String? = null,
+        var bigText: String? = null,
+        var collapsedText: String? = null,
+        var summaryText: String? = null,
     ) : Data()
 }
 

@@ -1,6 +1,5 @@
 package com.vanskarner.samplenotify
 
-import android.app.PendingIntent
 import android.content.Context
 import com.vanskarner.samplenotify.internal.BasicNotify
 import com.vanskarner.samplenotify.internal.BigTextNotify
@@ -9,9 +8,7 @@ import com.vanskarner.samplenotify.internal.NotifyData
 
 class NotifyConfig(private val context: Context) {
     private lateinit var data: Data
-    private lateinit var pendingIntent: PendingIntent
     private val actions: Array<ActionData?> by lazy { arrayOfNulls(3) }
-
 
     fun asBasic(content: Data.BasicData.() -> Unit): NotifyConfig {
         data = Data.BasicData().apply(content)
@@ -20,11 +17,6 @@ class NotifyConfig(private val context: Context) {
 
     fun asBigText(content: Data.BigTextData.() -> Unit): NotifyConfig {
         data = Data.BigTextData().apply(content)
-        return this
-    }
-
-    fun click(pending: PendingIntent): NotifyConfig {
-        pendingIntent = pending
         return this
     }
 
@@ -43,7 +35,6 @@ class NotifyConfig(private val context: Context) {
                     NotifyData(
                         context = context,
                         data = data,
-                        pending = pendingIntent,
                         actions = actions
                     )
                 )
@@ -54,7 +45,6 @@ class NotifyConfig(private val context: Context) {
                     NotifyData(
                         context = context,
                         data = data,
-                        pending = pendingIntent,
                         actions = actions
                     )
                 )
