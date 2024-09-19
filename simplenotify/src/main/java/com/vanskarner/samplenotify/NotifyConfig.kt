@@ -4,8 +4,8 @@ import android.app.PendingIntent
 import android.content.Context
 import com.vanskarner.samplenotify.internal.BasicNotify
 import com.vanskarner.samplenotify.internal.BigTextNotify
-import com.vanskarner.samplenotify.internal.NotifyBase
-import com.vanskarner.samplenotify.internal.PayLoadData
+import com.vanskarner.samplenotify.internal.Notify
+import com.vanskarner.samplenotify.internal.NotifyData
 
 class NotifyConfig(private val context: Context) {
     private lateinit var data: Data
@@ -36,11 +36,11 @@ class NotifyConfig(private val context: Context) {
 
     fun show() = filter(data).show()
 
-    private fun filter(data: Data): NotifyBase<*> {
+    private fun filter(data: Data): Notify<*> {
         return when (data) {
             is Data.BasicData -> {
                 BasicNotify(
-                    PayLoadData(
+                    NotifyData(
                         context = context,
                         data = data,
                         pending = pendingIntent,
@@ -51,7 +51,7 @@ class NotifyConfig(private val context: Context) {
 
             is Data.BigTextData -> {
                 BigTextNotify(
-                    PayLoadData(
+                    NotifyData(
                         context = context,
                         data = data,
                         pending = pendingIntent,

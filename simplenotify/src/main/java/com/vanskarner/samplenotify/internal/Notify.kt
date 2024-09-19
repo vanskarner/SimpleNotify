@@ -12,7 +12,7 @@ import androidx.core.app.NotificationManagerCompat
 import com.vanskarner.samplenotify.Data
 import com.vanskarner.simplenotify.R
 
-internal abstract class NotifyBase<T : Data>(val payLoad: PayLoadData<T>) {
+internal abstract class Notify<T : Data>(val payLoad: NotifyData<T>) {
     companion object {
         private const val DEFAULT_CHANNEL_ID = "defaultId"
         private const val MAXIMUM_ACTIONS = 3

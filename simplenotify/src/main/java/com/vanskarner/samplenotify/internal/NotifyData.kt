@@ -6,7 +6,7 @@ import com.vanskarner.samplenotify.ActionData
 import com.vanskarner.samplenotify.Data
 
 @Suppress("ArrayInDataClass")
-internal data class PayLoadData<T : Data>(
+internal data class NotifyData<T : Data>(
     val context: Context,
     val data: T,
     val pending: PendingIntent,
