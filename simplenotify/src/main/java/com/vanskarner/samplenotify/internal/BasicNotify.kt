@@ -10,6 +10,7 @@ internal class BasicNotify(payLoad: NotifyData<Data.BasicData>) :
         builder.setSmallIcon(notifyData.data.smallIcon)
             .setContentTitle(notifyData.data.title)
             .setContentText(notifyData.data.text)
+            .setLargeIcon(notifyData.data.largeIcon)
             .setContentIntent(notifyData.data.pending)
             .setAutoCancel(notifyData.data.autoCancel)
             .setPriority(notifyData.data.importance)
