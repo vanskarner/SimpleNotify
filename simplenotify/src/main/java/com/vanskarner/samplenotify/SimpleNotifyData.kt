@@ -28,6 +28,25 @@ sealed class Data {
     ) : Data()
 }
 
+@Suppress("ArrayInDataClass")
+data class ExtraData(
+    var vibrationPattern: LongArray? = null,
+    var lights: Triple<Int, Int, Int>? = null,
+    var ongoing: Boolean = false,
+    var visibility: Int? = null,
+    var category: String? = null,
+    var color: Int? = null,
+    var timeoutAfter: Long? = null,
+    var badgeIconType: Int? = null,//review
+    var timestampWhen: Long? = null,
+    var deleteIntent: PendingIntent? = null,
+    var fullScreenIntent: Pair<PendingIntent, Boolean>? = null,
+    var onlyAlertOnce: Boolean = false,
+    var subText: String? = null,
+    var showWhen: Boolean = false,
+    var useChronometer: Boolean = false
+)
+
 data class ActionData(
     var icon: Int = R.drawable.baseline_notifications_24,
     var name: String? = null,
