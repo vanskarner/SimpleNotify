@@ -8,15 +8,21 @@ import com.vanskarner.samplenotify.internal.NotifyData
 
 class NotifyConfig(private val context: Context) {
     private lateinit var data: Data
-    private val actions: Array<ActionData?> by lazy { arrayOfNulls(3) }
+    private var channelId: String? = null
+    private val actions: Array<ActionData?> by lazy { arrayOfNulls(Notify.MAXIMUM_ACTIONS) }
 
     fun asBasic(content: Data.BasicData.() -> Unit): NotifyConfig {
-        data = Data.BasicData().apply(content)
+        this.data = Data.BasicData().apply(content)
         return this
     }
 
     fun asBigText(content: Data.BigTextData.() -> Unit): NotifyConfig {
-        data = Data.BigTextData().apply(content)
+        this.data = Data.BigTextData().apply(content)
+        return this
+    }
+
+    fun assignChannel(channelId: String): NotifyConfig {
+        this.channelId = channelId
         return this
     }
 
@@ -39,7 +45,8 @@ class NotifyConfig(private val context: Context) {
         return NotifyData(
             context = context,
             data = data,
-            actions = actions
+            actions = actions,
+            channelId = channelId
         )
     }
 

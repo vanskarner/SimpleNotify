@@ -8,5 +8,6 @@ import com.vanskarner.samplenotify.Data
 internal data class NotifyData<T : Data>(
     val context: Context,
     val data: T,
+    val channelId: String?,
     val actions: Array<ActionData?>
 )
