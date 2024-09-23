@@ -13,7 +13,7 @@ internal class BasicNotify(notifyData: NotifyData<Data.BasicData>) :
             .setLargeIcon(notifyData.data.largeIcon)
             .setContentIntent(notifyData.data.pending)
             .setAutoCancel(notifyData.data.autoCancel)
-            .setPriority(notifyData.data.importance)
+            .setPriority(notifyData.data.priority)
             .setSound(notifyData.data.sound)
     }
 

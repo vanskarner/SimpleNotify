@@ -38,11 +38,21 @@ internal class NotifyChannel(private val context: Context) {
         return NotificationCompat.Builder(context, validChannelId)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun registerChannel(data: ChannelData) {
-        val channel = NotificationChannel(data.id, data.name, data.importance)
-            .apply { description = data.description }
-        notificationManager.createNotificationChannel(channel)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(data.id, data.name, data.importance)
+                .apply { description = data.description }
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
+    fun deleteChannel(channelId: String) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+            notificationManager.deleteNotificationChannel(channelId)
+    }
+
+    fun cancelNotification(id: Int) {
+        notificationManager.cancel(id)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -52,7 +62,7 @@ internal class NotifyChannel(private val context: Context) {
                 DEFAULT_CHANNEL_ID,
                 getString(R.string.chanel_name),
                 NotificationManager.IMPORTANCE_DEFAULT
-            ).apply { description = getString(R.string.chanel_text) }
+            ).apply { description = getString(R.string.chanel_description) }
             notificationManager.createNotificationChannel(channel)
         }
     }

@@ -12,8 +12,9 @@ internal abstract class Notify<T : Data>(val notifyData: NotifyData<T>) {
         const val MAXIMUM_ACTIONS = 3
     }
 
-    fun show() {
+    fun show(): Int {
         val notifyBuilder = NotifyChannel(notifyData.context).applyChannel(notifyData.channelId)
+        val notificationId = notifyData.data.id ?: Random.nextInt(0,Int.MAX_VALUE)
         applyData(notifyBuilder)
         applyActions(notifyBuilder)
         with(NotificationManagerCompat.from(notifyData.context)) {
@@ -24,8 +25,9 @@ internal abstract class Notify<T : Data>(val notifyData: NotifyData<T>) {
             ) {
                 return@with
             }
-            notify(notifyData.data.id ?: Random.nextInt(), notifyBuilder.build())
+            notify(notificationId, notifyBuilder.build())
         }
+        return notificationId
     }
 
     abstract fun applyData(builder: NotificationCompat.Builder)

@@ -12,7 +12,7 @@ sealed class Data {
     var smallIcon: Int = R.drawable.baseline_notifications_24
     var title: String? = null
     var largeIcon: Bitmap? = null
-    var importance: Int = NotificationCompat.PRIORITY_DEFAULT
+    var priority: Int = NotificationCompat.PRIORITY_DEFAULT
     var pending: PendingIntent? = null
     var autoCancel: Boolean = true
     var sound: Uri? = null

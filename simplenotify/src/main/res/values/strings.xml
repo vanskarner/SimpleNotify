@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">SimpleNotify</string>
     <string name="chanel_name">Default channel</string>
-    <string name="chanel_text">Application default notification channel</string>
+    <string name="chanel_description">Application default notification channel</string>
 </resources>

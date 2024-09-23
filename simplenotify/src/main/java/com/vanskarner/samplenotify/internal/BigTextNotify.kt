@@ -13,7 +13,7 @@ internal class BigTextNotify(notifyData: NotifyData<Data.BigTextData>) :
             .setLargeIcon(notifyData.data.largeIcon)
             .setContentIntent(notifyData.data.pending)
             .setAutoCancel(notifyData.data.autoCancel)
-            .setPriority(notifyData.data.importance)
+            .setPriority(notifyData.data.priority)
             .setSound(notifyData.data.sound)
             .setStyle(
                 NotificationCompat.BigTextStyle()
