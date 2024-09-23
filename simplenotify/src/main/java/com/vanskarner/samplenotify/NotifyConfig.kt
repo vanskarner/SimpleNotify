@@ -7,7 +7,7 @@ import com.vanskarner.samplenotify.internal.Notify
 import com.vanskarner.samplenotify.internal.NotifyData
 
 class NotifyConfig(private val context: Context) {
-    private lateinit var data: Data
+    private var data: Data? = null
     private var channelId: String? = null
     private val actions: Array<ActionData?> by lazy { arrayOfNulls(Notify.MAXIMUM_ACTIONS) }
 
@@ -32,12 +32,15 @@ class NotifyConfig(private val context: Context) {
         return this
     }
 
-    fun show() = filterNotify(data).show()
+    fun show() {
+        filterNotify(data)?.show()
+    }
 
-    private fun filterNotify(data: Data): Notify<*> {
+    private fun filterNotify(data: Data?): Notify<*>? {
         return when (data) {
             is Data.BasicData -> BasicNotify(createNotifyData(data))
             is Data.BigTextData -> BigTextNotify(createNotifyData(data))
+            else -> null
         }
     }
 
