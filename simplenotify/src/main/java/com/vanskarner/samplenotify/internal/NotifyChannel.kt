@@ -9,33 +9,32 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import com.vanskarner.samplenotify.ChannelData
 
-import com.vanskarner.simplenotify.R
-
 internal class NotifyChannel(private val context: Context) {
-    companion object {
-        private const val DEFAULT_CHANNEL_ID = "defaultId"
-    }
-
+    private val defaultChannel: ChannelData by lazy { ChannelData.byDefault(context) }
     private val notificationManager: NotificationManager
             by lazy { context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager }
 
-    fun getChannel(context: Context, channelId: String): NotificationChannel? {
-        var channel: NotificationChannel? = null
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-            channel = notificationManager.getNotificationChannel(channelId)
-        return channel
-    }
+    fun getChannel(channelId: String): NotificationChannel? =
+        when {
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ->
+                notificationManager.getNotificationChannel(channelId)
+
+            else -> null
+        }
 
     fun applyChannel(channelId: String?): NotificationCompat.Builder {
-        var validChannelId = DEFAULT_CHANNEL_ID
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            when {
-                channelId == null -> registerDefaultChannel()
-                checkChannelNotExists(channelId) -> registerDefaultChannel()
-                else -> validChannelId = channelId
+            val validChannelId = when {
+                channelId == null || checkChannelNotExists(channelId) -> {
+                    registerChannel(defaultChannel)
+                    defaultChannel.id
+                }
+
+                else -> channelId
             }
+            return NotificationCompat.Builder(context, validChannelId)
         }
-        return NotificationCompat.Builder(context, validChannelId)
+        return NotificationCompat.Builder(context, defaultChannel.id)
     }
 
     fun registerChannel(data: ChannelData) {
@@ -56,25 +55,7 @@ internal class NotifyChannel(private val context: Context) {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun registerDefaultChannel() {
-        if (checkChannelNotExists(DEFAULT_CHANNEL_ID)) {
-            val channel = NotificationChannel(
-                DEFAULT_CHANNEL_ID,
-                getString(R.string.chanel_name),
-                NotificationManager.IMPORTANCE_DEFAULT
-            ).apply { description = getString(R.string.chanel_description) }
-            notificationManager.createNotificationChannel(channel)
-        }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun checkChannelExists(channelId: String) =
-        notificationManager.getNotificationChannel(channelId) != null
-
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun checkChannelNotExists(channelId: String) =
         notificationManager.getNotificationChannel(channelId) == null
-
-    private fun getString(resId: Int) = context.getString(resId)
 
 }

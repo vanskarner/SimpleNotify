@@ -2,6 +2,7 @@ package com.vanskarner.samplenotify
 
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import androidx.core.app.NotificationCompat
@@ -54,8 +55,17 @@ data class ActionData(
 )
 
 data class ChannelData(
-    var id: String? = null,
-    var name: String? = null,
-    var description: String? = null,
-    var importance: Int = NotificationManager.IMPORTANCE_DEFAULT,
-)
+    var id: String,
+    var name: String,
+    var description: String,
+    var importance: Int
+) {
+    companion object {
+        internal fun byDefault(context: Context) = ChannelData(
+            id = "SingleNotifyId",
+            name = context.getString(R.string.chanel_name),
+            description = context.getString(R.string.chanel_description),
+            importance = NotificationManager.IMPORTANCE_DEFAULT
+        )
+    }
+}
