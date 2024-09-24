@@ -7,6 +7,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.Builder
+import androidx.core.app.RemoteInput
 import com.vanskarner.simplenotify.R
 
 sealed class Data {
@@ -74,11 +75,44 @@ data class ExtraData(
     var useChronometer: Boolean = false
 )
 
-data class ActionData(
-    var icon: Int = R.drawable.baseline_notifications_24,
-    var name: String? = null,
-    var pending: PendingIntent? = null
-)
+sealed class ActionData {
+
+    abstract fun applyData(builder: Builder)
+
+    data class BasicAction(
+        var icon: Int = R.drawable.baseline_notifications_24,
+        var label: String? = null,
+        var pending: PendingIntent? = null
+    ) : ActionData() {
+
+        override fun applyData(builder: Builder) {
+            builder.addAction(icon, label, pending)
+        }
+
+    }
+
+    data class ReplyAction(
+        var icon: Int = R.drawable.baseline_notifications_24,
+        var label: String? = null,
+        var replyPending: PendingIntent? = null,
+        var replyLabel: String? = null,
+        var replyKey: String = "default"
+    ) : ActionData() {
+
+        override fun applyData(builder: Builder) {
+            val remoteInput = RemoteInput.Builder(replyKey)
+                .setLabel(replyLabel)
+                .build()
+            val replyAction = NotificationCompat.Action
+                .Builder(icon, label, replyPending)
+                .addRemoteInput(remoteInput)
+                .build()
+            builder.addAction(replyAction)
+        }
+
+    }
+}
+
 
 data class ChannelData(
     var id: String = DEFAULT_ID,

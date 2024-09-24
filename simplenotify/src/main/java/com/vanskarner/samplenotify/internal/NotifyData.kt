@@ -10,5 +10,5 @@ internal data class NotifyData(
     val context: Context,
     val data: Data,
     val channelData: ChannelData,
-    val actions: Array<ActionData?>
+    val actions: Array<ActionData?>,
 )

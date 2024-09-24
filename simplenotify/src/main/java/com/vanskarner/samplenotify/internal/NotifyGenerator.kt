@@ -32,6 +32,6 @@ internal object NotifyGenerator {
         notifyData.actions
             .takeLast(MAXIMUM_ACTIONS)
             .filterNotNull()
-            .forEach { action -> builder.addAction(action.icon, action.name, action.pending) }
+            .forEach { it.applyData(builder) }
 
 }

@@ -47,11 +47,25 @@ class MainActivity : AppCompatActivity() {
             }
             val pendingIntent =
                 PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+            // Build a PendingIntent for the reply action to trigger.
+            val replyPendingIntent: PendingIntent =
+                PendingIntent.getBroadcast(applicationContext,
+                    123,
+                    intent,
+                    PendingIntent.FLAG_UPDATE_CURRENT)
+
             SimpleNotify.with(this)
                 .asBasic {
                     title = "Some title"
                     text = "Any description"
 //                    click = pendingIntent
+                }
+                .addReplyAction {
+                    icon = R.drawable.baseline_notifications_24
+                    label = "doAny"
+                    replyPending = replyPendingIntent
+                    replyLabel = "doReply"
+                    replyKey = "key_one"
                 }
                 .show()
         }

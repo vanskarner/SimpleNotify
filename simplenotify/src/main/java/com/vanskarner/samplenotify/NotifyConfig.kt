@@ -25,9 +25,15 @@ class NotifyConfig(private val context: Context) {
         return this
     }
 
-    fun addAction(action: ActionData.() -> Unit): NotifyConfig {
+    fun addAction(action: ActionData.BasicAction.() -> Unit): NotifyConfig {
         val index = actions.indexOfFirst { it == null }
-        if (index != -1) actions[index] = ActionData().apply(action)
+        if (index != -1) actions[index] = ActionData.BasicAction().apply(action)
+        return this
+    }
+
+    fun addReplyAction(action: ActionData.ReplyAction.() -> Unit): NotifyConfig {
+        val index = actions.indexOfFirst { it == null }
+        if (index != -1) actions[index] = ActionData.ReplyAction().apply(action)
         return this
     }
 
