@@ -55,14 +55,15 @@ data class ActionData(
 )
 
 data class ChannelData(
-    var id: String,
-    var name: String,
-    var description: String,
-    var importance: Int
+    var id: String = DEFAULT_ID,
+    var name: String = "Default channel",
+    var description: String = "Application default notification channel",
+    var importance: Int = NotificationManager.IMPORTANCE_DEFAULT
 ) {
     companion object {
+        private const val DEFAULT_ID = "SingleNotifyId"
         internal fun byDefault(context: Context) = ChannelData(
-            id = "SingleNotifyId",
+            id = DEFAULT_ID,
             name = context.getString(R.string.chanel_name),
             description = context.getString(R.string.chanel_description),
             importance = NotificationManager.IMPORTANCE_DEFAULT

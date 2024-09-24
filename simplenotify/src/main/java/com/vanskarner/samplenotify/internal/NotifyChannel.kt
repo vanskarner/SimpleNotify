@@ -10,39 +10,22 @@ import androidx.core.app.NotificationCompat
 import com.vanskarner.samplenotify.ChannelData
 
 internal class NotifyChannel(private val context: Context) {
-    private val defaultChannel: ChannelData by lazy { ChannelData.byDefault(context) }
     private val notificationManager: NotificationManager
             by lazy { context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager }
 
-    fun getChannel(channelId: String): NotificationChannel? =
-        when {
+    fun getChannel(channelId: String): NotificationChannel? {
+        return when {
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ->
                 notificationManager.getNotificationChannel(channelId)
 
             else -> null
         }
-
-    fun applyChannel(channelId: String?): NotificationCompat.Builder {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val validChannelId = when {
-                channelId == null || checkChannelNotExists(channelId) -> {
-                    registerChannel(defaultChannel)
-                    defaultChannel.id
-                }
-
-                else -> channelId
-            }
-            return NotificationCompat.Builder(context, validChannelId)
-        }
-        return NotificationCompat.Builder(context, defaultChannel.id)
     }
 
-    fun registerChannel(data: ChannelData) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(data.id, data.name, data.importance)
-                .apply { description = data.description }
-            notificationManager.createNotificationChannel(channel)
-        }
+    fun applyChannel(data: ChannelData): NotificationCompat.Builder {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && checkChannelNotExists(data.id))
+            registerChannel(data)
+        return NotificationCompat.Builder(context, data.id)
     }
 
     fun deleteChannel(channelId: String) {
@@ -50,8 +33,12 @@ internal class NotifyChannel(private val context: Context) {
             notificationManager.deleteNotificationChannel(channelId)
     }
 
-    fun cancelNotification(id: Int) {
-        notificationManager.cancel(id)
+    fun cancelNotification(id: Int) = notificationManager.cancel(id)
+
+    private fun registerChannel(data: ChannelData) {
+        val channel = NotificationChannel(data.id, data.name, data.importance)
+            .apply { description = data.description }
+        notificationManager.createNotificationChannel(channel)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

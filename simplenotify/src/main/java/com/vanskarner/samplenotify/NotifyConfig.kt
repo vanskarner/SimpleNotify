@@ -8,7 +8,7 @@ import com.vanskarner.samplenotify.internal.NotifyData
 
 class NotifyConfig(private val context: Context) {
     private var data: Data? = null
-    private var channelId: String? = null
+    private var channelData: ChannelData = ChannelData.byDefault(context)
     private val actions: Array<ActionData?> by lazy { arrayOfNulls(Notify.MAXIMUM_ACTIONS) }
 
     fun asBasic(content: Data.BasicData.() -> Unit): NotifyConfig {
@@ -21,8 +21,8 @@ class NotifyConfig(private val context: Context) {
         return this
     }
 
-    fun assignChannel(channelId: String): NotifyConfig {
-        this.channelId = channelId
+    fun useChannel(content: ChannelData.()->Unit): NotifyConfig {
+        this.channelData = ChannelData().apply(content)
         return this
     }
 
@@ -32,7 +32,7 @@ class NotifyConfig(private val context: Context) {
         return this
     }
 
-    fun show() =filterNotify(data)?.show() ?: -1
+    fun show() = filterNotify(data)?.show() ?: -1
 
     private fun filterNotify(data: Data?): Notify<*>? {
         return when (data) {
@@ -47,7 +47,7 @@ class NotifyConfig(private val context: Context) {
             context = context,
             data = data,
             actions = actions,
-            channelId = channelId
+            channelData = channelData
         )
     }
 
