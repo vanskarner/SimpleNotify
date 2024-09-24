@@ -31,8 +31,8 @@ class NotifyConfig(private val context: Context) {
         return this
     }
 
-    fun show() {
-        data?.let {
+    fun show(): Int {
+        return data?.let {
             val notifyData = NotifyData(
                 context = context,
                 data = it,
@@ -40,7 +40,7 @@ class NotifyConfig(private val context: Context) {
                 channelData = channelData
             )
             notifyGenerator.show(notifyData)
-        }
+        } ?: -1
     }
 
 }
