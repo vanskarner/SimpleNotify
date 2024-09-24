@@ -4,20 +4,17 @@ import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import com.vanskarner.samplenotify.Data
 import kotlin.random.Random
 
-internal abstract class Notify<T : Data>(val notifyData: NotifyData<T>) {
-    companion object {
-        const val MAXIMUM_ACTIONS = 3
-    }
+internal object NotifyGenerator {
+    const val MAXIMUM_ACTIONS = 3
 
-    fun show(): Int {
+    fun show(notifyData: NotifyData): Int {
         val channelId = NotifyChannel(notifyData.context).applyChannel(notifyData.channelData)
-        val notifyBuilder = NotificationCompat.Builder(notifyData.context,channelId)
-        val notificationId = notifyData.data.id ?: Random.nextInt(0,Int.MAX_VALUE)
-        applyData(notifyBuilder)
-        applyActions(notifyBuilder)
+        val notifyBuilder = NotificationCompat.Builder(notifyData.context, channelId)
+        val notificationId = notifyData.data.id ?: Random.nextInt(0, Int.MAX_VALUE)
+        notifyData.data.applyData(notifyBuilder)
+        applyActions(notifyData, notifyBuilder)
         with(NotificationManagerCompat.from(notifyData.context)) {
             if (ActivityCompat.checkSelfPermission(
                     notifyData.context,
@@ -31,14 +28,10 @@ internal abstract class Notify<T : Data>(val notifyData: NotifyData<T>) {
         return notificationId
     }
 
-    abstract fun applyData(builder: NotificationCompat.Builder)
-
-    private fun applyActions(builder: NotificationCompat.Builder) =
+    private fun applyActions(notifyData: NotifyData, builder: NotificationCompat.Builder) =
         notifyData.actions
             .takeLast(MAXIMUM_ACTIONS)
             .filterNotNull()
             .forEach { action -> builder.addAction(action.icon, action.name, action.pending) }
-
-    private fun getString(stringId: Int) = notifyData.context.getString(stringId)
 
 }

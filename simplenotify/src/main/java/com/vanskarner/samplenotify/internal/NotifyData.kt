@@ -6,9 +6,9 @@ import com.vanskarner.samplenotify.ChannelData
 import com.vanskarner.samplenotify.Data
 
 @Suppress("ArrayInDataClass")
-internal data class NotifyData<T : Data>(
+internal data class NotifyData(
     val context: Context,
-    val data: T,
+    val data: Data,
     val channelData: ChannelData,
     val actions: Array<ActionData?>
 )

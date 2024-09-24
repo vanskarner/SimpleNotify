@@ -6,6 +6,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationCompat.Builder
 import com.vanskarner.simplenotify.R
 
 sealed class Data {
@@ -18,15 +19,40 @@ sealed class Data {
     var autoCancel: Boolean = true
     var sound: Uri? = null
 
+    internal open fun applyData(builder: Builder) {
+        builder.setSmallIcon(smallIcon)
+            .setContentTitle(title)
+            .setLargeIcon(largeIcon)
+            .setContentIntent(pending)
+            .setAutoCancel(autoCancel)
+            .setPriority(priority)
+            .setSound(sound)
+    }
+
     data class BasicData(
         var text: String? = null
-    ) : Data()
+    ) : Data() {
+        override fun applyData(builder: Builder) {
+            super.applyData(builder)
+            builder.setContentText(text)
+        }
+    }
 
     data class BigTextData(
         var bigText: String? = null,
         var collapsedText: String? = null,
         var summaryText: String? = null,
-    ) : Data()
+    ) : Data() {
+        override fun applyData(builder: Builder) {
+            super.applyData(builder)
+            builder.setContentText(collapsedText)
+                .setStyle(
+                    NotificationCompat.BigTextStyle()
+                        .bigText(bigText)
+                        .setSummaryText(summaryText)
+                )
+        }
+    }
 }
 
 @Suppress("ArrayInDataClass")

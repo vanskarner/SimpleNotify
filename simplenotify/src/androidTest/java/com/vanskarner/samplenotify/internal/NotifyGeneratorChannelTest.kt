@@ -18,7 +18,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class NotifyChannelTest {
+class NotifyGeneratorChannelTest {
     private lateinit var notifyChannel: NotifyChannel
     private lateinit var notificationManager: NotificationManager
     private lateinit var expectedChannel: ChannelData
