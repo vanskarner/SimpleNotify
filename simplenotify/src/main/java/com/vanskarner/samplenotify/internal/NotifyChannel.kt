@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Context.NOTIFICATION_SERVICE
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.core.app.NotificationCompat
 import com.vanskarner.samplenotify.ChannelData
 
 internal class NotifyChannel(private val context: Context) {
@@ -22,10 +21,10 @@ internal class NotifyChannel(private val context: Context) {
         }
     }
 
-    fun applyChannel(data: ChannelData): NotificationCompat.Builder {
+    fun applyChannel(data: ChannelData): String {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && checkChannelNotExists(data.id))
             registerChannel(data)
-        return NotificationCompat.Builder(context, data.id)
+        return data.id
     }
 
     fun deleteChannel(channelId: String) {

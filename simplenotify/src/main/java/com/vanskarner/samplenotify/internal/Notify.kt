@@ -13,7 +13,8 @@ internal abstract class Notify<T : Data>(val notifyData: NotifyData<T>) {
     }
 
     fun show(): Int {
-        val notifyBuilder = NotifyChannel(notifyData.context).applyChannel(notifyData.channelData)
+        val channelId = NotifyChannel(notifyData.context).applyChannel(notifyData.channelData)
+        val notifyBuilder = NotificationCompat.Builder(notifyData.context,channelId)
         val notificationId = notifyData.data.id ?: Random.nextInt(0,Int.MAX_VALUE)
         applyData(notifyBuilder)
         applyActions(notifyBuilder)
