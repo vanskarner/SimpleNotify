@@ -4,13 +4,16 @@ import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.vanskarner.samplenotify.ChannelData
 import kotlin.random.Random
 
 internal object NotifyGenerator {
     const val MAXIMUM_ACTIONS = 3
 
     fun show(notifyData: NotifyData): Int {
-        val channelId = NotifyChannel(notifyData.context).applyChannel(notifyData.channelData)
+        val channelId = if (notifyData.progressData != null)
+            NotifyChannel(notifyData.context).applyChannel(ChannelData.forProgress(notifyData.context))
+        else NotifyChannel(notifyData.context).applyChannel(notifyData.channelData)
         val notifyBuilder = NotificationCompat.Builder(notifyData.context, channelId)
         val notificationId = notifyData.data.id ?: Random.nextInt(0, Int.MAX_VALUE)
         notifyData.data.applyData(notifyBuilder)

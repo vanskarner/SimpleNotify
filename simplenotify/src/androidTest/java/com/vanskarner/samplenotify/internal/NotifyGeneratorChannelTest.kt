@@ -42,7 +42,7 @@ class NotifyGeneratorChannelTest {
         assertNotNull(actualChannel)
         assertEquals(expectedChannel.id, actualChannel?.id)
         assertEquals(expectedChannel.name, actualChannel?.name)
-        assertEquals(expectedChannel.description, actualChannel?.description)
+        assertEquals(expectedChannel.summary, actualChannel?.description)
         assertEquals(expectedChannel.importance, actualChannel?.importance)
     }
 
@@ -75,10 +75,11 @@ class NotifyGeneratorChannelTest {
             .setContentText("Any Text")
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
         notificationManager.notify(notificationId, notifyBuilder.build())
-        Espresso.onIdle()
 
+        Espresso.onIdle()
         assertNotNull(notificationManager.activeNotifications.find { it.id == notificationId })
         notifyChannel.cancelNotification(notificationId)
+        Espresso.onIdle()
         assertNull(notificationManager.activeNotifications.find { it.id == notificationId })
     }
 

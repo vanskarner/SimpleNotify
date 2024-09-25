@@ -1,10 +1,13 @@
 package com.vanskarner.samplenotify
 
+import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.Builder
 import androidx.core.app.RemoteInput
@@ -113,20 +116,39 @@ sealed class ActionData {
     }
 }
 
-
 data class ChannelData(
     var id: String = DEFAULT_ID,
     var name: String = "Default channel",
-    var description: String = "Application default notification channel",
+    var summary: String = "Application default notification channel",
     var importance: Int = NotificationManager.IMPORTANCE_DEFAULT
 ) {
     companion object {
         private const val DEFAULT_ID = "SingleNotifyId"
+        private const val DEFAULT_PROGRESS_ID = "ProgressSingleNotifyId"
+
         internal fun byDefault(context: Context) = ChannelData(
             id = DEFAULT_ID,
             name = context.getString(R.string.chanel_name),
-            description = context.getString(R.string.chanel_description),
+            summary = context.getString(R.string.chanel_description),
+            importance = NotificationManager.IMPORTANCE_DEFAULT
+        )
+
+        internal fun forProgress(context: Context) = ChannelData(
+            id = DEFAULT_PROGRESS_ID,
+            name = context.getString(R.string.progress_channel_name),
+            summary = context.getString(R.string.progress_channel_description),
             importance = NotificationManager.IMPORTANCE_DEFAULT
         )
     }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    internal fun toNotificationChannel(): NotificationChannel {
+        val notificationChannel = NotificationChannel(id, name, importance)
+            .apply {
+                description = summary
+            }
+        if (id == DEFAULT_PROGRESS_ID) notificationChannel.setSound(null, null)
+        return notificationChannel
+    }
+
 }

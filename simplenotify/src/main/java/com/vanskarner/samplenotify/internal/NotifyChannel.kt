@@ -36,9 +36,7 @@ internal class NotifyChannel(private val context: Context) {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun registerChannel(data: ChannelData) {
-        val channel = NotificationChannel(data.id, data.name, data.importance)
-            .apply { description = data.description }
-        notificationManager.createNotificationChannel(channel)
+        notificationManager.createNotificationChannel(data.toNotificationChannel())
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
