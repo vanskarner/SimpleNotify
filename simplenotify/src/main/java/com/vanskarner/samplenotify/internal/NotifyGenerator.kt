@@ -15,6 +15,7 @@ internal object NotifyGenerator {
         val notificationId = notifyData.data.id ?: Random.nextInt(0, Int.MAX_VALUE)
         notifyData.data.applyData(notifyBuilder)
         applyActions(notifyData, notifyBuilder)
+        notifyData.progressData?.applyData(notifyBuilder)
         with(NotificationManagerCompat.from(notifyData.context)) {
             if (ActivityCompat.checkSelfPermission(
                     notifyData.context,

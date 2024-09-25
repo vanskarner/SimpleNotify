@@ -1,11 +1,13 @@
 package com.vanskarner.samplenotify
 
 import android.content.Context
+import com.vanskarner.samplenotify.internal.ProgressData
 import com.vanskarner.samplenotify.internal.NotifyGenerator
 import com.vanskarner.samplenotify.internal.NotifyData
 
 class NotifyConfig(private val context: Context) {
     private var data: Data? = null
+    private var progressData: ProgressData? = null
     private var channelData: ChannelData = ChannelData.byDefault(context)
     private val actions: Array<ActionData?> by lazy { arrayOfNulls(NotifyGenerator.MAXIMUM_ACTIONS) }
     private val notifyGenerator by lazy { NotifyGenerator }
@@ -17,6 +19,22 @@ class NotifyConfig(private val context: Context) {
 
     fun asBigText(content: Data.BigTextData.() -> Unit): NotifyConfig {
         this.data = Data.BigTextData().apply(content)
+        return this
+    }
+
+    fun progress(
+        currentPercentage: Int,
+        indeterminate: Boolean = false
+    ): NotifyConfig {
+        this.progressData = ProgressData().apply {
+            this.currentPercentage = currentPercentage
+            this.indeterminate = indeterminate
+        }
+        return this
+    }
+
+    fun hideProgress(shouldHide: () -> Boolean = { true }): NotifyConfig {
+        this.progressData?.conditionToHide = shouldHide
         return this
     }
 
@@ -43,7 +61,8 @@ class NotifyConfig(private val context: Context) {
                 context = context,
                 data = it,
                 actions = actions,
-                channelData = channelData
+                channelData = channelData,
+                progressData = progressData
             )
             notifyGenerator.show(notifyData)
         } ?: -1
