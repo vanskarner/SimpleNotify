@@ -9,6 +9,7 @@ import kotlin.random.Random
 
 internal object NotifyGenerator {
     const val MAXIMUM_ACTIONS = 3
+    private val assignContent by lazy { AssignContent }
 
     fun show(notifyData: NotifyData): Int {
         val channelId = if (notifyData.progressData != null)
@@ -16,9 +17,12 @@ internal object NotifyGenerator {
         else NotifyChannel(notifyData.context).applyChannel(notifyData.channelData)
         val notifyBuilder = NotificationCompat.Builder(notifyData.context, channelId)
         val notificationId = notifyData.data.id ?: Random.nextInt(0, Int.MAX_VALUE)
-        notifyData.data.applyData(notifyBuilder)
+//        notifyData.data.applyData(notifyBuilder)
+        assignContent.applyData(notifyData.data, notifyBuilder)
         applyActions(notifyData, notifyBuilder)
-        notifyData.progressData?.applyData(notifyBuilder)
+//        notifyData.progressData?.applyData(notifyBuilder)
+        if (notifyData.progressData != null)
+            assignContent.applyProgress(notifyData.progressData,notifyBuilder)
         with(NotificationManagerCompat.from(notifyData.context)) {
             if (ActivityCompat.checkSelfPermission(
                     notifyData.context,
@@ -36,6 +40,6 @@ internal object NotifyGenerator {
         notifyData.actions
             .takeLast(MAXIMUM_ACTIONS)
             .filterNotNull()
-            .forEach { it.applyData(builder) }
+            .forEach { assignContent.applyAction(it, builder) }
 
 }

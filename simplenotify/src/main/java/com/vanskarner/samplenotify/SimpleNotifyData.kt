@@ -1,16 +1,11 @@
 package com.vanskarner.samplenotify
 
-import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationCompat.Builder
-import androidx.core.app.RemoteInput
 import com.vanskarner.simplenotify.R
 
 sealed class Data {
@@ -23,40 +18,15 @@ sealed class Data {
     var autoCancel: Boolean = true
     var sound: Uri? = null
 
-    internal open fun applyData(builder: Builder) {
-        builder.setSmallIcon(smallIcon)
-            .setContentTitle(title)
-            .setLargeIcon(largeIcon)
-            .setContentIntent(pending)
-            .setAutoCancel(autoCancel)
-            .setPriority(priority)
-            .setSound(sound)
-    }
-
     data class BasicData(
         var text: String? = null
-    ) : Data() {
-        override fun applyData(builder: Builder) {
-            super.applyData(builder)
-            builder.setContentText(text)
-        }
-    }
+    ) : Data()
 
     data class BigTextData(
         var bigText: String? = null,
         var collapsedText: String? = null,
         var summaryText: String? = null,
-    ) : Data() {
-        override fun applyData(builder: Builder) {
-            super.applyData(builder)
-            builder.setContentText(collapsedText)
-                .setStyle(
-                    NotificationCompat.BigTextStyle()
-                        .bigText(bigText)
-                        .setSummaryText(summaryText)
-                )
-        }
-    }
+    ) : Data()
 }
 
 @Suppress("ArrayInDataClass")
@@ -79,20 +49,11 @@ data class ExtraData(
 )
 
 sealed class ActionData {
-
-    abstract fun applyData(builder: Builder)
-
     data class BasicAction(
         var icon: Int = R.drawable.baseline_notifications_24,
         var label: String? = null,
         var pending: PendingIntent? = null
-    ) : ActionData() {
-
-        override fun applyData(builder: Builder) {
-            builder.addAction(icon, label, pending)
-        }
-
-    }
+    ) : ActionData()
 
     data class ReplyAction(
         var icon: Int = R.drawable.baseline_notifications_24,
@@ -100,20 +61,7 @@ sealed class ActionData {
         var replyPending: PendingIntent? = null,
         var replyLabel: String? = null,
         var replyKey: String = "default"
-    ) : ActionData() {
-
-        override fun applyData(builder: Builder) {
-            val remoteInput = RemoteInput.Builder(replyKey)
-                .setLabel(replyLabel)
-                .build()
-            val replyAction = NotificationCompat.Action
-                .Builder(icon, label, replyPending)
-                .addRemoteInput(remoteInput)
-                .build()
-            builder.addAction(replyAction)
-        }
-
-    }
+    ) : ActionData()
 }
 
 data class ChannelData(
@@ -123,8 +71,8 @@ data class ChannelData(
     var importance: Int = NotificationManager.IMPORTANCE_DEFAULT
 ) {
     companion object {
-        private const val DEFAULT_ID = "SingleNotifyId"
-        private const val DEFAULT_PROGRESS_ID = "ProgressSingleNotifyId"
+        internal const val DEFAULT_ID = "SingleNotifyId"
+        internal const val DEFAULT_PROGRESS_ID = "ProgressSingleNotifyId"
 
         internal fun byDefault(context: Context) = ChannelData(
             id = DEFAULT_ID,
@@ -139,16 +87,6 @@ data class ChannelData(
             summary = context.getString(R.string.progress_channel_description),
             importance = NotificationManager.IMPORTANCE_DEFAULT
         )
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    internal fun toNotificationChannel(): NotificationChannel {
-        val notificationChannel = NotificationChannel(id, name, importance)
-            .apply {
-                description = summary
-            }
-        if (id == DEFAULT_PROGRESS_ID) notificationChannel.setSound(null, null)
-        return notificationChannel
     }
 
 }
