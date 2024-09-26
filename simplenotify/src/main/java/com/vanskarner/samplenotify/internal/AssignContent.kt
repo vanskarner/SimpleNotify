@@ -9,6 +9,7 @@ import com.vanskarner.samplenotify.ActionData
 import com.vanskarner.samplenotify.ChannelData
 import com.vanskarner.samplenotify.ChannelData.Companion.DEFAULT_PROGRESS_ID
 import com.vanskarner.samplenotify.Data
+import com.vanskarner.samplenotify.ProgressData
 
 internal object AssignContent {
 
@@ -55,7 +56,7 @@ internal object AssignContent {
         }
     }
 
-    fun applyProgress(progressData: ProgressData,builder: NotificationCompat.Builder){
+    fun applyProgress(progressData: ProgressData, builder: NotificationCompat.Builder){
         if (progressData.conditionToHide.invoke())
             builder.setProgress(0, 0, false)
         else builder.setProgress(100, progressData.currentPercentage, progressData.indeterminate)

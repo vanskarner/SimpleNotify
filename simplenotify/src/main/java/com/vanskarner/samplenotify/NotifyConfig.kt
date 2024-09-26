@@ -1,16 +1,13 @@
 package com.vanskarner.samplenotify
 
 import android.content.Context
-import com.vanskarner.samplenotify.internal.ProgressData
 import com.vanskarner.samplenotify.internal.NotifyGenerator
-import com.vanskarner.samplenotify.internal.NotifyData
 
 class NotifyConfig(private val context: Context) {
     private var data: Data? = null
     private var progressData: ProgressData? = null
     private var channelData: ChannelData = ChannelData.byDefault(context)
     private val actions: Array<ActionData?> by lazy { arrayOfNulls(NotifyGenerator.MAXIMUM_ACTIONS) }
-    private val notifyGenerator by lazy { NotifyGenerator }
 
     fun asBasic(content: Data.BasicData.() -> Unit): NotifyConfig {
         this.data = Data.BasicData().apply(content)
@@ -57,14 +54,13 @@ class NotifyConfig(private val context: Context) {
 
     fun show(): Int {
         return data?.let {
-            val notifyData = NotifyData(
+            NotifyGenerator(
                 context = context,
                 data = it,
                 actions = actions,
                 channelData = channelData,
                 progressData = progressData
-            )
-            notifyGenerator.show(notifyData)
+            ).show()
         } ?: -1
     }
 

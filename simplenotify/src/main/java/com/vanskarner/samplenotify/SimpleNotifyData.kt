@@ -64,6 +64,12 @@ sealed class ActionData {
     ) : ActionData()
 }
 
+data class ProgressData(
+    var currentPercentage: Int = 0,
+    var indeterminate: Boolean = false,
+    var conditionToHide: (() -> Boolean) = { false }
+)
+
 data class ChannelData(
     var id: String = DEFAULT_ID,
     var name: String = "Default channel",
