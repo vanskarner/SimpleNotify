@@ -36,6 +36,8 @@ internal object NotifyChannel {
 
     fun cancelNotification(context: Context, id: Int) = getManager(context).cancel(id)
 
+    fun cancelAllNotification(context: Context) = getManager(context).cancelAll()
+
     @RequiresApi(Build.VERSION_CODES.O)
     private fun registerChannel(context: Context, data: ChannelData) {
         val channel = AssignContent.applyNotificationChannel(data)
