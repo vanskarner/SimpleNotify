@@ -21,11 +21,12 @@ internal class NotifyGenerator(
 ) {
 
     private val assignContent = AssignContent
+    private val notifyChannel = NotifyChannel
 
     fun show(): Int {
         val channelId = if (progressData != null)
-            NotifyChannel(context).applyChannel(ChannelData.forProgress(context))
-        else NotifyChannel(context).applyChannel(channelData)
+            notifyChannel.applyChannel(context, ChannelData.forProgress(context))
+        else notifyChannel.applyChannel(context, channelData)
         val notifyBuilder = NotificationCompat.Builder(context, channelId)
         val notificationId = data.id ?: Random.nextInt(0, Int.MAX_VALUE)
         assignContent.applyData(data, notifyBuilder)

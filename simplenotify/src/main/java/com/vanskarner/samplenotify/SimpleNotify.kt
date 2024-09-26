@@ -7,12 +7,14 @@ class SimpleNotify {
 
     companion object {
 
+        private val notifyChannel = NotifyChannel
+
         fun with(context: Context): NotifyConfig {
             return NotifyConfig(context)
         }
 
         fun cancel(context: Context, channelId: Int) {
-            NotifyChannel(context).cancelNotification(channelId)
+            notifyChannel.cancelNotification(context, channelId)
         }
 
     }
