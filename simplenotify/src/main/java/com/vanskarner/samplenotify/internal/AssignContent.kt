@@ -34,6 +34,15 @@ internal object AssignContent {
                 if (data.lines.isNotEmpty()) builder.setStyle(style)
                 builder
             }
+
+            is Data.BigPictureData -> {
+                builder.setContentText(data.collapsedText)
+                    .setStyle(
+                        NotificationCompat.BigPictureStyle()
+                            .setSummaryText(data.summaryText)
+                            .bigPicture(data.image)
+                    )
+            }
         }
         filteredBuilder.setSmallIcon(data.smallIcon)
             .setContentTitle(data.title)

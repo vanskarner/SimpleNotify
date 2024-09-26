@@ -35,6 +35,12 @@ sealed class Data {
         var summaryText: String? = null,
         var lines: ArrayList<String> = arrayListOf(),
     ) : Data()
+
+    data class BigPictureData(
+        var collapsedText: String? = null,
+        var summaryText: String? = null,
+        var image: Bitmap? = null
+    ) : Data()
 }
 
 @Suppress("ArrayInDataClass")

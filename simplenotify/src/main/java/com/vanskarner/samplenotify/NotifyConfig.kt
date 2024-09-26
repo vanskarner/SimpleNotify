@@ -25,6 +25,11 @@ class NotifyConfig(private val context: Context) {
         return this
     }
 
+    fun asBigPicture(content: Data.BigPictureData.() -> Unit): NotifyConfig {
+        this.data = Data.BigPictureData().apply(content)
+        return this
+    }
+
     fun progress(
         currentPercentage: Int,
         indeterminate: Boolean = false
