@@ -1,13 +1,15 @@
 package com.vanskarner.samplenotify
 
 import android.content.Context
+import com.vanskarner.samplenotify.ChannelData.Companion.byDefault
+import com.vanskarner.samplenotify.internal.MAXIMUM_ACTIONS
 import com.vanskarner.samplenotify.internal.NotifyGenerator
 
 class NotifyConfig(private val context: Context) {
     private var data: Data? = null
     private var progressData: ProgressData? = null
     private var channelData: ChannelData = ChannelData.byDefault(context)
-    private val actions: Array<ActionData?> by lazy { arrayOfNulls(NotifyGenerator.MAXIMUM_ACTIONS) }
+    private val actions: Array<ActionData?> by lazy { arrayOfNulls(MAXIMUM_ACTIONS) }
 
     fun asBasic(content: Data.BasicData.() -> Unit): NotifyConfig {
         this.data = Data.BasicData().apply(content)
@@ -36,7 +38,7 @@ class NotifyConfig(private val context: Context) {
     }
 
     fun useChannel(content: ChannelData.() -> Unit): NotifyConfig {
-        this.channelData = ChannelData().apply(content)
+        this.channelData = channelData.apply(content)
         return this
     }
 

@@ -7,6 +7,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.vanskarner.samplenotify.ActionData
 import com.vanskarner.samplenotify.ChannelData
+import com.vanskarner.samplenotify.ChannelData.Companion.forProgress
 import com.vanskarner.samplenotify.Data
 import com.vanskarner.samplenotify.ProgressData
 import kotlin.random.Random
@@ -18,9 +19,6 @@ internal class NotifyGenerator(
     private val channelData: ChannelData,
     private val actions: Array<ActionData?>,
 ) {
-    companion object {
-        const val MAXIMUM_ACTIONS = 3
-    }
 
     private val assignContent = AssignContent
 

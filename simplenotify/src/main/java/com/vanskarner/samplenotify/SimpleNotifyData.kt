@@ -6,6 +6,8 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import androidx.core.app.NotificationCompat
+import com.vanskarner.samplenotify.internal.DEFAULT_CHANNEL_ID
+import com.vanskarner.samplenotify.internal.DEFAULT_PROGRESS_CHANNEL_ID
 import com.vanskarner.simplenotify.R
 
 sealed class Data {
@@ -71,24 +73,21 @@ data class ProgressData(
 )
 
 data class ChannelData(
-    var id: String = DEFAULT_ID,
-    var name: String = "Default channel",
-    var summary: String = "Application default notification channel",
-    var importance: Int = NotificationManager.IMPORTANCE_DEFAULT
+    var id: String,
+    var name: String,
+    var summary: String,
+    var importance: Int
 ) {
     companion object {
-        internal const val DEFAULT_ID = "SingleNotifyId"
-        internal const val DEFAULT_PROGRESS_ID = "ProgressSingleNotifyId"
-
-        internal fun byDefault(context: Context) = ChannelData(
-            id = DEFAULT_ID,
+        internal fun Companion.byDefault(context: Context) = ChannelData(
+            id = DEFAULT_CHANNEL_ID,
             name = context.getString(R.string.chanel_name),
             summary = context.getString(R.string.chanel_description),
             importance = NotificationManager.IMPORTANCE_DEFAULT
         )
 
-        internal fun forProgress(context: Context) = ChannelData(
-            id = DEFAULT_PROGRESS_ID,
+        internal fun Companion.forProgress(context: Context) = ChannelData(
+            id = DEFAULT_PROGRESS_CHANNEL_ID,
             name = context.getString(R.string.progress_channel_name),
             summary = context.getString(R.string.progress_channel_description),
             importance = NotificationManager.IMPORTANCE_DEFAULT

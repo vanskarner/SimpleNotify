@@ -7,7 +7,6 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.RemoteInput
 import com.vanskarner.samplenotify.ActionData
 import com.vanskarner.samplenotify.ChannelData
-import com.vanskarner.samplenotify.ChannelData.Companion.DEFAULT_PROGRESS_ID
 import com.vanskarner.samplenotify.Data
 import com.vanskarner.samplenotify.ProgressData
 
@@ -69,7 +68,7 @@ internal object AssignContent {
                 .apply {
                     description = channelData.summary
                 }
-        if (channelData.id == DEFAULT_PROGRESS_ID) notificationChannel.setSound(null, null)
+        if (channelData.id == DEFAULT_PROGRESS_CHANNEL_ID) notificationChannel.setSound(null, null)
         return notificationChannel
     }
 
