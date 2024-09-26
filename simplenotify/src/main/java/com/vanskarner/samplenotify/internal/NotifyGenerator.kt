@@ -7,7 +7,6 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.vanskarner.samplenotify.ActionData
 import com.vanskarner.samplenotify.ChannelData
-import com.vanskarner.samplenotify.ChannelData.Companion.forProgress
 import com.vanskarner.samplenotify.Data
 import com.vanskarner.samplenotify.ProgressData
 import kotlin.random.Random
@@ -15,7 +14,7 @@ import kotlin.random.Random
 internal class NotifyGenerator(
     private val context: Context,
     private val data: Data,
-    private val progressData: ProgressData?,
+    private val progressData: ProgressData,
     private val channelData: ChannelData,
     private val actions: Array<ActionData?>,
 ) {
@@ -24,14 +23,13 @@ internal class NotifyGenerator(
     private val notifyChannel = NotifyChannel
 
     fun show(): Int {
-        val channelId = if (progressData != null)
-            notifyChannel.applyChannel(context, ChannelData.forProgress(context))
-        else notifyChannel.applyChannel(context, channelData)
-        val notifyBuilder = NotificationCompat.Builder(context, channelId)
-        val notificationId = data.id ?: Random.nextInt(0, Int.MAX_VALUE)
+        val selectedChannel = selectChannel()
+        notifyChannel.applyChannel(context, selectedChannel)
+        val notifyBuilder = NotificationCompat.Builder(context, selectedChannel.id)
         assignContent.applyData(data, notifyBuilder)
         applyActions(notifyBuilder)
-        if (progressData != null) assignContent.applyProgress(progressData, notifyBuilder)
+        assignContent.applyProgress(progressData, notifyBuilder)
+        val notificationId = generateId()
         with(NotificationManagerCompat.from(context)) {
             if (ActivityCompat.checkSelfPermission(
                     context,
@@ -43,6 +41,17 @@ internal class NotifyGenerator(
             notify(notificationId, notifyBuilder.build())
         }
         return notificationId
+    }
+
+    private fun selectChannel(): ChannelData {
+        return if (progressData.enable && channelData.id != DEFAULT_CHANNEL_ID)
+            ChannelData.forProgress(context)
+        else channelData
+    }
+
+    private fun generateId(): Int {
+        return if (progressData.enable && data.id == null) DEFAULT_PROGRESS_NOTIFICATION_ID
+        else data.id ?: Random.nextInt(0, Int.MAX_VALUE)
     }
 
     private fun applyActions(builder: NotificationCompat.Builder) {

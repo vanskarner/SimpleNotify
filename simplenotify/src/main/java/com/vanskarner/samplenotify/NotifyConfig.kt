@@ -1,13 +1,12 @@
 package com.vanskarner.samplenotify
 
 import android.content.Context
-import com.vanskarner.samplenotify.ChannelData.Companion.byDefault
 import com.vanskarner.samplenotify.internal.MAXIMUM_ACTIONS
 import com.vanskarner.samplenotify.internal.NotifyGenerator
 
 class NotifyConfig(private val context: Context) {
     private var data: Data? = null
-    private var progressData: ProgressData? = null
+    private var progressData: ProgressData = ProgressData.byDefault()
     private var channelData: ChannelData = ChannelData.byDefault(context)
     private val actions: Array<ActionData?> by lazy { arrayOfNulls(MAXIMUM_ACTIONS) }
 
@@ -25,15 +24,19 @@ class NotifyConfig(private val context: Context) {
         currentPercentage: Int,
         indeterminate: Boolean = false
     ): NotifyConfig {
-        this.progressData = ProgressData().apply {
+        this.progressData = progressData.apply {
             this.currentPercentage = currentPercentage
             this.indeterminate = indeterminate
+            this.enable = true
         }
         return this
     }
 
     fun hideProgress(shouldHide: () -> Boolean = { true }): NotifyConfig {
-        this.progressData?.conditionToHide = shouldHide
+        this.progressData = progressData.apply {
+            this.conditionToHide = shouldHide
+            this.enable = true
+        }
         return this
     }
 

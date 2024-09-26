@@ -67,11 +67,23 @@ sealed class ActionData {
     ) : ActionData()
 }
 
-data class ProgressData(
-    var currentPercentage: Int = 0,
-    var indeterminate: Boolean = false,
-    var conditionToHide: (() -> Boolean) = { false }
-)
+internal data class ProgressData(
+    var currentPercentage: Int,
+    var indeterminate: Boolean,
+    var conditionToHide: (() -> Boolean),
+    var enable: Boolean
+) {
+    companion object {
+        internal fun byDefault(): ProgressData {
+            return ProgressData(
+                currentPercentage = 0,
+                indeterminate = false,
+                conditionToHide = { false },
+                enable = false,
+            )
+        }
+    }
+}
 
 data class ChannelData(
     var id: String,
@@ -80,14 +92,14 @@ data class ChannelData(
     var importance: Int
 ) {
     companion object {
-        internal fun Companion.byDefault(context: Context) = ChannelData(
+        internal fun byDefault(context: Context) = ChannelData(
             id = DEFAULT_CHANNEL_ID,
             name = context.getString(R.string.chanel_name),
             summary = context.getString(R.string.chanel_description),
             importance = NotificationManager.IMPORTANCE_DEFAULT
         )
 
-        internal fun Companion.forProgress(context: Context) = ChannelData(
+        internal fun forProgress(context: Context) = ChannelData(
             id = DEFAULT_PROGRESS_CHANNEL_ID,
             name = context.getString(R.string.progress_channel_name),
             summary = context.getString(R.string.progress_channel_description),
