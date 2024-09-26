@@ -19,6 +19,7 @@ sealed class Data {
     var pending: PendingIntent? = null
     var autoCancel: Boolean = true
     var sound: Uri? = null
+    var category: String? = null
 
     data class BasicData(
         var text: String? = null

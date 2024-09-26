@@ -13,14 +13,7 @@ import com.vanskarner.samplenotify.ProgressData
 internal object AssignContent {
 
     fun applyData(data: Data, builder: NotificationCompat.Builder) {
-        builder.setSmallIcon(data.smallIcon)
-            .setContentTitle(data.title)
-            .setLargeIcon(data.largeIcon)
-            .setContentIntent(data.pending)
-            .setAutoCancel(data.autoCancel)
-            .setPriority(data.priority)
-            .setSound(data.sound)
-        when (data) {
+        val filteredBuilder = when (data) {
             is Data.BasicData -> {
                 builder.setContentText(data.text)
             }
@@ -34,6 +27,14 @@ internal object AssignContent {
                     )
             }
         }
+        filteredBuilder.setSmallIcon(data.smallIcon)
+            .setContentTitle(data.title)
+            .setLargeIcon(data.largeIcon)
+            .setContentIntent(data.pending)
+            .setAutoCancel(data.autoCancel)
+            .setPriority(data.priority)
+            .setSound(data.sound)
+            .setCategory(data.category)
     }
 
     fun applyAction(actionData: ActionData, builder: NotificationCompat.Builder) {
@@ -55,7 +56,7 @@ internal object AssignContent {
         }
     }
 
-    fun applyProgress(progressData: ProgressData, builder: NotificationCompat.Builder){
+    fun applyProgress(progressData: ProgressData, builder: NotificationCompat.Builder) {
         if (progressData.conditionToHide.invoke())
             builder.setProgress(0, 0, false)
         else builder.setProgress(100, progressData.currentPercentage, progressData.indeterminate)
