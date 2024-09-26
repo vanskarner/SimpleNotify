@@ -26,6 +26,14 @@ internal object AssignContent {
                             .setSummaryText(data.summaryText)
                     )
             }
+
+            is Data.TextListData -> {
+                val style = NotificationCompat.InboxStyle()
+                data.lines.forEach { style.addLine(it) }
+                builder.setContentText(data.summaryText)
+                if (data.lines.isNotEmpty()) builder.setStyle(style)
+                builder
+            }
         }
         filteredBuilder.setSmallIcon(data.smallIcon)
             .setContentTitle(data.title)

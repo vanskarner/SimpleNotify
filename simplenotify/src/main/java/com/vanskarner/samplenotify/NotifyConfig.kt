@@ -20,6 +20,11 @@ class NotifyConfig(private val context: Context) {
         return this
     }
 
+    fun asTextList(content: Data.TextListData.() -> Unit): NotifyConfig {
+        this.data = Data.TextListData().apply(content)
+        return this
+    }
+
     fun progress(
         currentPercentage: Int,
         indeterminate: Boolean = false

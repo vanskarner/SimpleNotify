@@ -30,6 +30,11 @@ sealed class Data {
         var collapsedText: String? = null,
         var summaryText: String? = null,
     ) : Data()
+
+    data class TextListData(
+        var summaryText: String? = null,
+        var lines: ArrayList<String> = arrayListOf(),
+    ) : Data()
 }
 
 @Suppress("ArrayInDataClass")
