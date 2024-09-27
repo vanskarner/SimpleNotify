@@ -20,8 +20,8 @@ class NotifyConfig(private val context: Context) {
         return this
     }
 
-    fun asTextList(content: Data.TextListData.() -> Unit): NotifyConfig {
-        this.data = Data.TextListData().apply(content)
+    fun asInbox(content: Data.InboxData.() -> Unit): NotifyConfig {
+        this.data = Data.InboxData().apply(content)
         return this
     }
 

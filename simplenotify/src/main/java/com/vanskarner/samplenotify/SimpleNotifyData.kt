@@ -33,7 +33,7 @@ sealed class Data {
         var summaryText: String? = null,
     ) : Data()
 
-    data class TextListData(
+    data class InboxData(
         var summaryText: String? = null,
         var lines: ArrayList<String> = arrayListOf(),
     ) : Data()

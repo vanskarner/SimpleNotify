@@ -27,7 +27,7 @@ internal object AssignContent {
                     )
             }
 
-            is Data.TextListData -> {
+            is Data.InboxData -> {
                 builder.setContentText(data.summaryText)
                 val style = NotificationCompat.InboxStyle()
                 data.lines.forEach { style.addLine(it) }
