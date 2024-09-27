@@ -1,11 +1,13 @@
 package com.vanskarner.samplenotify
 
 import android.app.NotificationManager
+import androidx.core.app.NotificationCompat.MessagingStyle.Message
 import android.app.PendingIntent
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import androidx.core.app.NotificationCompat
+import androidx.core.app.Person
 import com.vanskarner.samplenotify.internal.DEFAULT_CHANNEL_ID
 import com.vanskarner.samplenotify.internal.DEFAULT_PROGRESS_CHANNEL_ID
 import com.vanskarner.simplenotify.R
@@ -40,6 +42,12 @@ sealed class Data {
         var collapsedText: String? = null,
         var summaryText: String? = null,
         var image: Bitmap? = null
+    ) : Data()
+
+    data class MessageData(
+        var conversationTitle: String? = null,
+        var user: Person = Person.Builder().build(),
+        var messages: ArrayList<Message> = arrayListOf()
     ) : Data()
 }
 

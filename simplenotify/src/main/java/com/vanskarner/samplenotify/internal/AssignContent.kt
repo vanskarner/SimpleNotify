@@ -28,11 +28,10 @@ internal object AssignContent {
             }
 
             is Data.TextListData -> {
+                builder.setContentText(data.summaryText)
                 val style = NotificationCompat.InboxStyle()
                 data.lines.forEach { style.addLine(it) }
-                builder.setContentText(data.summaryText)
-                if (data.lines.isNotEmpty()) builder.setStyle(style)
-                builder
+                builder.setStyle(style)
             }
 
             is Data.BigPictureData -> {
@@ -42,6 +41,13 @@ internal object AssignContent {
                             .setSummaryText(data.summaryText)
                             .bigPicture(data.image)
                     )
+            }
+
+            is Data.MessageData -> {
+                val style = NotificationCompat.MessagingStyle(data.user)
+                    .setConversationTitle(data.conversationTitle)
+                data.messages.forEach { style.addMessage(it.text, it.timestamp, it.person) }
+                builder.setStyle(style)
             }
         }
         filteredBuilder.setSmallIcon(data.smallIcon)

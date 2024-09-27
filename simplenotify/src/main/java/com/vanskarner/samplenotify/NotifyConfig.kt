@@ -30,6 +30,11 @@ class NotifyConfig(private val context: Context) {
         return this
     }
 
+    fun asMessaging(content: Data.MessageData.() -> Unit): NotifyConfig {
+        this.data = Data.MessageData().apply(content)
+        return this
+    }
+
     fun progress(
         currentPercentage: Int,
         indeterminate: Boolean = false
