@@ -8,12 +8,14 @@ import androidx.core.app.NotificationManagerCompat
 import com.vanskarner.samplenotify.ActionData
 import com.vanskarner.samplenotify.ChannelData
 import com.vanskarner.samplenotify.Data
+import com.vanskarner.samplenotify.ExtraData
 import com.vanskarner.samplenotify.ProgressData
 import kotlin.random.Random
 
 internal class NotifyGenerator(
     private val context: Context,
     private val data: Data,
+    private val extra: ExtraData,
     private val progressData: ProgressData,
     private val channelData: ChannelData,
     private val actions: Array<ActionData?>,
@@ -27,6 +29,7 @@ internal class NotifyGenerator(
         notifyChannel.applyChannel(context, selectedChannel)
         val notifyBuilder = NotificationCompat.Builder(context, selectedChannel.id)
         assignContent.applyData(data, notifyBuilder)
+        assignContent.applyExtras(extra,notifyBuilder)
         applyActions(notifyBuilder)
         assignContent.applyProgress(progressData, notifyBuilder)
         val notificationId = generateId()

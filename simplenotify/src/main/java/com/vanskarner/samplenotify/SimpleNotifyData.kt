@@ -5,6 +5,8 @@ import androidx.core.app.NotificationCompat.MessagingStyle.Message
 import android.app.PendingIntent
 import android.content.Context
 import android.graphics.Bitmap
+import android.media.AudioAttributes
+import android.media.RingtoneManager
 import android.net.Uri
 import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
@@ -20,8 +22,6 @@ sealed class Data {
     var priority: Int = NotificationCompat.PRIORITY_DEFAULT
     var pending: PendingIntent? = null
     var autoCancel: Boolean = true
-    var sound: Uri? = null
-    var category: String? = null
 
     data class BasicData(
         var text: String? = null
@@ -53,21 +53,21 @@ sealed class Data {
 
 @Suppress("ArrayInDataClass")
 data class ExtraData(
+    var category: String? = null,
+    var visibility: Int? = null,
     var vibrationPattern: LongArray? = null,
     var lights: Triple<Int, Int, Int>? = null,
-    var ongoing: Boolean = false,
-    var visibility: Int? = null,
-    var category: String? = null,
+    var ongoing: Boolean? = null,
     var color: Int? = null,
     var timeoutAfter: Long? = null,
-    var badgeIconType: Int? = null,//review
+    var badgeIconType: Int? = null,
     var timestampWhen: Long? = null,
     var deleteIntent: PendingIntent? = null,
     var fullScreenIntent: Pair<PendingIntent, Boolean>? = null,
-    var onlyAlertOnce: Boolean = false,
+    var onlyAlertOnce: Boolean? = null,
     var subText: String? = null,
-    var showWhen: Boolean = false,
-    var useChronometer: Boolean = false
+    var showWhen: Boolean? = null,
+    var useChronometer: Boolean? = null
 )
 
 sealed class ActionData {
@@ -108,21 +108,27 @@ data class ChannelData(
     var id: String,
     var name: String,
     var summary: String,
-    var importance: Int
+    var importance: Int,
+    var sound: Uri?,
+    var audioAttributes: AudioAttributes?
 ) {
     companion object {
         internal fun byDefault(context: Context) = ChannelData(
             id = DEFAULT_CHANNEL_ID,
             name = context.getString(R.string.chanel_name),
             summary = context.getString(R.string.chanel_description),
-            importance = NotificationManager.IMPORTANCE_DEFAULT
+            importance = NotificationManager.IMPORTANCE_DEFAULT,
+            sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION),
+            audioAttributes = AudioAttributes.Builder().build()
         )
 
         internal fun forProgress(context: Context) = ChannelData(
             id = DEFAULT_PROGRESS_CHANNEL_ID,
             name = context.getString(R.string.progress_channel_name),
             summary = context.getString(R.string.progress_channel_description),
-            importance = NotificationManager.IMPORTANCE_DEFAULT
+            importance = NotificationManager.IMPORTANCE_DEFAULT,
+            sound = null,
+            audioAttributes = null
         )
     }
 

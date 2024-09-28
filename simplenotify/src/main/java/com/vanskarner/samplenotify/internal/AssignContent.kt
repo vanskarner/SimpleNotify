@@ -8,6 +8,7 @@ import androidx.core.app.RemoteInput
 import com.vanskarner.samplenotify.ActionData
 import com.vanskarner.samplenotify.ChannelData
 import com.vanskarner.samplenotify.Data
+import com.vanskarner.samplenotify.ExtraData
 import com.vanskarner.samplenotify.ProgressData
 
 internal object AssignContent {
@@ -56,8 +57,30 @@ internal object AssignContent {
             .setContentIntent(data.pending)
             .setAutoCancel(data.autoCancel)
             .setPriority(data.priority)
-            .setSound(data.sound)
-            .setCategory(data.category)
+    }
+
+    fun applyExtras(extras: ExtraData, builder: NotificationCompat.Builder) {
+        builder.setCategory(extras.category)
+        builder.setSubText(extras.subText)
+        builder.setVibrate(extras.vibrationPattern)
+        builder.setDeleteIntent(extras.deleteIntent)
+        extras.visibility?.let { builder.setVisibility(it) }
+        extras.lights?.let {
+            builder.setLights(
+                extras.lights!!.first,
+                extras.lights!!.second,
+                extras.lights!!.third
+            )
+        }
+        extras.ongoing?.let { builder.setOngoing(it) }
+        extras.color?.let { builder.setColor(it) }
+        extras.timeoutAfter?.let { builder.setTimeoutAfter(it) }
+        extras.badgeIconType?.let { builder.setBadgeIconType(it) }
+        extras.timestampWhen?.let { builder.setWhen(it) }
+        extras.fullScreenIntent?.let { builder.setFullScreenIntent(it.first, it.second) }
+        extras.onlyAlertOnce?.let { builder.setOnlyAlertOnce(it) }
+        extras.showWhen?.let { builder.setShowWhen(it) }
+        extras.useChronometer?.let { builder.setUsesChronometer(it) }
     }
 
     fun applyAction(actionData: ActionData, builder: NotificationCompat.Builder) {
@@ -96,7 +119,7 @@ internal object AssignContent {
                 .apply {
                     description = channelData.summary
                 }
-        if (channelData.id == DEFAULT_PROGRESS_CHANNEL_ID) notificationChannel.setSound(null, null)
+        notificationChannel.setSound(channelData.sound, channelData.audioAttributes)
         return notificationChannel
     }
 
