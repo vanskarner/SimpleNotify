@@ -72,13 +72,13 @@ data class ExtraData(
 
 sealed class ActionData {
     data class BasicAction(
-        var icon: Int = R.drawable.baseline_notifications_24,
+        var icon: Int = 0,
         var label: String? = null,
         var pending: PendingIntent? = null
     ) : ActionData()
 
     data class ReplyAction(
-        var icon: Int = R.drawable.baseline_notifications_24,
+        var icon: Int = 0,
         var label: String? = null,
         var replyPending: PendingIntent? = null,
         var replyLabel: String? = null,

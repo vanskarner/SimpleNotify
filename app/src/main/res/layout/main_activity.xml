@@ -20,28 +20,34 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
-            android:text="Type 1" />
+            android:text="Basic 1" />
 
         <Button
             android:id="@+id/btnType2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
-            android:text="Type 2" />
+            android:text="Basic 2" />
 
         <Button
             android:id="@+id/btnType3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
-            android:text="Type 3" />
+            android:text="Basic 3" />
 
         <Button
             android:id="@+id/btnType4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
-            android:text="Type 4" />
+            android:text="Basic 4" />
+        <Button
+            android:id="@+id/btnType5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:text="Basic 5" />
     </LinearLayout>
 
     <LinearLayout

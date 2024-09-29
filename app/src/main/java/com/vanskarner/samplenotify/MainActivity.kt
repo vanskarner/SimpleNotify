@@ -1,11 +1,10 @@
 package com.vanskarner.samplenotify
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -16,12 +15,17 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
+    companion object {
+        const val REMOTE_INPUT_KEY = "some_key"
+        const val INTENT_EXTRA_NOTIFY_ID = "notificationId"
+    }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private val requestPermissionLauncher =
@@ -41,38 +45,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
         findViewById<Button>(R.id.btnSetting).setOnClickListener { openSettings() }
-        findViewById<Button>(R.id.btnType1).setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            }
-            val pendingIntent =
-                PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
-            // Build a PendingIntent for the reply action to trigger.
-            val replyPendingIntent: PendingIntent =
-                PendingIntent.getBroadcast(applicationContext,
-                    123,
-                    intent,
-                    PendingIntent.FLAG_UPDATE_CURRENT)
-
-            SimpleNotify.with(this)
-                .asBasic {
-                    title = "Some title"
-                    text = "Any description"
-//                    click = pendingIntent
-                }
-                .addReplyAction {
-                    icon = R.drawable.baseline_notifications_24
-                    label = "doAny"
-                    replyPending = replyPendingIntent
-                    replyLabel = "doReply"
-                    replyKey = "key_one"
-                }
-                .show()
-        }
-        findViewById<Button>(R.id.btnType2).setOnClickListener { notificationType2() }
-        findViewById<Button>(R.id.btnType3).setOnClickListener { notificationType3() }
-        findViewById<Button>(R.id.btnType4).setOnClickListener { notificationType4() }
-
+        findViewById<Button>(R.id.btnType1).setOnClickListener { notifyBasic1() }
+        findViewById<Button>(R.id.btnType2).setOnClickListener { notifyBasic2() }
+        findViewById<Button>(R.id.btnType3).setOnClickListener { notifyBasic3() }
+        findViewById<Button>(R.id.btnType4).setOnClickListener { notifyBasic4(this) }
+        findViewById<Button>(R.id.btnType5).setOnClickListener { notifyBasic5(this) }
     }
 
     private fun showPermissionDeniedDialog() {
@@ -104,61 +81,102 @@ class MainActivity : AppCompatActivity() {
         ) == PackageManager.PERMISSION_GRANTED
     }
 
-    private fun notificationType1() {
-        val channelId = "default_channel"
-        val smallIcon = R.drawable.baseline_notifications_24
-        val title = "textTitle"
-        val text = "textContent"
+    private fun notifyBasic1() {
+        SimpleNotify.with(this)
+            .asBasic {
+                title = "Dina Basurearte: With her phrase “Your mom!"
+                text = "A never-before-seen response from a female president to the people"
+            }
+            .show()
+    }
+
+    private fun notifyBasic2() {
+        SimpleNotify.with(this)
+            .asBasic {
+                smallIcon = R.drawable.baseline_handshake_24
+                title = "Dina Balearte: Order with bullets and promotions"
+                text = "Promotions after repression, a touch of presidential irony."
+                largeIcon = BitmapFactory.decodeResource(resources, R.drawable.dina4)
+                pending = getSimplePendingIntent()
+            }
+            .show()
+    }
+
+    private fun notifyBasic3() {
+        val notifyId = 666
+        SimpleNotify.with(this)
+            .asBasic {
+                id = notifyId
+                title = "Dina Corruptuarte: Waykis case in the shadows"
+                text = "An alleged criminal network dedicated to influence peddling"
+            }
+            .addReplyAction {
+                label = "Respond"
+                replyPending = getReplyPendingIntent(notifyId)
+                replyLabel = "response"
+                replyKey = REMOTE_INPUT_KEY
+            }
+            .addAction {
+                label = "Impeachment"
+                pending = getSimplePendingIntent()
+            }
+            .addAction {
+                label = "Report"
+                pending = getSimplePendingIntent()
+            }
+            .show()
+    }
+
+    private fun notifyBasic4(context: Context) {
+        CoroutineScope(Dispatchers.IO).launch {
+            for (progress in 0..100 step 20) {
+                delay(1000)
+                SimpleNotify.with(context)
+                    .asBasic {
+                        title = "Downloading Dina's Prosecutor File"
+                        text = "Be careful their government and most of the police work together."
+                    }
+                    .progress(progress)
+                    .hideProgress { progress == 100 }
+                    .show()
+            }
+        }
+    }
+
+    private fun notifyBasic5(context: Context) {
+        CoroutineScope(Dispatchers.IO).launch {
+            for (progress in 0..100 step 20) {
+                delay(1000)
+                SimpleNotify.with(context)
+                    .asBasic {
+                        title = "Downloading Dina's Prosecutor File"
+                        text = "Be careful their government and most of the police work together."
+                    }
+                    .progress(progress, true)
+                    .hideProgress { progress == 100 }
+                    .show()
+            }
+        }
+    }
+
+    private fun getSimplePendingIntent(): PendingIntent? {
         val intent = Intent(this, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
-        val pendingIntent =
-            PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+        return PendingIntent
+            .getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+    }
 
-        val builder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(smallIcon)
-            .setContentTitle(title)
-            .setContentText(text)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .setContentIntent(pendingIntent)
-            .setAutoCancel(true)
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) createNotificationChannel(channelId)
-
-        val notificationId = 12
-        with(NotificationManagerCompat.from(this)) {
-            if (ActivityCompat.checkSelfPermission(
-                    this@MainActivity,
-                    android.Manifest.permission.POST_NOTIFICATIONS
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                return@with
-            }
-            notify(notificationId, builder.build())
+    private fun getReplyPendingIntent(notifyId: Int): PendingIntent {
+        val replyIntent = Intent(this, RemoteInputBroadcast::class.java).apply {
+            putExtra(INTENT_EXTRA_NOTIFY_ID, notifyId)
         }
-    }
-
-    private fun notificationType2() {
-    }
-
-    private fun notificationType3() {
-
-    }
-
-    private fun notificationType4() {
-
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun createNotificationChannel(channelId: String) {
-        val name = "Default channel"
-        val descriptionText = "Application default notification channel"
-        val importance = NotificationManager.IMPORTANCE_DEFAULT
-        val channel = NotificationChannel(channelId, name, importance)
-            .apply { description = descriptionText }
-        val notificationManager: NotificationManager =
-            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.createNotificationChannel(channel)
+        return PendingIntent.getBroadcast(
+            applicationContext,
+            123,
+            replyIntent,
+            PendingIntent.FLAG_MUTABLE
+        )
     }
 
 }
