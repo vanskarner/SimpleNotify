@@ -47,7 +47,7 @@ internal class NotifyGenerator(
     }
 
     private fun selectChannel(): ChannelData {
-        return if (progressData.enable && channelData.id != DEFAULT_CHANNEL_ID)
+        return if (progressData.enable && channelData.id == DEFAULT_CHANNEL_ID)
             ChannelData.forProgress(context)
         else channelData
     }

@@ -20,10 +20,8 @@ internal object NotifyChannel {
     }
 
     fun applyChannel(context: Context, data: ChannelData): String {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && checkChannelNotExists(
-                context,
-                data.id
-            )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
+            checkChannelNotExists(context, data.id)
         )
             registerChannel(context, data)
         return data.id
