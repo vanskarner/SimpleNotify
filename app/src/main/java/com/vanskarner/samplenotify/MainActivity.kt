@@ -15,6 +15,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.RemoteInput
 import androidx.core.content.ContextCompat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -113,8 +114,7 @@ class MainActivity : AppCompatActivity() {
             .addReplyAction {
                 label = "Respond"
                 replyPending = getReplyPendingIntent(notifyId)
-                replyLabel = "response"
-                replyKey = REMOTE_INPUT_KEY
+                remote = RemoteInput.Builder(REMOTE_INPUT_KEY).setLabel("response").build()
             }
             .addAction {
                 label = "Impeachment"

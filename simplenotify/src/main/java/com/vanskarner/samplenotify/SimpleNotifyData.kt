@@ -10,6 +10,7 @@ import android.media.RingtoneManager
 import android.net.Uri
 import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
+import androidx.core.app.RemoteInput
 import com.vanskarner.samplenotify.internal.DEFAULT_CHANNEL_ID
 import com.vanskarner.samplenotify.internal.DEFAULT_PROGRESS_CHANNEL_ID
 import com.vanskarner.simplenotify.R
@@ -81,8 +82,7 @@ sealed class ActionData {
         var icon: Int = 0,
         var label: String? = null,
         var replyPending: PendingIntent? = null,
-        var replyLabel: String? = null,
-        var replyKey: String = "default"
+        var remote: RemoteInput? = null
     ) : ActionData()
 }
 

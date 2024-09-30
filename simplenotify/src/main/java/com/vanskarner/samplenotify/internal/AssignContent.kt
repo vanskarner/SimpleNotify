@@ -4,7 +4,6 @@ import android.app.NotificationChannel
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
-import androidx.core.app.RemoteInput
 import com.vanskarner.samplenotify.ActionData
 import com.vanskarner.samplenotify.ChannelData
 import com.vanskarner.samplenotify.Data
@@ -90,12 +89,9 @@ internal object AssignContent {
             }
 
             is ActionData.ReplyAction -> {
-                val remoteInput = RemoteInput.Builder(actionData.replyKey)
-                    .setLabel(actionData.replyLabel)
-                    .build()
                 val replyAction = NotificationCompat.Action
                     .Builder(actionData.icon, actionData.label, actionData.replyPending)
-                    .addRemoteInput(remoteInput)
+                    .addRemoteInput(actionData.remote)
                     .build()
                 builder.addAction(replyAction)
             }
