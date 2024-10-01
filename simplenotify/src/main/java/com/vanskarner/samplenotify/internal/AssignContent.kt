@@ -99,13 +99,8 @@ internal object AssignContent {
     }
 
     fun applyProgress(progressData: ProgressData, builder: NotificationCompat.Builder) {
-        when {
-            progressData.enable && progressData.conditionToHide.invoke() ->
-                builder.setProgress(0, 0, false)
-
-            progressData.enable ->
-                builder.setProgress(100, progressData.currentPercentage, progressData.indeterminate)
-        }
+        if (progressData.hide) builder.setProgress(0, 0, false)
+        else builder.setProgress(100, progressData.currentValue, progressData.indeterminate)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

@@ -28,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
-            android:text="Detallada" />
+            android:text="Detailed" />
 
         <Button
             android:id="@+id/btnType3"
@@ -42,7 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
-            android:text="Progreso" />
+            android:text="Progress" />
         <Button
             android:id="@+id/btnType5"
             android:layout_width="wrap_content"

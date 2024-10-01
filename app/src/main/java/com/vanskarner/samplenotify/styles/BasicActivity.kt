@@ -40,12 +40,12 @@ class BasicActivity : BaseActivity() {
         findViewById<Button>(R.id.btnSetting).setOnClickListener { openSettings() }
         findViewById<Button>(R.id.btnType1).setOnClickListener { simple() }
         findViewById<Button>(R.id.btnType2).setOnClickListener { detail() }
-        findViewById<Button>(R.id.btnType3).setOnClickListener { withActions() }
-        findViewById<Button>(R.id.btnType4).setOnClickListener { withProgress(this) }
-        findViewById<Button>(R.id.btnType5).setOnClickListener { withIndeterminateProgress(this) }
+        findViewById<Button>(R.id.btnType3).setOnClickListener { actions() }
+        findViewById<Button>(R.id.btnType4).setOnClickListener { progress(this) }
+        findViewById<Button>(R.id.btnType5).setOnClickListener { indeterminateProgress(this) }
     }
 
-    private fun withIndeterminateProgress(context: Context) {
+    private fun indeterminateProgress(context: Context) {
         CoroutineScope(Dispatchers.IO).launch {
             for (progress in 0..100 step 20) {
                 delay(1000)
@@ -54,14 +54,16 @@ class BasicActivity : BaseActivity() {
                         title = "Downloading Dina's Prosecutor File"
                         text = "Be careful their government and most of the police work together."
                     }
-                    .progress(progress, true)
-                    .hideProgress { progress == 100 }
+                    .progress {
+                        indeterminate = true
+                        hide = progress == 100
+                    }
                     .show()
             }
         }
     }
 
-    private fun withProgress(context: Context) {
+    private fun progress(context: Context) {
         CoroutineScope(Dispatchers.IO).launch {
             for (progress in 0..100 step 20) {
                 delay(1000)
@@ -70,14 +72,16 @@ class BasicActivity : BaseActivity() {
                         title = "Downloading Dina's Prosecutor File"
                         text = "Be careful their government and most of the police work together."
                     }
-                    .progress(progress)
-                    .hideProgress { progress == 100 }
+                    .progress {
+                        currentValue = progress
+                        hide = progress == 100
+                    }
                     .show()
             }
         }
     }
 
-    private fun withActions() {
+    private fun actions() {
         val notifyId = 666
         SimpleNotify.with(this)
             .asBasic {
@@ -92,11 +96,11 @@ class BasicActivity : BaseActivity() {
             }
             .addAction {
                 label = "Impeachment"
-                pending = getSimplePendingIntent()
+                pending = getSimplePendingIntent(BasicActivity::class.java)
             }
             .addAction {
                 label = "Report"
-                pending = getSimplePendingIntent()
+                pending = getSimplePendingIntent(BasicActivity::class.java)
             }
             .show()
     }
@@ -108,7 +112,7 @@ class BasicActivity : BaseActivity() {
                 title = "Dina Balearte: Order with bullets and promotions"
                 text = "Promotions after repression, a touch of presidential irony."
                 largeIcon = BitmapFactory.decodeResource(resources, R.drawable.dina4)
-                pending = getSimplePendingIntent()
+                pending = getSimplePendingIntent(BasicActivity::class.java)
             }
             .show()
     }

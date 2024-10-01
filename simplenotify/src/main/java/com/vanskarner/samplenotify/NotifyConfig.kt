@@ -7,7 +7,7 @@ import com.vanskarner.samplenotify.internal.NotifyGenerator
 class NotifyConfig(private val context: Context) {
     private var data: Data? = null
     private var extras: ExtraData = ExtraData()
-    private var progressData: ProgressData = ProgressData.byDefault()
+    private var progressData: ProgressData? = null
     private var channelData: ChannelData = ChannelData.byDefault(context)
     private val actions: Array<ActionData?> by lazy { arrayOfNulls(MAXIMUM_ACTIONS) }
 
@@ -41,23 +41,8 @@ class NotifyConfig(private val context: Context) {
         return this
     }
 
-    fun progress(
-        currentPercentage: Int,
-        indeterminate: Boolean = false
-    ): NotifyConfig {
-        this.progressData = progressData.apply {
-            this.currentPercentage = currentPercentage
-            this.indeterminate = indeterminate
-            this.enable = true
-        }
-        return this
-    }
-
-    fun hideProgress(conditionToHide: () -> Boolean = { true }): NotifyConfig {
-        this.progressData = progressData.apply {
-            this.conditionToHide = conditionToHide
-            this.enable = true
-        }
+    fun progress(content: ProgressData.() -> Unit): NotifyConfig {
+        this.progressData = ProgressData().apply(content)
         return this
     }
 

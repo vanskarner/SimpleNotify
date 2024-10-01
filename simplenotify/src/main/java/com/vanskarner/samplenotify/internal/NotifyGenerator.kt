@@ -16,7 +16,7 @@ internal class NotifyGenerator(
     private val context: Context,
     private val data: Data,
     private val extra: ExtraData,
-    private val progressData: ProgressData,
+    private val progressData: ProgressData?,
     private val channelData: ChannelData,
     private val actions: Array<ActionData?>,
 ) {
@@ -29,10 +29,10 @@ internal class NotifyGenerator(
         notifyChannel.applyChannel(context, selectedChannel)
         val notifyBuilder = NotificationCompat.Builder(context, selectedChannel.id)
         assignContent.applyData(data, notifyBuilder)
-        assignContent.applyExtras(extra,notifyBuilder)
+        assignContent.applyExtras(extra, notifyBuilder)
         applyActions(notifyBuilder)
-        assignContent.applyProgress(progressData, notifyBuilder)
-        val notificationId = generateId()
+        progressData?.let { assignContent.applyProgress(it, notifyBuilder) }
+        val notificationId = generateNotificationId()
         with(NotificationManagerCompat.from(context)) {
             if (ActivityCompat.checkSelfPermission(
                     context,
@@ -47,15 +47,17 @@ internal class NotifyGenerator(
     }
 
     private fun selectChannel(): ChannelData {
-        return if (progressData.enable && channelData.id == DEFAULT_CHANNEL_ID)
+        return if (hasProgress() && channelData.id == DEFAULT_CHANNEL_ID)
             ChannelData.forProgress(context)
         else channelData
     }
 
-    private fun generateId(): Int {
-        return if (progressData.enable && data.id == null) DEFAULT_PROGRESS_NOTIFICATION_ID
+    private fun generateNotificationId(): Int {
+        return if (hasProgress() && data.id == null) DEFAULT_PROGRESS_NOTIFICATION_ID
         else data.id ?: Random.nextInt(0, Int.MAX_VALUE)
     }
+
+    private fun hasProgress() = progressData != null
 
     private fun applyActions(builder: NotificationCompat.Builder) {
         actions

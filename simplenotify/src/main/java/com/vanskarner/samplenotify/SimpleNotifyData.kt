@@ -86,23 +86,11 @@ sealed class ActionData {
     ) : ActionData()
 }
 
-internal data class ProgressData(
-    var currentPercentage: Int,
-    var indeterminate: Boolean,
-    var conditionToHide: (() -> Boolean),
-    var enable: Boolean
-) {
-    companion object {
-        internal fun byDefault(): ProgressData {
-            return ProgressData(
-                currentPercentage = 0,
-                indeterminate = false,
-                conditionToHide = { false },
-                enable = false,
-            )
-        }
-    }
-}
+data class ProgressData(
+    var currentValue: Int = 0,
+    var indeterminate: Boolean = false,
+    var hide: Boolean = false
+)
 
 data class ChannelData(
     var id: String,

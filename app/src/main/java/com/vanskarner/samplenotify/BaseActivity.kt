@@ -1,5 +1,6 @@
 package com.vanskarner.samplenotify
 
+import android.app.Activity
 import android.app.PendingIntent
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -24,8 +25,8 @@ abstract class BaseActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    fun getSimplePendingIntent(): PendingIntent {
-        val intent = Intent(this, MainActivity::class.java).apply {
+    fun getSimplePendingIntent(clazz: Class<out Activity>): PendingIntent {
+        val intent = Intent(this, clazz).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
         return PendingIntent
