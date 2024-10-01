@@ -9,7 +9,7 @@ class RemoteInputBroadcast : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         val msg = getMessageText(intent)
-        val notificationId = intent.getIntExtra(MainActivity.INTENT_EXTRA_NOTIFY_ID, -1)
+        val notificationId = intent.getIntExtra(BaseActivity.INTENT_EXTRA_NOTIFY_ID, -1)
         SimpleNotify
             .with(context)
             .asBasic {
@@ -25,7 +25,7 @@ class RemoteInputBroadcast : BroadcastReceiver() {
 
     private fun getMessageText(intent: Intent): CharSequence? {
         return RemoteInput.getResultsFromIntent(intent)
-            ?.getCharSequence(MainActivity.REMOTE_INPUT_KEY)
+            ?.getCharSequence(BaseActivity.REMOTE_INPUT_KEY)
     }
 
 }

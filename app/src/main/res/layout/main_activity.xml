@@ -9,6 +9,7 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -16,85 +17,54 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <Button
-            android:id="@+id/btnType1"
+            android:id="@+id/btnBasic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
-            android:text="Basic 1" />
+            android:text="Basic" />
 
         <Button
-            android:id="@+id/btnType2"
+            android:id="@+id/btnBigText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
-            android:text="Basic 2" />
+            android:text="Big Text" />
 
         <Button
-            android:id="@+id/btnType3"
+            android:id="@+id/btnBigPicture"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
-            android:text="Basic 3" />
+            android:text="Big Picture" />
 
         <Button
-            android:id="@+id/btnType4"
+            android:id="@+id/btnInbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
-            android:text="Basic 4" />
+            android:text="Inbox" />
+
         <Button
-            android:id="@+id/btnType5"
+            android:id="@+id/btnMessaging"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
-            android:text="Basic 5" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/lyPermission"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:checked="true"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:text="Notification Permission"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <Button
-            android:id="@+id/btnPermission"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Request \n Permission" />
-
-        <TextView
-            android:id="@+id/tvPermission"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            tools:text="Not granted" />
+            android:text="Messaging" />
     </LinearLayout>
 
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/textView"
+        android:layout_width="0dp"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:textStyle="bold"
         android:layout_height="wrap_content"
-        android:text="Only for Android 13.0+"
-        app:layout_constraintEnd_toEndOf="@+id/lyPermission"
-        app:layout_constraintStart_toStartOf="@+id/lyPermission"
-        app:layout_constraintTop_toBottomOf="@+id/lyPermission" />
-
-    <Button
-        android:id="@+id/btnSetting"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
-        android:layout_marginBottom="32dp"
-        android:text="App Settings"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:text="Notification Styles"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
