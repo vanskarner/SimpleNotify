@@ -61,20 +61,10 @@ internal object AssignContent {
     fun applyExtras(extras: ExtraData, builder: NotificationCompat.Builder) {
         builder.setCategory(extras.category)
         builder.setSubText(extras.subText)
-        builder.setVibrate(extras.vibrationPattern)
         builder.setDeleteIntent(extras.deleteIntent)
         extras.visibility?.let { builder.setVisibility(it) }
-        extras.lights?.let {
-            builder.setLights(
-                extras.lights!!.first,
-                extras.lights!!.second,
-                extras.lights!!.third
-            )
-        }
         extras.ongoing?.let { builder.setOngoing(it) }
         extras.color?.let { builder.setColor(it) }
-        extras.timeoutAfter?.let { builder.setTimeoutAfter(it) }
-        extras.badgeIconType?.let { builder.setBadgeIconType(it) }
         extras.timestampWhen?.let { builder.setWhen(it) }
         extras.fullScreenIntent?.let { builder.setFullScreenIntent(it.first, it.second) }
         extras.onlyAlertOnce?.let { builder.setOnlyAlertOnce(it) }

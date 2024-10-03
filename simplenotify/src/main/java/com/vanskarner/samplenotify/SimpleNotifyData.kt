@@ -23,6 +23,8 @@ sealed class Data {
     var priority: Int = NotificationCompat.PRIORITY_DEFAULT
     var pending: PendingIntent? = null
     var autoCancel: Boolean = true
+//    var timeoutAfter: Long? = null
+//    var badgeIconType: Int? = null
 
     data class BasicData(
         var text: String? = null
@@ -52,16 +54,11 @@ sealed class Data {
     ) : Data()
 }
 
-@Suppress("ArrayInDataClass")
 data class ExtraData(
     var category: String? = null,
     var visibility: Int? = null,
-    var vibrationPattern: LongArray? = null,
-    var lights: Triple<Int, Int, Int>? = null,
     var ongoing: Boolean? = null,
     var color: Int? = null,
-    var timeoutAfter: Long? = null,
-    var badgeIconType: Int? = null,
     var timestampWhen: Long? = null,
     var deleteIntent: PendingIntent? = null,
     var fullScreenIntent: Pair<PendingIntent, Boolean>? = null,
@@ -99,6 +96,8 @@ data class ChannelData(
     var importance: Int,
     var sound: Uri?,
     var audioAttributes: AudioAttributes?
+//    var vibrationPattern: LongArray? = null,
+//    var lights: Triple<Int, Int, Int>? = null,
 ) {
     companion object {
         internal fun byDefault(context: Context) = ChannelData(
