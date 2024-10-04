@@ -9,7 +9,7 @@ class NotifyConfig(private val context: Context) {
     private var extras: ExtraData = ExtraData()
     private var progressData: ProgressData? = null
     private var channelData: ChannelData = ChannelData.byDefault(context)
-    private val actions: Array<ActionData?> by lazy { arrayOfNulls(MAXIMUM_ACTIONS) }
+    internal val actions: Array<ActionData?> by lazy { arrayOfNulls(MAXIMUM_ACTIONS) }
 
     fun asBasic(content: Data.BasicData.() -> Unit): NotifyConfig {
         this.data = Data.BasicData().apply(content)
