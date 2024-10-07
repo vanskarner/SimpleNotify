@@ -7,7 +7,6 @@ import androidx.core.app.NotificationCompat
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SdkSuppress
-import com.vanskarner.samplenotify.ChannelData
 import com.vanskarner.samplenotify.Data
 import com.vanskarner.samplenotify.ExtraData
 import com.vanskarner.samplenotify.ProgressData
@@ -32,7 +31,7 @@ class NotifyGeneratorBeforeApi26Test {
     }
 
     @Test
-    fun show_whenIdIsNullAndProgressIsNotNull_setNotificationAndProgress() = runTest {
+    fun show_whenHasProgressAndHasNoChannel_shouldBeShown() = runTest {
         val data = Data.BasicData()
         data.id = null
         val progressData = ProgressData(
@@ -45,25 +44,27 @@ class NotifyGeneratorBeforeApi26Test {
             data = data,
             extra = ExtraData(),
             progressData = progressData,
-            channelData = ChannelData.byDefault(ApplicationProvider.getApplicationContext()),
+            channelId = null,
             actions = emptyArray(),
         )
         val actualNotificationId = notifyGenerator.show()
-        val actualNotification =
+        val statusBarNotification =
             notificationManager.activeNotifications.first { it.id == actualNotificationId }
+        val actualNotification = statusBarNotification.notification
 
+        assertEquals(DEFAULT_PROGRESS_NOTIFICATION_ID, statusBarNotification.id)
         assertEquals(
             progressData.currentValue,
-            actualNotification.notification.extras.getInt(NotificationCompat.EXTRA_PROGRESS)
+            actualNotification.extras.getInt(NotificationCompat.EXTRA_PROGRESS)
         )
         assertEquals(
             progressData.indeterminate,
-            actualNotification.notification.extras.getBoolean(NotificationCompat.EXTRA_PROGRESS_INDETERMINATE)
+            actualNotification.extras.getBoolean(NotificationCompat.EXTRA_PROGRESS_INDETERMINATE)
         )
     }
 
     @Test
-    fun show_whenIdIsNullAndProgressIsNull_setNotification() = runTest {
+    fun show_whenHasNoProgressAndHasNoChannel_shouldBeShown() = runTest {
         val data = Data.BasicData()
         data.id = null
         notifyGenerator = NotifyGenerator(
@@ -71,25 +72,24 @@ class NotifyGeneratorBeforeApi26Test {
             data = data,
             extra = ExtraData(),
             progressData = null,
-            channelData = ChannelData.byDefault(ApplicationProvider.getApplicationContext()),
+            channelId = null,
             actions = emptyArray(),
         )
         val actualNotificationId = notifyGenerator.show()
-        val actualNotification =
+        val statusBarNotification =
             notificationManager.activeNotifications.first { it.id == actualNotificationId }
+        val actualNotification = statusBarNotification.notification
 
-        assertEquals(
-            0,
-            actualNotification.notification.extras.getInt(NotificationCompat.EXTRA_PROGRESS)
-        )
+        assertNotNull(actualNotification)
+        assertEquals(0, actualNotification.extras.getInt(NotificationCompat.EXTRA_PROGRESS))
         assertEquals(
             false,
-            actualNotification.notification.extras.getBoolean(NotificationCompat.EXTRA_PROGRESS_INDETERMINATE)
+            actualNotification.extras.getBoolean(NotificationCompat.EXTRA_PROGRESS_INDETERMINATE)
         )
     }
 
     @Test
-    fun show_whenIdIsNotNullAndProgressIsNotNull_setNotificationAndProgress() = runTest {
+    fun show_whenHasIdAndHasProgressAndHasChannel_shouldBeShown() = runTest {
         val data = Data.BasicData()
         data.id = 111
         val progressData = ProgressData(
@@ -102,25 +102,27 @@ class NotifyGeneratorBeforeApi26Test {
             data = data,
             extra = ExtraData(),
             progressData = progressData,
-            channelData = ChannelData.byDefault(ApplicationProvider.getApplicationContext()),
+            channelId = "testId",
             actions = emptyArray(),
         )
         notifyGenerator.show()
-        val actualNotification =
+        val statusBarNotification =
             notificationManager.activeNotifications.first { it.id == data.id }
+        val actualNotification = statusBarNotification.notification
 
+        assertNotNull(actualNotification)
         assertEquals(
             progressData.currentValue,
-            actualNotification.notification.extras.getInt(NotificationCompat.EXTRA_PROGRESS)
+            actualNotification.extras.getInt(NotificationCompat.EXTRA_PROGRESS)
         )
         assertEquals(
             progressData.indeterminate,
-            actualNotification.notification.extras.getBoolean(NotificationCompat.EXTRA_PROGRESS_INDETERMINATE)
+            actualNotification.extras.getBoolean(NotificationCompat.EXTRA_PROGRESS_INDETERMINATE)
         )
     }
 
     @Test
-    fun show_whenIdIsNotNullAndProgressIsNull_setNotification() = runTest {
+    fun show_whenHasIdAndHasNoProgressAndHasChannel_shouldBeShown() = runTest {
         val data = Data.BasicData()
         data.id = 111
         notifyGenerator = NotifyGenerator(
@@ -128,20 +130,19 @@ class NotifyGeneratorBeforeApi26Test {
             data = data,
             extra = ExtraData(),
             progressData = null,
-            channelData = ChannelData.byDefault(ApplicationProvider.getApplicationContext()),
+            channelId = "testId",
             actions = emptyArray(),
         )
         notifyGenerator.show()
-        val actualNotification =
+        val statusBarNotification =
             notificationManager.activeNotifications.first { it.id == data.id }
+        val actualNotification = statusBarNotification.notification
 
-        assertEquals(
-            0,
-            actualNotification.notification.extras.getInt(NotificationCompat.EXTRA_PROGRESS)
-        )
+        assertNotNull(actualNotification)
+        assertEquals(0, actualNotification.extras.getInt(NotificationCompat.EXTRA_PROGRESS))
         assertEquals(
             false,
-            actualNotification.notification.extras.getBoolean(NotificationCompat.EXTRA_PROGRESS_INDETERMINATE)
+            actualNotification.extras.getBoolean(NotificationCompat.EXTRA_PROGRESS_INDETERMINATE)
         )
     }
 

@@ -8,11 +8,10 @@ import androidx.test.espresso.Espresso
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SdkSuppress
 import androidx.test.platform.app.InstrumentationRegistry
-import com.vanskarner.samplenotify.ChannelData
 import com.vanskarner.simplenotify.R
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -23,39 +22,40 @@ class NotifyChannelBeforeApi26Test {
     private lateinit var notifyChannel: NotifyChannel
     private lateinit var appContext: Context
     private lateinit var notificationManager: NotificationManager
-    private lateinit var expectedChannel: ChannelData
 
     @Before
     fun setup() {
         appContext = InstrumentationRegistry.getInstrumentation().targetContext
         notificationManager =
             appContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        expectedChannel = ChannelData.byDefault(appContext)
 
         notifyChannel = NotifyChannel
     }
 
     @Test
-    fun applyChannelAndGetChannel_shouldBeNull() {
-        val actualChannelId = notifyChannel.applyChannel(appContext, expectedChannel)
-        val actualChannel = notifyChannel.getChannel(appContext, expectedChannel.id)
+    fun applyDefaultChannel_shouldOnlyReturnId() {
+        val channelId = notifyChannel.applyDefaultChannel(appContext)
 
-        assertEquals(expectedChannel.id, actualChannelId)
-        assertNull(actualChannel)
+        assertEquals(DEFAULT_CHANNEL_ID, channelId)
     }
 
     @Test
-    fun deleteChannel_shouldBeNull() {
-        notifyChannel.applyChannel(appContext, expectedChannel)
-        notifyChannel.deleteChannel(appContext, expectedChannel.id)
-        val actualChannel = notifyChannel.getChannel(appContext, expectedChannel.id)
+    fun applyProgressChannel_shouldOnlyReturnId() {
+        val channelId = notifyChannel.applyProgressChannel(appContext)
 
-        assertNull(actualChannel)
+        assertEquals(DEFAULT_PROGRESS_CHANNEL_ID, channelId)
+    }
+
+    @Test
+    fun checkChannelNotExists_shouldOnlyReturnTrue() {
+        val channel1 = notifyChannel.checkChannelNotExists(appContext, "anyId")
+
+        assertTrue(channel1)
     }
 
     @Test
     fun cancelNotification_shouldBeCanceled() {
-        val channelId = notifyChannel.applyChannel(appContext, expectedChannel)
+        val channelId = notifyChannel.applyDefaultChannel(appContext)
         val notificationId = 123
         val notifyBuilder = NotificationCompat.Builder(appContext, channelId)
             .setSmallIcon(R.drawable.baseline_notifications_24)
@@ -73,7 +73,7 @@ class NotifyChannelBeforeApi26Test {
 
     @Test
     fun cancelAllNotification_shouldBeCanceled() {
-        val channelId = notifyChannel.applyChannel(appContext, expectedChannel)
+        val channelId = notifyChannel.applyDefaultChannel(appContext)
         val notificationId = 123
         val notifyBuilder = NotificationCompat.Builder(appContext, channelId)
             .setSmallIcon(R.drawable.baseline_notifications_24)

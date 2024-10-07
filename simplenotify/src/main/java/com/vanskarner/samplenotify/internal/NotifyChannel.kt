@@ -4,49 +4,76 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Context.NOTIFICATION_SERVICE
+import android.media.AudioAttributes
+import android.media.RingtoneManager
 import android.os.Build
 import androidx.annotation.RequiresApi
-import com.vanskarner.samplenotify.ChannelData
+import com.vanskarner.simplenotify.R
 
 internal object NotifyChannel {
 
-    fun getChannel(context: Context, channelId: String): NotificationChannel? {
-        return when {
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ->
-                getManager(context).getNotificationChannel(channelId)
-
-            else -> null
+    fun applyDefaultChannel(context: Context): String {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+            && checkChannelNotExists(context, DEFAULT_CHANNEL_ID)
+        ) {
+            val manager = getManager(context)
+            val defaultChannel = defaultChannel(context)
+            manager.createNotificationChannel(defaultChannel)
         }
+        return DEFAULT_CHANNEL_ID
     }
 
-    fun applyChannel(context: Context, data: ChannelData): String {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
-            checkChannelNotExists(context, data.id)
-        )
-            registerChannel(context, data)
-        return data.id
+    fun applyProgressChannel(context: Context): String {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+            && checkChannelNotExists(context, DEFAULT_PROGRESS_CHANNEL_ID)
+        ) {
+            val manager = getManager(context)
+            val progressChannel = progressChannel(context)
+            manager.createNotificationChannel(progressChannel)
+        }
+        return DEFAULT_PROGRESS_CHANNEL_ID
     }
 
-    fun deleteChannel(context: Context, channelId: String) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-            getManager(context).deleteNotificationChannel(channelId)
+    fun checkChannelNotExists(context: Context, channelId: String): Boolean {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val manager = getManager(context)
+            return manager.getNotificationChannel(channelId) == null
+        }
+        return true
     }
 
     fun cancelNotification(context: Context, id: Int) = getManager(context).cancel(id)
 
     fun cancelAllNotification(context: Context) = getManager(context).cancelAll()
 
+    private fun getManager(context: Context): NotificationManager =
+        context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun registerChannel(context: Context, data: ChannelData) {
-        val channel = AssignContent.applyNotificationChannel(data)
-        getManager(context).createNotificationChannel(channel)
+    private fun defaultChannel(context: Context): NotificationChannel {
+        val channel = NotificationChannel(
+            DEFAULT_CHANNEL_ID,
+            context.getString(R.string.chanel_name),
+            NotificationManager.IMPORTANCE_DEFAULT
+        )
+        channel.description = context.getString(R.string.chanel_description)
+        channel.setSound(
+            RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION),
+            AudioAttributes.Builder().build()
+        )
+        return channel
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun checkChannelNotExists(context: Context, channelId: String) =
-        getManager(context).getNotificationChannel(channelId) == null
-
-    private fun getManager(context: Context): NotificationManager =
-        context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+    private fun progressChannel(context: Context): NotificationChannel {
+        val channel = NotificationChannel(
+            DEFAULT_PROGRESS_CHANNEL_ID,
+            context.getString(R.string.progress_channel_name),
+            NotificationManager.IMPORTANCE_DEFAULT
+        )
+        channel.description = context.getString(R.string.progress_channel_description)
+        channel.setSound(null, null)
+        return channel
+    }
 
 }

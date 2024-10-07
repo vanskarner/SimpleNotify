@@ -5,7 +5,6 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import com.vanskarner.samplenotify.ActionData
-import com.vanskarner.samplenotify.ChannelData
 import com.vanskarner.samplenotify.Data
 import com.vanskarner.samplenotify.ExtraData
 import com.vanskarner.samplenotify.ProgressData
@@ -93,15 +92,15 @@ internal object AssignContent {
         else builder.setProgress(100, progressData.currentValue, progressData.indeterminate)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun applyNotificationChannel(channelData: ChannelData): NotificationChannel {
-        val notificationChannel =
-            NotificationChannel(channelData.id, channelData.name, channelData.importance)
-                .apply {
-                    description = channelData.summary
-                }
-        notificationChannel.setSound(channelData.sound, channelData.audioAttributes)
-        return notificationChannel
-    }
+//    @RequiresApi(Build.VERSION_CODES.O)
+//    fun applyNotificationChannel(channelData: ChannelData): NotificationChannel {
+//        val notificationChannel =
+//            NotificationChannel(channelData.id, channelData.name, channelData.importance)
+//                .apply {
+//                    description = channelData.summary
+//                }
+//        notificationChannel.setSound(channelData.sound, channelData.audioAttributes)
+//        return notificationChannel
+//    }
 
 }

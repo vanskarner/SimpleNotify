@@ -1,18 +1,11 @@
 package com.vanskarner.samplenotify
 
-import android.app.NotificationManager
 import androidx.core.app.NotificationCompat.MessagingStyle.Message
 import android.app.PendingIntent
-import android.content.Context
 import android.graphics.Bitmap
-import android.media.AudioAttributes
-import android.media.RingtoneManager
-import android.net.Uri
 import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
 import androidx.core.app.RemoteInput
-import com.vanskarner.samplenotify.internal.DEFAULT_CHANNEL_ID
-import com.vanskarner.samplenotify.internal.DEFAULT_PROGRESS_CHANNEL_ID
 import com.vanskarner.simplenotify.R
 
 sealed class Data {
@@ -88,35 +81,3 @@ data class ProgressData(
     var indeterminate: Boolean = false,
     var hide: Boolean = false
 )
-
-data class ChannelData(
-    var id: String,
-    var name: String,
-    var summary: String,
-    var importance: Int,
-    var sound: Uri?,
-    var audioAttributes: AudioAttributes?
-//    var vibrationPattern: LongArray? = null,
-//    var lights: Triple<Int, Int, Int>? = null,
-) {
-    companion object {
-        internal fun byDefault(context: Context) = ChannelData(
-            id = DEFAULT_CHANNEL_ID,
-            name = context.getString(R.string.chanel_name),
-            summary = context.getString(R.string.chanel_description),
-            importance = NotificationManager.IMPORTANCE_DEFAULT,
-            sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION),
-            audioAttributes = AudioAttributes.Builder().build()
-        )
-
-        internal fun forProgress(context: Context) = ChannelData(
-            id = DEFAULT_PROGRESS_CHANNEL_ID,
-            name = context.getString(R.string.progress_channel_name),
-            summary = context.getString(R.string.progress_channel_description),
-            importance = NotificationManager.IMPORTANCE_DEFAULT,
-            sound = null,
-            audioAttributes = null
-        )
-    }
-
-}

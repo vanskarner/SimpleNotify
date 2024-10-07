@@ -6,7 +6,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.vanskarner.samplenotify.ActionData
-import com.vanskarner.samplenotify.ChannelData
 import com.vanskarner.samplenotify.Data
 import com.vanskarner.samplenotify.ExtraData
 import com.vanskarner.samplenotify.ProgressData
@@ -17,7 +16,7 @@ internal class NotifyGenerator(
     private val data: Data,
     private val extra: ExtraData,
     private val progressData: ProgressData?,
-    private val channelData: ChannelData,
+    private val channelId: String?,
     private val actions: Array<ActionData?>,
 ) {
 
@@ -25,9 +24,7 @@ internal class NotifyGenerator(
     private val notifyChannel = NotifyChannel
 
     fun show(): Int {
-        val selectedChannel = selectChannel()
-        notifyChannel.applyChannel(context, selectedChannel)
-        val notifyBuilder = NotificationCompat.Builder(context, selectedChannel.id)
+        val notifyBuilder = NotificationCompat.Builder(context, selectChannelId())
         assignContent.applyData(data, notifyBuilder)
         assignContent.applyExtras(extra, notifyBuilder)
         applyActions(notifyBuilder)
@@ -46,10 +43,12 @@ internal class NotifyGenerator(
         return notificationId
     }
 
-    private fun selectChannel(): ChannelData {
-        return if (hasProgress() && channelData.id == DEFAULT_CHANNEL_ID)
-            ChannelData.forProgress(context)
-        else channelData
+    fun selectChannelId(): String {
+        return when {
+            hasNoProgress() && channelNotExists() -> notifyChannel.applyDefaultChannel(context)
+            hasProgress() && channelNotExists() -> notifyChannel.applyProgressChannel(context)
+            else -> channelId ?: notifyChannel.applyDefaultChannel(context)
+        }
     }
 
     private fun generateNotificationId(): Int {
@@ -57,7 +56,16 @@ internal class NotifyGenerator(
         else data.id ?: Random.nextInt(0, Int.MAX_VALUE)
     }
 
+    private fun channelNotExists(): Boolean {
+        if (channelId != null) {
+            return notifyChannel.checkChannelNotExists(context, channelId)
+        }
+        return true
+    }
+
     private fun hasProgress() = progressData != null
+
+    private fun hasNoProgress() = progressData == null
 
     private fun applyActions(builder: NotificationCompat.Builder) {
         actions

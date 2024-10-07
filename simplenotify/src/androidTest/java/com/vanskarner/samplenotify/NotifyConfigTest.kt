@@ -250,6 +250,16 @@ class NotifyConfigTest {
     }
 
     @Test
+    fun useChannel_shouldSetChannel() {
+        notifyConfig.useChannel("AnyChannelId")
+        val channelIdField = notifyConfig.javaClass.getDeclaredField("channelId")
+        channelIdField.isAccessible = true
+        val actualChannelIdField = channelIdField.get(notifyConfig) as String
+
+        assertEquals("AnyChannelId", actualChannelIdField)
+    }
+
+    @Test
     fun addAction_whenRegisteringMultipleItems_keepOnlyThreeItems() {
         val expectedPendingIntent = createPendingIntent()
         notifyConfig.addAction {

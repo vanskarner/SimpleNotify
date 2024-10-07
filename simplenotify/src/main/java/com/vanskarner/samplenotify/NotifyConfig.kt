@@ -8,7 +8,7 @@ class NotifyConfig(private val context: Context) {
     private var data: Data? = null
     private var extras: ExtraData = ExtraData()
     private var progressData: ProgressData? = null
-    private var channelData: ChannelData = ChannelData.byDefault(context)
+    private var channelId: String? = null
     internal val actions: Array<ActionData?> by lazy { arrayOfNulls(MAXIMUM_ACTIONS) }
 
     fun asBasic(content: Data.BasicData.() -> Unit): NotifyConfig {
@@ -46,8 +46,8 @@ class NotifyConfig(private val context: Context) {
         return this
     }
 
-    fun useChannel(content: ChannelData.() -> Unit): NotifyConfig {
-        this.channelData = channelData.apply(content)
+    fun useChannel(channelId: String): NotifyConfig {
+        this.channelId = channelId
         return this
     }
 
@@ -70,7 +70,7 @@ class NotifyConfig(private val context: Context) {
                 data = it,
                 extra = extras,
                 actions = actions,
-                channelData = channelData,
+                channelId = channelId,
                 progressData = progressData
             ).show()
         } ?: -1
