@@ -13,8 +13,8 @@ class SimpleNotify {
             return NotifyConfig(context)
         }
 
-        fun cancel(context: Context, channelId: Int) {
-            notifyChannel.cancelNotification(context, channelId)
+        fun cancel(context: Context, notificationId: Int) {
+            notifyChannel.cancelNotification(context, notificationId)
         }
 
         fun cancelAll(context: Context) {
