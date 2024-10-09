@@ -1,4 +1,4 @@
-package com.vanskarner.samplenotify
+package com.vanskarner.samplenotify.common
 
 import android.os.Build
 import androidx.test.rule.GrantPermissionRule

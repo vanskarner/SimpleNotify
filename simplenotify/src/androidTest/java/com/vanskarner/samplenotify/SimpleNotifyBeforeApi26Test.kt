@@ -9,6 +9,7 @@ import androidx.test.espresso.Espresso
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SdkSuppress
 import androidx.test.platform.app.InstrumentationRegistry
+import com.vanskarner.samplenotify.common.ConditionalPermissionRule
 import com.vanskarner.simplenotify.test.R
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull

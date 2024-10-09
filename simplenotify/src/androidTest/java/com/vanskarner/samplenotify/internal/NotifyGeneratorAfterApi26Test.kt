@@ -9,10 +9,10 @@ import androidx.core.app.NotificationCompat
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SdkSuppress
-import com.vanskarner.samplenotify.ConditionalPermissionRule
-import com.vanskarner.samplenotify.Data
+import com.vanskarner.samplenotify.common.ConditionalPermissionRule
 import com.vanskarner.samplenotify.ExtraData
 import com.vanskarner.samplenotify.ProgressData
+import com.vanskarner.samplenotify.common.TestDataProvider
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.*
 import org.junit.Before
@@ -42,7 +42,7 @@ class NotifyGeneratorAfterApi26Test {
 
     @Test
     fun show_whenHasProgressAndHasNoChannel_setDefaultProgressChannel() = runTest {
-        val data = Data.BasicData()
+        val data = TestDataProvider.basicData()
         data.id = null
         val progressData = ProgressData(
             currentValue = 50,
@@ -75,7 +75,7 @@ class NotifyGeneratorAfterApi26Test {
 
     @Test
     fun show_whenHasNoProgressAndHasNoChannel_setDefaultChannel() = runTest {
-        val data = Data.BasicData()
+        val data = TestDataProvider.basicData()
         data.id = null
         notifyGenerator = NotifyGenerator(
             context = context,
@@ -106,7 +106,7 @@ class NotifyGeneratorAfterApi26Test {
         val expectedChannel =
             NotificationChannel("testId", "Any Name", NotificationManager.IMPORTANCE_DEFAULT)
         notificationManager.createNotificationChannel(expectedChannel)
-        val data = Data.BasicData()
+        val data = TestDataProvider.basicData()
         data.id = 111
         val progressData = ProgressData(
             currentValue = 50,
@@ -142,7 +142,7 @@ class NotifyGeneratorAfterApi26Test {
         val expectedChannel =
             NotificationChannel("testId", "Any Name", NotificationManager.IMPORTANCE_DEFAULT)
         notificationManager.createNotificationChannel(expectedChannel)
-        val data = Data.BasicData()
+        val data = TestDataProvider.basicData()
         data.id = 111
         notifyGenerator = NotifyGenerator(
             context = context,

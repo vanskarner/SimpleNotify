@@ -2,9 +2,7 @@ package com.vanskarner.samplenotify
 
 import android.Manifest
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Build
@@ -14,6 +12,8 @@ import androidx.core.app.NotificationCompat.MessagingStyle.Message
 import androidx.core.app.Person
 import androidx.core.app.RemoteInput
 import androidx.test.core.app.ApplicationProvider
+import com.vanskarner.samplenotify.common.ConditionalPermissionRule
+import com.vanskarner.samplenotify.common.TestDataProvider
 import com.vanskarner.simplenotify.test.R
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.*
@@ -37,7 +37,7 @@ class NotifyConfigTest {
 
     @Test
     fun asBasic_shouldSetData() {
-        val expectedPendingIntent = createPendingIntent()
+        val expectedPendingIntent = TestDataProvider.pendingIntent()
         val expectedLargeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
         notifyConfig.asBasic {
             id = 123
@@ -65,7 +65,7 @@ class NotifyConfigTest {
 
     @Test
     fun asBigText_shouldSetData() {
-        val expectedPendingIntent = createPendingIntent()
+        val expectedPendingIntent = TestDataProvider.pendingIntent()
         val expectedLargeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
         notifyConfig.asBigText {
             id = 123
@@ -100,7 +100,7 @@ class NotifyConfigTest {
 
     @Test
     fun asInbox_shouldSetData() {
-        val expectedPendingIntent = createPendingIntent()
+        val expectedPendingIntent = TestDataProvider.pendingIntent()
         val expectedLargeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
         val expectedLines = arrayListOf("item 1", "Item 2", "Item 3")
         notifyConfig.asInbox {
@@ -131,7 +131,7 @@ class NotifyConfigTest {
 
     @Test
     fun asBigPicture_shouldSetData() {
-        val expectedPendingIntent = createPendingIntent()
+        val expectedPendingIntent = TestDataProvider.pendingIntent()
         val expectedLargeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
         val expectedImage = Bitmap.createBitmap(4, 4, Bitmap.Config.ARGB_8888)
         notifyConfig.asBigPicture {
@@ -167,7 +167,7 @@ class NotifyConfigTest {
 
     @Test
     fun asMessaging_shouldSetData() {
-        val expectedPendingIntent = createPendingIntent()
+        val expectedPendingIntent = TestDataProvider.pendingIntent()
         val expectedLargeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
         val expectedUser = Person.Builder().build()
         val expectedMessage = arrayListOf(
@@ -237,8 +237,8 @@ class NotifyConfigTest {
 
     @Test
     fun extras_shouldSetData() {
-        val expectedPendingIntent = createPendingIntent()
-        val expectedFullScreenIntent = Pair(createPendingIntent(), true)
+        val expectedPendingIntent = TestDataProvider.pendingIntent()
+        val expectedFullScreenIntent = Pair(TestDataProvider.pendingIntent(), true)
         val expectedTimestampWhen = System.currentTimeMillis()
         notifyConfig.extras {
             category = NotificationCompat.CATEGORY_MESSAGE
@@ -298,7 +298,7 @@ class NotifyConfigTest {
 
     @Test
     fun addAction_whenRegisteringMultipleItems_keepOnlyThreeItems() {
-        val expectedPendingIntent = createPendingIntent()
+        val expectedPendingIntent = TestDataProvider.pendingIntent()
         notifyConfig.addAction {
             icon = R.drawable.test_ic_message_24
             label = "Action 1"
@@ -325,7 +325,7 @@ class NotifyConfigTest {
 
     @Test
     fun addReplyAction_whenRegisteringMultipleItems_keepOnlyThreeItems() {
-        val expectedPendingIntent = createPendingIntent()
+        val expectedPendingIntent = TestDataProvider.pendingIntent()
         val expectedRemote = RemoteInput.Builder("anyKey").build()
         notifyConfig.addReplyAction {
             icon = R.drawable.test_ic_message_24
@@ -393,12 +393,4 @@ class NotifyConfigTest {
         )
     }
 
-    private fun createPendingIntent(): PendingIntent {
-        return PendingIntent.getBroadcast(
-            ApplicationProvider.getApplicationContext(),
-            123,
-            Intent(),
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-    }
 }
