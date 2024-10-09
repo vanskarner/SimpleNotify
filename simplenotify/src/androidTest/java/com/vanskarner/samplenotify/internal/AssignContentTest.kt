@@ -18,7 +18,7 @@ import com.vanskarner.samplenotify.ActionData
 import com.vanskarner.samplenotify.Data
 import com.vanskarner.samplenotify.ExtraData
 import com.vanskarner.samplenotify.ProgressData
-import com.vanskarner.simplenotify.R
+import com.vanskarner.simplenotify.test.R
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
@@ -228,12 +228,12 @@ class AssignContentTest {
     @Suppress("DEPRECATION")
     fun applyAction_apply() {
         val basicActionData = ActionData.BasicAction(
-            icon = R.drawable.baseline_notifications_24,
+            icon = R.drawable.test_ic_mail_24,
             label = "Any Label",
             pending = createPendingIntent()
         )
         val replyAction = ActionData.ReplyAction(
-            icon = R.drawable.baseline_notifications_24,
+            icon = R.drawable.test_ic_archive_24,
             label = "Any Label",
             replyPending = createPendingIntent(),
             remote = RemoteInput.Builder("any_key").build()
@@ -309,7 +309,7 @@ class AssignContentTest {
         val basicData = Data.BasicData().apply {
             title = "Any title"
             text = "Any text"
-            smallIcon = R.drawable.baseline_notifications_24
+            smallIcon = R.drawable.test_ic_notification_24
             largeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
             priority = NotificationCompat.PRIORITY_DEFAULT
             contentIntent = pendingIntent
@@ -325,7 +325,7 @@ class AssignContentTest {
             bigText = "Any text"
             text = "Any collapsedText"
             summaryText = "Any summary"
-            smallIcon = R.drawable.baseline_notifications_24
+            smallIcon = R.drawable.test_ic_notification_24
             largeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
             priority = NotificationCompat.PRIORITY_DEFAULT
             contentIntent = pendingIntent
@@ -341,7 +341,7 @@ class AssignContentTest {
             text = "Any text"
             lines = arrayListOf("Any line 1", "Any line 2", "Any line 3")
             text = "Any summary"
-            smallIcon = R.drawable.baseline_notifications_24
+            smallIcon = R.drawable.test_ic_notification_24
             largeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
             priority = NotificationCompat.PRIORITY_HIGH
             contentIntent = pendingIntent
@@ -357,7 +357,7 @@ class AssignContentTest {
             text = "Any collapsedText"
             summaryText = "Any text"
             image = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
-            smallIcon = R.drawable.baseline_notifications_24
+            smallIcon = R.drawable.test_ic_notification_24
             largeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
             priority = NotificationCompat.PRIORITY_HIGH
             contentIntent = pendingIntent
@@ -383,7 +383,7 @@ class AssignContentTest {
                     Person.Builder().setName("Max").build()
                 )
             )
-            smallIcon = R.drawable.baseline_notifications_24
+            smallIcon = R.drawable.test_ic_notification_24
             largeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
             priority = NotificationCompat.PRIORITY_HIGH
             contentIntent = pendingIntent
@@ -396,28 +396,16 @@ class AssignContentTest {
         val data = Data.CustomDesignData().apply {
             hasStyle = false
             smallRemoteViews = {
-                val remoteViews = RemoteViews(
-                    context.packageName,
-                    com.vanskarner.simplenotify.test.R.layout.small_notification
-                )
-                remoteViews.setTextViewText(
-                    com.vanskarner.simplenotify.test.R.id.notification_title,
-                    "Small title"
-                )
+                val remoteViews = RemoteViews(context.packageName, R.layout.test_small_notification)
+                remoteViews.setTextViewText(R.id.notification_title, "Small title")
                 remoteViews
             }
             largeRemoteViews = {
-                val remoteViews = RemoteViews(
-                    context.packageName,
-                    com.vanskarner.simplenotify.test.R.layout.large_notification
-                )
-                remoteViews.setTextViewText(
-                    com.vanskarner.simplenotify.test.R.id.notification_title,
-                    "Large title"
-                )
+                val remoteViews = RemoteViews(context.packageName, R.layout.test_large_notification)
+                remoteViews.setTextViewText(R.id.notification_title, "Large title")
                 remoteViews
             }
-            smallIcon = R.drawable.baseline_notifications_24
+            smallIcon = R.drawable.test_ic_notification_24
             contentIntent = createPendingIntent()
             autoCancel = true
             priority = NotificationCompat.PRIORITY_HIGH

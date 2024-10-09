@@ -9,7 +9,7 @@ import androidx.test.espresso.Espresso
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SdkSuppress
 import androidx.test.platform.app.InstrumentationRegistry
-import com.vanskarner.simplenotify.R
+import com.vanskarner.simplenotify.test.R
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
@@ -83,7 +83,7 @@ class SimpleNotifyBeforeApi26Test {
     fun cancel_shouldBeCancel() {
         val notificationId = 123
         val notifyBuilder = NotificationCompat.Builder(appContext, "anyId")
-            .setSmallIcon(R.drawable.baseline_notifications_24)
+            .setSmallIcon(R.drawable.test_ic_notification_24)
             .setContentTitle("Any Title")
             .setContentText("Any Text")
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
@@ -102,7 +102,7 @@ class SimpleNotifyBeforeApi26Test {
     fun cancelAllNotifications_shouldBeCancel() {
         val notificationId = 123
         val notifyBuilder = NotificationCompat.Builder(appContext, "anyId")
-            .setSmallIcon(R.drawable.baseline_notifications_24)
+            .setSmallIcon(R.drawable.test_ic_notification_24)
             .setContentTitle("Any Title")
             .setContentText("Any Text")
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)

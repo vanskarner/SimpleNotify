@@ -11,7 +11,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SdkSuppress
 import androidx.test.platform.app.InstrumentationRegistry
 import com.vanskarner.samplenotify.internal.DEFAULT_CHANNEL_ID
-import com.vanskarner.simplenotify.R
+import com.vanskarner.simplenotify.test.R
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
@@ -93,7 +93,7 @@ class SimpleNotifyAfterApi26Test {
         notificationManager.createNotificationChannel(testChannel)
         val notificationId = 123
         val notifyBuilder = NotificationCompat.Builder(appContext, testChannel.id)
-            .setSmallIcon(R.drawable.baseline_notifications_24)
+            .setSmallIcon(R.drawable.test_ic_notification_24)
             .setContentTitle("Any Title")
             .setContentText("Any Text")
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
@@ -115,7 +115,7 @@ class SimpleNotifyAfterApi26Test {
         notificationManager.createNotificationChannel(testChannel)
         val notificationId = 123
         val notifyBuilder = NotificationCompat.Builder(appContext, testChannel.id)
-            .setSmallIcon(R.drawable.baseline_notifications_24)
+            .setSmallIcon(R.drawable.test_ic_notification_24)
             .setContentTitle("Any Title")
             .setContentText("Any Text")
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)

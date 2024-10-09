@@ -11,7 +11,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SdkSuppress
 import androidx.test.platform.app.InstrumentationRegistry
 import com.vanskarner.samplenotify.ConditionalPermissionRule
-import com.vanskarner.simplenotify.R
+import com.vanskarner.simplenotify.test.R
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -82,7 +82,7 @@ class NotifyChannelAfterApi26Test {
         val channelId = notifyChannel.applyDefaultChannel(appContext)
         val notificationId = 123
         val notifyBuilder = NotificationCompat.Builder(appContext, channelId)
-            .setSmallIcon(R.drawable.baseline_notifications_24)
+            .setSmallIcon(R.drawable.test_ic_notification_24)
             .setContentTitle("Any Title")
             .setContentText("Any Text")
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
@@ -100,7 +100,7 @@ class NotifyChannelAfterApi26Test {
         val channelId = notifyChannel.applyDefaultChannel(appContext)
         val notificationId = 123
         val notifyBuilder = NotificationCompat.Builder(appContext, channelId)
-            .setSmallIcon(R.drawable.baseline_notifications_24)
+            .setSmallIcon(R.drawable.test_ic_notification_24)
             .setContentTitle("Any Title")
             .setContentText("Any Text")
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)

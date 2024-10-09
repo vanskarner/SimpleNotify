@@ -14,7 +14,7 @@ import androidx.core.app.NotificationCompat.MessagingStyle.Message
 import androidx.core.app.Person
 import androidx.core.app.RemoteInput
 import androidx.test.core.app.ApplicationProvider
-import com.vanskarner.simplenotify.R
+import com.vanskarner.simplenotify.test.R
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.*
 import org.junit.Before
@@ -41,7 +41,7 @@ class NotifyConfigTest {
         val expectedLargeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
         notifyConfig.asBasic {
             id = 123
-            smallIcon = R.drawable.baseline_notifications_24
+            smallIcon = R.drawable.test_ic_notification_24
             title = "Test Title"
             text = "Test Text"
             largeIcon = expectedLargeIcon
@@ -54,7 +54,7 @@ class NotifyConfigTest {
         val actualBasicData = dataField.get(notifyConfig) as Data.BasicData
 
         assertEquals(123, actualBasicData.id)
-        assertEquals(R.drawable.baseline_notifications_24, actualBasicData.smallIcon)
+        assertEquals(R.drawable.test_ic_notification_24, actualBasicData.smallIcon)
         assertEquals("Test Title", actualBasicData.title)
         assertEquals("Test Text", actualBasicData.text)
         assertTrue(actualBasicData.largeIcon?.sameAs(expectedLargeIcon)!!)
@@ -69,7 +69,7 @@ class NotifyConfigTest {
         val expectedLargeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
         notifyConfig.asBigText {
             id = 123
-            smallIcon = R.drawable.baseline_notifications_24
+            smallIcon = R.drawable.test_ic_notification_24
             title = "Test Title"
             bigText = "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
             text = "Contrary to popular belief"
@@ -84,7 +84,7 @@ class NotifyConfigTest {
         val actualBigTextData = dataField.get(notifyConfig) as Data.BigTextData
 
         assertEquals(123, actualBigTextData.id)
-        assertEquals(R.drawable.baseline_notifications_24, actualBigTextData.smallIcon)
+        assertEquals(R.drawable.test_ic_notification_24, actualBigTextData.smallIcon)
         assertEquals("Test Title", actualBigTextData.title)
         assertEquals(
             "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
@@ -105,7 +105,7 @@ class NotifyConfigTest {
         val expectedLines = arrayListOf("item 1", "Item 2", "Item 3")
         notifyConfig.asInbox {
             id = 123
-            smallIcon = R.drawable.baseline_notifications_24
+            smallIcon = R.drawable.test_ic_notification_24
             title = "Test Title"
             text = "Lorem Ipsum is not simply random text"
             lines = expectedLines
@@ -119,7 +119,7 @@ class NotifyConfigTest {
         val actualInboxData = dataField.get(notifyConfig) as Data.InboxData
 
         assertEquals(123, actualInboxData.id)
-        assertEquals(R.drawable.baseline_notifications_24, actualInboxData.smallIcon)
+        assertEquals(R.drawable.test_ic_notification_24, actualInboxData.smallIcon)
         assertEquals("Test Title", actualInboxData.title)
         assertEquals("Lorem Ipsum is not simply random text", actualInboxData.text)
         assertEquals(expectedLines, actualInboxData.lines)
@@ -136,7 +136,7 @@ class NotifyConfigTest {
         val expectedImage = Bitmap.createBitmap(4, 4, Bitmap.Config.ARGB_8888)
         notifyConfig.asBigPicture {
             id = 123
-            smallIcon = R.drawable.baseline_notifications_24
+            smallIcon = R.drawable.test_ic_notification_24
             title = "Test Title"
             text = "Contrary to popular belief"
             summaryText = "Lorem Ipsum is not simply random text"
@@ -151,7 +151,10 @@ class NotifyConfigTest {
         val actualBigPictureData = dataField.get(notifyConfig) as Data.BigPictureData
 
         assertEquals(123, actualBigPictureData.id)
-        assertEquals(R.drawable.baseline_notifications_24, actualBigPictureData.smallIcon)
+        assertEquals(
+            R.drawable.test_ic_notification_24,
+            actualBigPictureData.smallIcon
+        )
         assertEquals("Test Title", actualBigPictureData.title)
         assertEquals("Contrary to popular belief", actualBigPictureData.text)
         assertEquals("Lorem Ipsum is not simply random text", actualBigPictureData.summaryText)
@@ -173,7 +176,7 @@ class NotifyConfigTest {
         )
         notifyConfig.asMessaging {
             id = 123
-            smallIcon = R.drawable.baseline_notifications_24
+            smallIcon = R.drawable.test_ic_notification_24
             conversationTitle = "Contrary to popular belief"
             user = expectedUser
             messages = expectedMessage
@@ -187,7 +190,7 @@ class NotifyConfigTest {
         val actualMessageData = dataField.get(notifyConfig) as Data.MessageData
 
         assertEquals(123, actualMessageData.id)
-        assertEquals(R.drawable.baseline_notifications_24, actualMessageData.smallIcon)
+        assertEquals(R.drawable.test_ic_notification_24, actualMessageData.smallIcon)
         assertEquals("Contrary to popular belief", actualMessageData.conversationTitle)
         assertEquals(expectedUser, actualMessageData.user)
         assertEquals(expectedMessage, actualMessageData.messages)
@@ -201,21 +204,16 @@ class NotifyConfigTest {
     fun asCustomDesign_shouldSetData() {
         val context: Context = ApplicationProvider.getApplicationContext()
         notifyConfig.asCustomDesign {
+            smallIcon = R.drawable.test_ic_notification_24
             hasStyle = true
             smallRemoteViews = {
-                val remoteViews = RemoteViews(
-                    context.packageName,
-                    com.vanskarner.simplenotify.test.R.layout.small_notification
-                )
-                remoteViews.setTextViewText(com.vanskarner.simplenotify.test.R.id.notification_title, "Small title")
+                val remoteViews = RemoteViews(context.packageName, R.layout.test_small_notification)
+                remoteViews.setTextViewText(R.id.notification_title, "Small title")
                 remoteViews
             }
             largeRemoteViews = {
-                val remoteViews = RemoteViews(
-                    context.packageName,
-                    com.vanskarner.simplenotify.test.R.layout.large_notification
-                )
-                remoteViews.setTextViewText(com.vanskarner.simplenotify.test.R.id.notification_title, "Large title")
+                val remoteViews = RemoteViews(context.packageName, R.layout.test_large_notification)
+                remoteViews.setTextViewText(R.id.notification_title, "Large title")
                 remoteViews
             }
         }
@@ -223,9 +221,18 @@ class NotifyConfigTest {
         dataField.isAccessible = true
         val actualCustomDesignData = dataField.get(notifyConfig) as Data.CustomDesignData
 
-        assertEquals(R.drawable.baseline_notifications_24, actualCustomDesignData.smallIcon)
-        assertEquals(com.vanskarner.simplenotify.test.R.layout.small_notification, actualCustomDesignData.smallRemoteViews.invoke()?.layoutId)
-        assertEquals(com.vanskarner.simplenotify.test.R.layout.large_notification, actualCustomDesignData.largeRemoteViews.invoke()?.layoutId)
+        assertEquals(
+            R.drawable.test_ic_notification_24,
+            actualCustomDesignData.smallIcon
+        )
+        assertEquals(
+            R.layout.test_small_notification,
+            actualCustomDesignData.smallRemoteViews.invoke()?.layoutId
+        )
+        assertEquals(
+            R.layout.test_large_notification,
+            actualCustomDesignData.largeRemoteViews.invoke()?.layoutId
+        )
     }
 
     @Test
@@ -293,22 +300,22 @@ class NotifyConfigTest {
     fun addAction_whenRegisteringMultipleItems_keepOnlyThreeItems() {
         val expectedPendingIntent = createPendingIntent()
         notifyConfig.addAction {
-            icon = R.drawable.baseline_notifications_24
+            icon = R.drawable.test_ic_message_24
             label = "Action 1"
             pending = expectedPendingIntent
         }
             .addAction {
-                icon = R.drawable.baseline_notifications_24
+                icon = R.drawable.test_ic_mail_24
                 label = "Action 2"
                 pending = expectedPendingIntent
             }
             .addAction {
-                icon = R.drawable.baseline_notifications_24
+                icon = R.drawable.test_ic_archive_24
                 label = "Action 3"
                 pending = expectedPendingIntent
             }
             .addAction {
-                icon = R.drawable.baseline_notifications_24
+                icon = R.drawable.test_ic_message_24
                 label = "Action 4"
                 pending = expectedPendingIntent
             }
@@ -321,25 +328,25 @@ class NotifyConfigTest {
         val expectedPendingIntent = createPendingIntent()
         val expectedRemote = RemoteInput.Builder("anyKey").build()
         notifyConfig.addReplyAction {
-            icon = R.drawable.baseline_notifications_24
+            icon = R.drawable.test_ic_message_24
             label = "Action 1"
             replyPending = expectedPendingIntent
             remote = expectedRemote
         }
             .addReplyAction {
-                icon = R.drawable.baseline_notifications_24
+                icon = R.drawable.test_ic_mail_24
                 label = "Action 2"
                 replyPending = expectedPendingIntent
                 remote = expectedRemote
             }
             .addReplyAction {
-                icon = R.drawable.baseline_notifications_24
+                icon = R.drawable.test_ic_archive_24
                 label = "Action 3"
                 replyPending = expectedPendingIntent
                 remote = expectedRemote
             }
             .addReplyAction {
-                icon = R.drawable.baseline_notifications_24
+                icon = R.drawable.test_ic_message_24
                 label = "Action 4"
                 replyPending = expectedPendingIntent
                 remote = expectedRemote
