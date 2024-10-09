@@ -36,6 +36,11 @@ class NotifyConfig(private val context: Context) {
         return this
     }
 
+    fun asCustomDesign(content: Data.CustomDesignData.() -> Unit): NotifyConfig {
+        this.data = Data.CustomDesignData().apply(content)
+        return this
+    }
+
     fun extras(content: ExtraData.() -> Unit): NotifyConfig {
         this.extras = extras.apply(content)
         return this

@@ -1,8 +1,5 @@
 package com.vanskarner.samplenotify.internal
 
-import android.app.NotificationChannel
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import com.vanskarner.samplenotify.ActionData
 import com.vanskarner.samplenotify.Data
@@ -14,11 +11,13 @@ internal object AssignContent {
     fun applyData(data: Data, builder: NotificationCompat.Builder) {
         val filteredBuilder = when (data) {
             is Data.BasicData -> {
-                builder.setContentText(data.text)
+                builder.setContentTitle(data.title)
+                    .setContentText(data.text)
             }
 
             is Data.BigTextData -> {
-                builder.setContentText(data.collapsedText)
+                builder.setContentTitle(data.title)
+                    .setContentText(data.collapsedText)
                     .setStyle(
                         NotificationCompat.BigTextStyle()
                             .bigText(data.bigText)
@@ -27,14 +26,16 @@ internal object AssignContent {
             }
 
             is Data.InboxData -> {
-                builder.setContentText(data.summaryText)
+                builder.setContentTitle(data.title)
+                    .setContentText(data.summaryText)
                 val style = NotificationCompat.InboxStyle()
                 data.lines.forEach { style.addLine(it) }
                 builder.setStyle(style)
             }
 
             is Data.BigPictureData -> {
-                builder.setContentText(data.collapsedText)
+                builder.setContentTitle(data.title)
+                    .setContentText(data.collapsedText)
                     .setStyle(
                         NotificationCompat.BigPictureStyle()
                             .setSummaryText(data.summaryText)
@@ -48,9 +49,14 @@ internal object AssignContent {
                 data.messages.forEach { style.addMessage(it.text, it.timestamp, it.person) }
                 builder.setStyle(style)
             }
+
+            is Data.CustomDesignData -> {
+                if (data.hasStyle) builder.setStyle(NotificationCompat.DecoratedCustomViewStyle())
+                builder.setCustomContentView(data.smallRemoteViews.invoke())
+                    .setCustomBigContentView(data.largeRemoteViews.invoke())
+            }
         }
         filteredBuilder.setSmallIcon(data.smallIcon)
-            .setContentTitle(data.title)
             .setLargeIcon(data.largeIcon)
             .setContentIntent(data.pending)
             .setAutoCancel(data.autoCancel)
@@ -91,16 +97,5 @@ internal object AssignContent {
         if (progressData.hide) builder.setProgress(0, 0, false)
         else builder.setProgress(100, progressData.currentValue, progressData.indeterminate)
     }
-
-//    @RequiresApi(Build.VERSION_CODES.O)
-//    fun applyNotificationChannel(channelData: ChannelData): NotificationChannel {
-//        val notificationChannel =
-//            NotificationChannel(channelData.id, channelData.name, channelData.importance)
-//                .apply {
-//                    description = channelData.summary
-//                }
-//        notificationChannel.setSound(channelData.sound, channelData.audioAttributes)
-//        return notificationChannel
-//    }
 
 }

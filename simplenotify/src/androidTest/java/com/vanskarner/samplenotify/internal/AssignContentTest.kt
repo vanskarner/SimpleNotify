@@ -2,12 +2,15 @@ package com.vanskarner.samplenotify.internal
 
 import android.app.Notification
 import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Icon
+import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
+import androidx.core.app.Person
 import androidx.core.app.RemoteInput
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -34,7 +37,8 @@ class AssignContentTest {
     }
 
     @Test
-    fun applyData_apply() {
+    @Suppress("DEPRECATION")
+    fun applyData_asBasicData_apply() {
         val basicData = createBasicData()
         assignContent.applyData(basicData, builder)
         val notification = builder.build()
@@ -42,16 +46,151 @@ class AssignContentTest {
         assertEquals(basicData.title, notification.extras.getString(NotificationCompat.EXTRA_TITLE))
         assertEquals(basicData.text, notification.extras.getString(NotificationCompat.EXTRA_TEXT))
         assertEquals(basicData.smallIcon, notification.smallIcon.resId)
-        @Suppress("DEPRECATION")
         val largeIcon = notification.extras.getParcelable<Icon>(NotificationCompat.EXTRA_LARGE_ICON)
         assertTrue(basicData.largeIcon!!.sameAs(largeIcon?.toBitmap()))
-        @Suppress("DEPRECATION")
         assertEquals(basicData.priority, notification.priority)
         assertEquals(basicData.pending, notification.contentIntent)
         assertEquals(
             basicData.autoCancel,
             notification.flags and NotificationCompat.FLAG_AUTO_CANCEL != 0
         )
+    }
+
+    @Test
+    @Suppress("DEPRECATION")
+    fun applyData_asBigTextData_apply() {
+        val data = createBigTextData()
+        assignContent.applyData(data, builder)
+        val notification = builder.build()
+
+        assertEquals(data.bigText, notification.extras.getString(NotificationCompat.EXTRA_BIG_TEXT))
+        assertEquals(
+            data.summaryText,
+            notification.extras.getString(NotificationCompat.EXTRA_SUMMARY_TEXT)
+        )
+        assertEquals(data.title, notification.extras.getString(NotificationCompat.EXTRA_TITLE))
+        assertEquals(
+            data.collapsedText,
+            notification.extras.getString(NotificationCompat.EXTRA_TEXT)
+        )
+        assertEquals(data.smallIcon, notification.smallIcon.resId)
+        val largeIcon = notification.extras.getParcelable<Icon>(NotificationCompat.EXTRA_LARGE_ICON)
+        assertTrue(data.largeIcon!!.sameAs(largeIcon?.toBitmap()))
+        assertEquals(data.priority, notification.priority)
+        assertEquals(data.pending, notification.contentIntent)
+        assertEquals(
+            data.autoCancel,
+            notification.flags and NotificationCompat.FLAG_AUTO_CANCEL != 0
+        )
+    }
+
+    @Test
+    @Suppress("DEPRECATION")
+    fun applyData_asInboxData_apply() {
+        val data = createInboxData()
+        assignContent.applyData(data, builder)
+        val notification = builder.build()
+
+        assertEquals(data.summaryText, notification.extras.getString(NotificationCompat.EXTRA_TEXT))
+        assertEquals(
+            data.lines.size,
+            notification.extras.getCharSequenceArray(NotificationCompat.EXTRA_TEXT_LINES)?.size
+        )
+        assertEquals(data.title, notification.extras.getString(NotificationCompat.EXTRA_TITLE))
+        assertEquals(data.smallIcon, notification.smallIcon.resId)
+        val largeIcon = notification.extras.getParcelable<Icon>(NotificationCompat.EXTRA_LARGE_ICON)
+        assertTrue(data.largeIcon!!.sameAs(largeIcon?.toBitmap()))
+        assertEquals(data.priority, notification.priority)
+        assertEquals(data.pending, notification.contentIntent)
+        assertEquals(
+            data.autoCancel,
+            notification.flags and NotificationCompat.FLAG_AUTO_CANCEL != 0
+        )
+    }
+
+    @Test
+    @Suppress("DEPRECATION")
+    fun applyData_asBigPictureData_apply() {
+        val data = createBigPictureData()
+        assignContent.applyData(data, builder)
+        val notification = builder.build()
+
+        assertEquals(
+            data.collapsedText,
+            notification.extras.getString(NotificationCompat.EXTRA_TEXT)
+        )
+        assertEquals(
+            data.summaryText,
+            notification.extras.getString(NotificationCompat.EXTRA_SUMMARY_TEXT)
+        )
+        val picture = notification.extras.getParcelable<Bitmap>(NotificationCompat.EXTRA_PICTURE)
+        assertTrue(data.image!!.sameAs(picture))
+        assertEquals(data.title, notification.extras.getString(NotificationCompat.EXTRA_TITLE))
+        assertEquals(data.smallIcon, notification.smallIcon.resId)
+        val largeIcon = notification.extras.getParcelable<Icon>(NotificationCompat.EXTRA_LARGE_ICON)
+        assertTrue(data.largeIcon!!.sameAs(largeIcon?.toBitmap()))
+        assertEquals(data.priority, notification.priority)
+        assertEquals(data.pending, notification.contentIntent)
+        assertEquals(
+            data.autoCancel,
+            notification.flags and NotificationCompat.FLAG_AUTO_CANCEL != 0
+        )
+    }
+
+    @Test
+    @Suppress("DEPRECATION")
+    fun applyData_asMessageData_apply() {
+        val data = createMessageData()
+        assignContent.applyData(data, builder)
+        val notification = builder.build()
+
+        assertEquals(
+            data.conversationTitle,
+            notification.extras.getString(NotificationCompat.EXTRA_CONVERSATION_TITLE)
+        )
+        assertEquals(
+            data.user.name,
+            notification.extras.getString(NotificationCompat.EXTRA_SELF_DISPLAY_NAME)
+        )
+        val messages = notification.extras.getParcelableArray(NotificationCompat.EXTRA_MESSAGES)
+        assertEquals(data.messages.size, messages?.size)
+        assertEquals(data.smallIcon, notification.smallIcon.resId)
+        val largeIcon = notification.extras.getParcelable<Icon>(NotificationCompat.EXTRA_LARGE_ICON)
+        assertTrue(data.largeIcon!!.sameAs(largeIcon?.toBitmap()))
+        assertEquals(data.priority, notification.priority)
+        assertEquals(data.pending, notification.contentIntent)
+        assertEquals(
+            data.autoCancel,
+            notification.flags and NotificationCompat.FLAG_AUTO_CANCEL != 0
+        )
+    }
+
+    @Test
+    @Suppress("DEPRECATION")
+    fun applyData_asCustomDesignData_apply() {
+        val expectedData = createCustomDesignData(ApplicationProvider.getApplicationContext())
+        assignContent.applyData(expectedData, builder)
+        val notification = builder.build()
+
+        assertNotNull(notification.contentView)
+        assertEquals(
+            expectedData.smallRemoteViews.invoke()?.layoutId,
+            notification.contentView.layoutId
+        )
+        assertNotNull(notification.bigContentView)
+        assertEquals(
+            expectedData.largeRemoteViews.invoke()?.layoutId,
+            notification.bigContentView.layoutId
+        )
+        assertEquals(expectedData.smallIcon, notification.smallIcon.resId)
+        val largeIcon = notification.extras.getParcelable<Icon>(NotificationCompat.EXTRA_LARGE_ICON)
+        assertTrue(expectedData.largeIcon!!.sameAs(largeIcon?.toBitmap()))
+        assertEquals(expectedData.pending, notification.contentIntent)
+        assertEquals(
+            expectedData.autoCancel,
+            notification.flags and NotificationCompat.FLAG_AUTO_CANCEL != 0
+        )
+        assertEquals(expectedData.priority, notification.priority)
     }
 
     @Test
@@ -177,6 +316,114 @@ class AssignContentTest {
             autoCancel = true
         }
         return basicData
+    }
+
+    private fun createBigTextData(): Data.BigTextData {
+        val pendingIntent = createPendingIntent()
+        val data = Data.BigTextData().apply {
+            title = "Any title"
+            bigText = "Any text"
+            collapsedText = "Any collapsedText"
+            summaryText = "Any summary"
+            smallIcon = R.drawable.baseline_notifications_24
+            largeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
+            priority = NotificationCompat.PRIORITY_DEFAULT
+            pending = pendingIntent
+            autoCancel = true
+        }
+        return data
+    }
+
+    private fun createInboxData(): Data.InboxData {
+        val pendingIntent = createPendingIntent()
+        val data = Data.InboxData().apply {
+            title = "Any title"
+            summaryText = "Any text"
+            lines = arrayListOf("Any line 1", "Any line 2", "Any line 3")
+            summaryText = "Any summary"
+            smallIcon = R.drawable.baseline_notifications_24
+            largeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
+            priority = NotificationCompat.PRIORITY_HIGH
+            pending = pendingIntent
+            autoCancel = true
+        }
+        return data
+    }
+
+    private fun createBigPictureData(): Data.BigPictureData {
+        val pendingIntent = createPendingIntent()
+        val data = Data.BigPictureData().apply {
+            title = "Any title"
+            collapsedText = "Any collapsedText"
+            summaryText = "Any text"
+            image = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
+            smallIcon = R.drawable.baseline_notifications_24
+            largeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
+            priority = NotificationCompat.PRIORITY_HIGH
+            pending = pendingIntent
+            autoCancel = true
+        }
+        return data
+    }
+
+    private fun createMessageData(): Data.MessageData {
+        val pendingIntent = createPendingIntent()
+        val data = Data.MessageData().apply {
+            conversationTitle = "Any conversationTitle"
+            user = Person.Builder().setName("Albert").build()
+            messages = arrayListOf(
+                NotificationCompat.MessagingStyle.Message(
+                    "Any Message 1",
+                    System.currentTimeMillis() - (5 * 60 * 1000),
+                    Person.Builder().setName("Chris").build()
+                ),
+                NotificationCompat.MessagingStyle.Message(
+                    "Any Message 2",
+                    System.currentTimeMillis() - (10 * 60 * 1000),
+                    Person.Builder().setName("Max").build()
+                )
+            )
+            smallIcon = R.drawable.baseline_notifications_24
+            largeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
+            priority = NotificationCompat.PRIORITY_HIGH
+            pending = pendingIntent
+            autoCancel = true
+        }
+        return data
+    }
+
+    private fun createCustomDesignData(context: Context): Data.CustomDesignData {
+        val data = Data.CustomDesignData().apply {
+            hasStyle = false
+            smallRemoteViews = {
+                val remoteViews = RemoteViews(
+                    context.packageName,
+                    com.vanskarner.simplenotify.test.R.layout.small_notification
+                )
+                remoteViews.setTextViewText(
+                    com.vanskarner.simplenotify.test.R.id.notification_title,
+                    "Small title"
+                )
+                remoteViews
+            }
+            largeRemoteViews = {
+                val remoteViews = RemoteViews(
+                    context.packageName,
+                    com.vanskarner.simplenotify.test.R.layout.large_notification
+                )
+                remoteViews.setTextViewText(
+                    com.vanskarner.simplenotify.test.R.id.notification_title,
+                    "Large title"
+                )
+                remoteViews
+            }
+            smallIcon = R.drawable.baseline_notifications_24
+            pending = createPendingIntent()
+            autoCancel = true
+            priority = NotificationCompat.PRIORITY_HIGH
+            largeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
+        }
+        return data
     }
 
     private fun createPendingIntent(): PendingIntent? {

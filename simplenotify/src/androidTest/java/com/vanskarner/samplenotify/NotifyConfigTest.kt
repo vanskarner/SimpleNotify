@@ -8,6 +8,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Build
+import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.MessagingStyle.Message
 import androidx.core.app.Person
@@ -173,7 +174,6 @@ class NotifyConfigTest {
         notifyConfig.asMessaging {
             id = 123
             smallIcon = R.drawable.baseline_notifications_24
-            title = "Test Title"
             conversationTitle = "Contrary to popular belief"
             user = expectedUser
             messages = expectedMessage
@@ -188,7 +188,6 @@ class NotifyConfigTest {
 
         assertEquals(123, actualMessageData.id)
         assertEquals(R.drawable.baseline_notifications_24, actualMessageData.smallIcon)
-        assertEquals("Test Title", actualMessageData.title)
         assertEquals("Contrary to popular belief", actualMessageData.conversationTitle)
         assertEquals(expectedUser, actualMessageData.user)
         assertEquals(expectedMessage, actualMessageData.messages)
@@ -196,6 +195,37 @@ class NotifyConfigTest {
         assertEquals(NotificationCompat.PRIORITY_HIGH, actualMessageData.priority)
         assertEquals(expectedPendingIntent, actualMessageData.pending)
         assertEquals(false, actualMessageData.autoCancel)
+    }
+
+    @Test
+    fun asCustomDesign_shouldSetData() {
+        val context: Context = ApplicationProvider.getApplicationContext()
+        notifyConfig.asCustomDesign {
+            hasStyle = true
+            smallRemoteViews = {
+                val remoteViews = RemoteViews(
+                    context.packageName,
+                    com.vanskarner.simplenotify.test.R.layout.small_notification
+                )
+                remoteViews.setTextViewText(com.vanskarner.simplenotify.test.R.id.notification_title, "Small title")
+                remoteViews
+            }
+            largeRemoteViews = {
+                val remoteViews = RemoteViews(
+                    context.packageName,
+                    com.vanskarner.simplenotify.test.R.layout.large_notification
+                )
+                remoteViews.setTextViewText(com.vanskarner.simplenotify.test.R.id.notification_title, "Large title")
+                remoteViews
+            }
+        }
+        val dataField = notifyConfig.javaClass.getDeclaredField("data")
+        dataField.isAccessible = true
+        val actualCustomDesignData = dataField.get(notifyConfig) as Data.CustomDesignData
+
+        assertEquals(R.drawable.baseline_notifications_24, actualCustomDesignData.smallIcon)
+        assertEquals(com.vanskarner.simplenotify.test.R.layout.small_notification, actualCustomDesignData.smallRemoteViews.invoke()?.layoutId)
+        assertEquals(com.vanskarner.simplenotify.test.R.layout.large_notification, actualCustomDesignData.largeRemoteViews.invoke()?.layoutId)
     }
 
     @Test

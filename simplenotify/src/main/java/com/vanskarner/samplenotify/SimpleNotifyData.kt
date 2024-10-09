@@ -3,6 +3,7 @@ package com.vanskarner.samplenotify
 import androidx.core.app.NotificationCompat.MessagingStyle.Message
 import android.app.PendingIntent
 import android.graphics.Bitmap
+import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
 import androidx.core.app.RemoteInput
@@ -11,7 +12,6 @@ import com.vanskarner.simplenotify.R
 sealed class Data {
     var id: Int? = null
     var smallIcon: Int = R.drawable.baseline_notifications_24
-    var title: String? = null
     var largeIcon: Bitmap? = null
     var priority: Int = NotificationCompat.PRIORITY_DEFAULT
     var pending: PendingIntent? = null
@@ -20,21 +20,25 @@ sealed class Data {
 //    var badgeIconType: Int? = null
 
     data class BasicData(
-        var text: String? = null
+        var text: String? = null,
+        var title: String? = null
     ) : Data()
 
     data class BigTextData(
+        var title: String? = null,
         var bigText: String? = null,
         var collapsedText: String? = null,
         var summaryText: String? = null,
     ) : Data()
 
     data class InboxData(
+        var title: String? = null,
         var summaryText: String? = null,
         var lines: ArrayList<String> = arrayListOf(),
     ) : Data()
 
     data class BigPictureData(
+        var title: String? = null,
         var collapsedText: String? = null,
         var summaryText: String? = null,
         var image: Bitmap? = null
@@ -44,6 +48,12 @@ sealed class Data {
         var conversationTitle: String? = null,
         var user: Person = Person.Builder().build(),
         var messages: ArrayList<Message> = arrayListOf()
+    ) : Data()
+
+    data class CustomDesignData(
+        var hasStyle: Boolean = true,
+        var smallRemoteViews: () -> RemoteViews? = { null },
+        var largeRemoteViews: () -> RemoteViews? = { null }
     ) : Data()
 }
 
