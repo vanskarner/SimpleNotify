@@ -49,7 +49,7 @@ class AssignContentTest {
         val largeIcon = notification.extras.getParcelable<Icon>(NotificationCompat.EXTRA_LARGE_ICON)
         assertTrue(basicData.largeIcon!!.sameAs(largeIcon?.toBitmap()))
         assertEquals(basicData.priority, notification.priority)
-        assertEquals(basicData.pending, notification.contentIntent)
+        assertEquals(basicData.contentIntent, notification.contentIntent)
         assertEquals(
             basicData.autoCancel,
             notification.flags and NotificationCompat.FLAG_AUTO_CANCEL != 0
@@ -70,14 +70,14 @@ class AssignContentTest {
         )
         assertEquals(data.title, notification.extras.getString(NotificationCompat.EXTRA_TITLE))
         assertEquals(
-            data.collapsedText,
+            data.text,
             notification.extras.getString(NotificationCompat.EXTRA_TEXT)
         )
         assertEquals(data.smallIcon, notification.smallIcon.resId)
         val largeIcon = notification.extras.getParcelable<Icon>(NotificationCompat.EXTRA_LARGE_ICON)
         assertTrue(data.largeIcon!!.sameAs(largeIcon?.toBitmap()))
         assertEquals(data.priority, notification.priority)
-        assertEquals(data.pending, notification.contentIntent)
+        assertEquals(data.contentIntent, notification.contentIntent)
         assertEquals(
             data.autoCancel,
             notification.flags and NotificationCompat.FLAG_AUTO_CANCEL != 0
@@ -91,7 +91,7 @@ class AssignContentTest {
         assignContent.applyData(data, builder)
         val notification = builder.build()
 
-        assertEquals(data.summaryText, notification.extras.getString(NotificationCompat.EXTRA_TEXT))
+        assertEquals(data.text, notification.extras.getString(NotificationCompat.EXTRA_TEXT))
         assertEquals(
             data.lines.size,
             notification.extras.getCharSequenceArray(NotificationCompat.EXTRA_TEXT_LINES)?.size
@@ -101,7 +101,7 @@ class AssignContentTest {
         val largeIcon = notification.extras.getParcelable<Icon>(NotificationCompat.EXTRA_LARGE_ICON)
         assertTrue(data.largeIcon!!.sameAs(largeIcon?.toBitmap()))
         assertEquals(data.priority, notification.priority)
-        assertEquals(data.pending, notification.contentIntent)
+        assertEquals(data.contentIntent, notification.contentIntent)
         assertEquals(
             data.autoCancel,
             notification.flags and NotificationCompat.FLAG_AUTO_CANCEL != 0
@@ -116,7 +116,7 @@ class AssignContentTest {
         val notification = builder.build()
 
         assertEquals(
-            data.collapsedText,
+            data.text,
             notification.extras.getString(NotificationCompat.EXTRA_TEXT)
         )
         assertEquals(
@@ -130,7 +130,7 @@ class AssignContentTest {
         val largeIcon = notification.extras.getParcelable<Icon>(NotificationCompat.EXTRA_LARGE_ICON)
         assertTrue(data.largeIcon!!.sameAs(largeIcon?.toBitmap()))
         assertEquals(data.priority, notification.priority)
-        assertEquals(data.pending, notification.contentIntent)
+        assertEquals(data.contentIntent, notification.contentIntent)
         assertEquals(
             data.autoCancel,
             notification.flags and NotificationCompat.FLAG_AUTO_CANCEL != 0
@@ -158,7 +158,7 @@ class AssignContentTest {
         val largeIcon = notification.extras.getParcelable<Icon>(NotificationCompat.EXTRA_LARGE_ICON)
         assertTrue(data.largeIcon!!.sameAs(largeIcon?.toBitmap()))
         assertEquals(data.priority, notification.priority)
-        assertEquals(data.pending, notification.contentIntent)
+        assertEquals(data.contentIntent, notification.contentIntent)
         assertEquals(
             data.autoCancel,
             notification.flags and NotificationCompat.FLAG_AUTO_CANCEL != 0
@@ -185,7 +185,7 @@ class AssignContentTest {
         assertEquals(expectedData.smallIcon, notification.smallIcon.resId)
         val largeIcon = notification.extras.getParcelable<Icon>(NotificationCompat.EXTRA_LARGE_ICON)
         assertTrue(expectedData.largeIcon!!.sameAs(largeIcon?.toBitmap()))
-        assertEquals(expectedData.pending, notification.contentIntent)
+        assertEquals(expectedData.contentIntent, notification.contentIntent)
         assertEquals(
             expectedData.autoCancel,
             notification.flags and NotificationCompat.FLAG_AUTO_CANCEL != 0
@@ -312,7 +312,7 @@ class AssignContentTest {
             smallIcon = R.drawable.baseline_notifications_24
             largeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
             priority = NotificationCompat.PRIORITY_DEFAULT
-            pending = pendingIntent
+            contentIntent = pendingIntent
             autoCancel = true
         }
         return basicData
@@ -323,12 +323,12 @@ class AssignContentTest {
         val data = Data.BigTextData().apply {
             title = "Any title"
             bigText = "Any text"
-            collapsedText = "Any collapsedText"
+            text = "Any collapsedText"
             summaryText = "Any summary"
             smallIcon = R.drawable.baseline_notifications_24
             largeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
             priority = NotificationCompat.PRIORITY_DEFAULT
-            pending = pendingIntent
+            contentIntent = pendingIntent
             autoCancel = true
         }
         return data
@@ -338,13 +338,13 @@ class AssignContentTest {
         val pendingIntent = createPendingIntent()
         val data = Data.InboxData().apply {
             title = "Any title"
-            summaryText = "Any text"
+            text = "Any text"
             lines = arrayListOf("Any line 1", "Any line 2", "Any line 3")
-            summaryText = "Any summary"
+            text = "Any summary"
             smallIcon = R.drawable.baseline_notifications_24
             largeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
             priority = NotificationCompat.PRIORITY_HIGH
-            pending = pendingIntent
+            contentIntent = pendingIntent
             autoCancel = true
         }
         return data
@@ -354,13 +354,13 @@ class AssignContentTest {
         val pendingIntent = createPendingIntent()
         val data = Data.BigPictureData().apply {
             title = "Any title"
-            collapsedText = "Any collapsedText"
+            text = "Any collapsedText"
             summaryText = "Any text"
             image = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
             smallIcon = R.drawable.baseline_notifications_24
             largeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
             priority = NotificationCompat.PRIORITY_HIGH
-            pending = pendingIntent
+            contentIntent = pendingIntent
             autoCancel = true
         }
         return data
@@ -386,7 +386,7 @@ class AssignContentTest {
             smallIcon = R.drawable.baseline_notifications_24
             largeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
             priority = NotificationCompat.PRIORITY_HIGH
-            pending = pendingIntent
+            contentIntent = pendingIntent
             autoCancel = true
         }
         return data
@@ -418,7 +418,7 @@ class AssignContentTest {
                 remoteViews
             }
             smallIcon = R.drawable.baseline_notifications_24
-            pending = createPendingIntent()
+            contentIntent = createPendingIntent()
             autoCancel = true
             priority = NotificationCompat.PRIORITY_HIGH
             largeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)

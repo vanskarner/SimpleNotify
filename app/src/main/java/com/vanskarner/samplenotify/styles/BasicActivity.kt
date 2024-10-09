@@ -112,7 +112,7 @@ class BasicActivity : BaseActivity() {
                 title = "Dina Balearte: Order with bullets and promotions"
                 text = "Promotions after repression, a touch of presidential irony."
                 largeIcon = BitmapFactory.decodeResource(resources, R.drawable.dina4)
-                pending = getSimplePendingIntent(BasicActivity::class.java)
+                contentIntent = getSimplePendingIntent(BasicActivity::class.java)
             }
             .show()
     }

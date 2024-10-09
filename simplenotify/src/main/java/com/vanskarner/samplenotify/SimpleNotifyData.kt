@@ -13,40 +13,40 @@ sealed class Data {
     var id: Int? = null
     var smallIcon: Int = R.drawable.baseline_notifications_24
     var largeIcon: Bitmap? = null
-    var priority: Int = NotificationCompat.PRIORITY_DEFAULT
-    var pending: PendingIntent? = null
+    var contentIntent: PendingIntent? = null
     var autoCancel: Boolean = true
+    var priority: Int = NotificationCompat.PRIORITY_DEFAULT
 //    var timeoutAfter: Long? = null
 //    var badgeIconType: Int? = null
 
     data class BasicData(
+        var title: String? = null,
         var text: String? = null,
-        var title: String? = null
     ) : Data()
 
     data class BigTextData(
         var title: String? = null,
+        var text: String? = null,
         var bigText: String? = null,
-        var collapsedText: String? = null,
         var summaryText: String? = null,
     ) : Data()
 
     data class InboxData(
         var title: String? = null,
-        var summaryText: String? = null,
+        var text: String? = null,
         var lines: ArrayList<String> = arrayListOf(),
     ) : Data()
 
     data class BigPictureData(
         var title: String? = null,
-        var collapsedText: String? = null,
+        var text: String? = null,
         var summaryText: String? = null,
         var image: Bitmap? = null
     ) : Data()
 
     data class MessageData(
-        var conversationTitle: String? = null,
         var user: Person = Person.Builder().build(),
+        var conversationTitle: String? = null,
         var messages: ArrayList<Message> = arrayListOf()
     ) : Data()
 

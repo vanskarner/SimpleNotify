@@ -46,7 +46,7 @@ class NotifyConfigTest {
             text = "Test Text"
             largeIcon = expectedLargeIcon
             priority = NotificationCompat.PRIORITY_HIGH
-            pending = expectedPendingIntent
+            contentIntent = expectedPendingIntent
             autoCancel = false
         }
         val dataField = notifyConfig.javaClass.getDeclaredField("data")
@@ -59,7 +59,7 @@ class NotifyConfigTest {
         assertEquals("Test Text", actualBasicData.text)
         assertTrue(actualBasicData.largeIcon?.sameAs(expectedLargeIcon)!!)
         assertEquals(NotificationCompat.PRIORITY_HIGH, actualBasicData.priority)
-        assertEquals(expectedPendingIntent, actualBasicData.pending)
+        assertEquals(expectedPendingIntent, actualBasicData.contentIntent)
         assertEquals(false, actualBasicData.autoCancel)
     }
 
@@ -72,11 +72,11 @@ class NotifyConfigTest {
             smallIcon = R.drawable.baseline_notifications_24
             title = "Test Title"
             bigText = "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-            collapsedText = "Contrary to popular belief"
+            text = "Contrary to popular belief"
             summaryText = "Lorem Ipsum is not simply random text"
             largeIcon = expectedLargeIcon
             priority = NotificationCompat.PRIORITY_HIGH
-            pending = expectedPendingIntent
+            contentIntent = expectedPendingIntent
             autoCancel = false
         }
         val dataField = notifyConfig.javaClass.getDeclaredField("data")
@@ -90,11 +90,11 @@ class NotifyConfigTest {
             "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
             actualBigTextData.bigText
         )
-        assertEquals("Contrary to popular belief", actualBigTextData.collapsedText)
+        assertEquals("Contrary to popular belief", actualBigTextData.text)
         assertEquals("Lorem Ipsum is not simply random text", actualBigTextData.summaryText)
         assertTrue(actualBigTextData.largeIcon?.sameAs(expectedLargeIcon)!!)
         assertEquals(NotificationCompat.PRIORITY_HIGH, actualBigTextData.priority)
-        assertEquals(expectedPendingIntent, actualBigTextData.pending)
+        assertEquals(expectedPendingIntent, actualBigTextData.contentIntent)
         assertEquals(false, actualBigTextData.autoCancel)
     }
 
@@ -107,11 +107,11 @@ class NotifyConfigTest {
             id = 123
             smallIcon = R.drawable.baseline_notifications_24
             title = "Test Title"
-            summaryText = "Lorem Ipsum is not simply random text"
+            text = "Lorem Ipsum is not simply random text"
             lines = expectedLines
             largeIcon = expectedLargeIcon
             priority = NotificationCompat.PRIORITY_HIGH
-            pending = expectedPendingIntent
+            contentIntent = expectedPendingIntent
             autoCancel = false
         }
         val dataField = notifyConfig.javaClass.getDeclaredField("data")
@@ -121,11 +121,11 @@ class NotifyConfigTest {
         assertEquals(123, actualInboxData.id)
         assertEquals(R.drawable.baseline_notifications_24, actualInboxData.smallIcon)
         assertEquals("Test Title", actualInboxData.title)
-        assertEquals("Lorem Ipsum is not simply random text", actualInboxData.summaryText)
+        assertEquals("Lorem Ipsum is not simply random text", actualInboxData.text)
         assertEquals(expectedLines, actualInboxData.lines)
         assertTrue(actualInboxData.largeIcon?.sameAs(expectedLargeIcon)!!)
         assertEquals(NotificationCompat.PRIORITY_HIGH, actualInboxData.priority)
-        assertEquals(expectedPendingIntent, actualInboxData.pending)
+        assertEquals(expectedPendingIntent, actualInboxData.contentIntent)
         assertEquals(false, actualInboxData.autoCancel)
     }
 
@@ -138,12 +138,12 @@ class NotifyConfigTest {
             id = 123
             smallIcon = R.drawable.baseline_notifications_24
             title = "Test Title"
-            collapsedText = "Contrary to popular belief"
+            text = "Contrary to popular belief"
             summaryText = "Lorem Ipsum is not simply random text"
             image = expectedImage
             largeIcon = expectedLargeIcon
             priority = NotificationCompat.PRIORITY_HIGH
-            pending = expectedPendingIntent
+            contentIntent = expectedPendingIntent
             autoCancel = false
         }
         val dataField = notifyConfig.javaClass.getDeclaredField("data")
@@ -153,12 +153,12 @@ class NotifyConfigTest {
         assertEquals(123, actualBigPictureData.id)
         assertEquals(R.drawable.baseline_notifications_24, actualBigPictureData.smallIcon)
         assertEquals("Test Title", actualBigPictureData.title)
-        assertEquals("Contrary to popular belief", actualBigPictureData.collapsedText)
+        assertEquals("Contrary to popular belief", actualBigPictureData.text)
         assertEquals("Lorem Ipsum is not simply random text", actualBigPictureData.summaryText)
         assertTrue(actualBigPictureData.image?.sameAs(expectedImage)!!)
         assertTrue(actualBigPictureData.largeIcon?.sameAs(expectedLargeIcon)!!)
         assertEquals(NotificationCompat.PRIORITY_HIGH, actualBigPictureData.priority)
-        assertEquals(expectedPendingIntent, actualBigPictureData.pending)
+        assertEquals(expectedPendingIntent, actualBigPictureData.contentIntent)
         assertEquals(false, actualBigPictureData.autoCancel)
     }
 
@@ -179,7 +179,7 @@ class NotifyConfigTest {
             messages = expectedMessage
             largeIcon = expectedLargeIcon
             priority = NotificationCompat.PRIORITY_HIGH
-            pending = expectedPendingIntent
+            contentIntent = expectedPendingIntent
             autoCancel = false
         }
         val dataField = notifyConfig.javaClass.getDeclaredField("data")
@@ -193,7 +193,7 @@ class NotifyConfigTest {
         assertEquals(expectedMessage, actualMessageData.messages)
         assertTrue(actualMessageData.largeIcon?.sameAs(expectedLargeIcon)!!)
         assertEquals(NotificationCompat.PRIORITY_HIGH, actualMessageData.priority)
-        assertEquals(expectedPendingIntent, actualMessageData.pending)
+        assertEquals(expectedPendingIntent, actualMessageData.contentIntent)
         assertEquals(false, actualMessageData.autoCancel)
     }
 

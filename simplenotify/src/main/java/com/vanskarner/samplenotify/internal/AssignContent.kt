@@ -16,31 +16,29 @@ internal object AssignContent {
             }
 
             is Data.BigTextData -> {
+                val style = NotificationCompat.BigTextStyle()
+                    .bigText(data.bigText)
+                    .setSummaryText(data.summaryText)
                 builder.setContentTitle(data.title)
-                    .setContentText(data.collapsedText)
-                    .setStyle(
-                        NotificationCompat.BigTextStyle()
-                            .bigText(data.bigText)
-                            .setSummaryText(data.summaryText)
-                    )
+                    .setContentText(data.text)
+                    .setStyle(style)
             }
 
             is Data.InboxData -> {
-                builder.setContentTitle(data.title)
-                    .setContentText(data.summaryText)
                 val style = NotificationCompat.InboxStyle()
                 data.lines.forEach { style.addLine(it) }
-                builder.setStyle(style)
+                builder.setContentTitle(data.title)
+                    .setContentText(data.text)
+                    .setStyle(style)
             }
 
             is Data.BigPictureData -> {
+                val style = NotificationCompat.BigPictureStyle()
+                    .setSummaryText(data.summaryText)
+                    .bigPicture(data.image)
                 builder.setContentTitle(data.title)
-                    .setContentText(data.collapsedText)
-                    .setStyle(
-                        NotificationCompat.BigPictureStyle()
-                            .setSummaryText(data.summaryText)
-                            .bigPicture(data.image)
-                    )
+                    .setContentText(data.text)
+                    .setStyle(style)
             }
 
             is Data.MessageData -> {
@@ -58,7 +56,7 @@ internal object AssignContent {
         }
         filteredBuilder.setSmallIcon(data.smallIcon)
             .setLargeIcon(data.largeIcon)
-            .setContentIntent(data.pending)
+            .setContentIntent(data.contentIntent)
             .setAutoCancel(data.autoCancel)
             .setPriority(data.priority)
     }
