@@ -17,9 +17,9 @@ class RemoteInputBroadcast : BroadcastReceiver() {
                 title = "Message sent"
                 text = "Your message has been sent: $msg"
             }
-            .extras {
-                timeoutAfter = 2500
-            }
+//            .extras {
+//                timeoutAfter = 2500
+//            }
             .show()
     }
 
