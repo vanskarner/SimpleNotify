@@ -6,13 +6,10 @@ import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Icon
 import androidx.core.app.NotificationCompat
-import androidx.core.app.RemoteInput
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.vanskarner.samplenotify.ActionData
-import com.vanskarner.samplenotify.ProgressData
+import com.vanskarner.samplenotify.Data
 import com.vanskarner.samplenotify.common.TestDataProvider
-import com.vanskarner.simplenotify.test.R
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
@@ -31,254 +28,178 @@ class AssignContentTest {
     }
 
     @Test
-    @Suppress("DEPRECATION")
     fun applyData_asBasicData_apply() {
-        val basicData = TestDataProvider.basicData()
-        assignContent.applyData(basicData, builder)
+        val expectedData = TestDataProvider.basicData()
+        assignContent.applyData(expectedData, builder)
         val notification = builder.build()
+        val actualExtras = notification.extras
 
-        assertEquals(basicData.title, notification.extras.getString(NotificationCompat.EXTRA_TITLE))
-        assertEquals(basicData.text, notification.extras.getString(NotificationCompat.EXTRA_TEXT))
-        assertEquals(basicData.smallIcon, notification.smallIcon.resId)
-        val largeIcon = notification.extras.getParcelable<Icon>(NotificationCompat.EXTRA_LARGE_ICON)
-        assertTrue(basicData.largeIcon!!.sameAs(largeIcon?.toBitmap()))
-        assertEquals(basicData.priority, notification.priority)
-        assertEquals(basicData.contentIntent, notification.contentIntent)
-        assertEquals(
-            basicData.autoCancel,
-            notification.flags and NotificationCompat.FLAG_AUTO_CANCEL != 0
-        )
+        assertEquals(expectedData.title, actualExtras.getString(NotificationCompat.EXTRA_TITLE))
+        assertEquals(expectedData.text, actualExtras.getString(NotificationCompat.EXTRA_TEXT))
+        checkCommonData(expectedData, notification)
     }
 
     @Test
-    @Suppress("DEPRECATION")
     fun applyData_asBigTextData_apply() {
-        val data = TestDataProvider.bigTextData()
-        assignContent.applyData(data, builder)
+        val expectedData = TestDataProvider.bigTextData()
+        assignContent.applyData(expectedData, builder)
         val notification = builder.build()
+        val actualExtras = notification.extras
+        val actualBigText = actualExtras.getString(NotificationCompat.EXTRA_BIG_TEXT)
+        val actualSummaryText = actualExtras.getString(NotificationCompat.EXTRA_SUMMARY_TEXT)
 
-        assertEquals(data.bigText, notification.extras.getString(NotificationCompat.EXTRA_BIG_TEXT))
-        assertEquals(
-            data.summaryText,
-            notification.extras.getString(NotificationCompat.EXTRA_SUMMARY_TEXT)
-        )
-        assertEquals(data.title, notification.extras.getString(NotificationCompat.EXTRA_TITLE))
-        assertEquals(
-            data.text,
-            notification.extras.getString(NotificationCompat.EXTRA_TEXT)
-        )
-        assertEquals(data.smallIcon, notification.smallIcon.resId)
-        val largeIcon = notification.extras.getParcelable<Icon>(NotificationCompat.EXTRA_LARGE_ICON)
-        assertTrue(data.largeIcon!!.sameAs(largeIcon?.toBitmap()))
-        assertEquals(data.priority, notification.priority)
-        assertEquals(data.contentIntent, notification.contentIntent)
-        assertEquals(
-            data.autoCancel,
-            notification.flags and NotificationCompat.FLAG_AUTO_CANCEL != 0
-        )
+        assertEquals(expectedData.title, actualExtras.getString(NotificationCompat.EXTRA_TITLE))
+        assertEquals(expectedData.text, actualExtras.getString(NotificationCompat.EXTRA_TEXT))
+        assertEquals(expectedData.bigText, actualBigText)
+        assertEquals(expectedData.summaryText, actualSummaryText)
+        checkCommonData(expectedData, notification)
     }
 
     @Test
-    @Suppress("DEPRECATION")
     fun applyData_asInboxData_apply() {
-        val data = TestDataProvider.inboxData()
-        assignContent.applyData(data, builder)
+        val expectedData = TestDataProvider.inboxData()
+        assignContent.applyData(expectedData, builder)
         val notification = builder.build()
+        val actualExtras = notification.extras
+        val actualTextLines = actualExtras.getCharSequenceArray(NotificationCompat.EXTRA_TEXT_LINES)
 
-        assertEquals(data.text, notification.extras.getString(NotificationCompat.EXTRA_TEXT))
-        assertEquals(
-            data.lines.size,
-            notification.extras.getCharSequenceArray(NotificationCompat.EXTRA_TEXT_LINES)?.size
-        )
-        assertEquals(data.title, notification.extras.getString(NotificationCompat.EXTRA_TITLE))
-        assertEquals(data.smallIcon, notification.smallIcon.resId)
-        val largeIcon = notification.extras.getParcelable<Icon>(NotificationCompat.EXTRA_LARGE_ICON)
-        assertTrue(data.largeIcon!!.sameAs(largeIcon?.toBitmap()))
-        assertEquals(data.priority, notification.priority)
-        assertEquals(data.contentIntent, notification.contentIntent)
-        assertEquals(
-            data.autoCancel,
-            notification.flags and NotificationCompat.FLAG_AUTO_CANCEL != 0
-        )
+        assertEquals(expectedData.title, actualExtras.getString(NotificationCompat.EXTRA_TITLE))
+        assertEquals(expectedData.text, actualExtras.getString(NotificationCompat.EXTRA_TEXT))
+        assertEquals(expectedData.lines.size, actualTextLines!!.size)
+        checkCommonData(expectedData, notification)
     }
 
     @Test
-    @Suppress("DEPRECATION")
     fun applyData_asBigPictureData_apply() {
-        val data = TestDataProvider.bigPictureData()
-        assignContent.applyData(data, builder)
+        val expectedData = TestDataProvider.bigPictureData()
+        assignContent.applyData(expectedData, builder)
         val notification = builder.build()
+        val actualExtras = notification.extras
+        val actualPicture = actualExtras.getParcelable<Bitmap>(NotificationCompat.EXTRA_PICTURE)
+        val actualSummaryText = actualExtras.getString(NotificationCompat.EXTRA_SUMMARY_TEXT)
 
-        assertEquals(
-            data.text,
-            notification.extras.getString(NotificationCompat.EXTRA_TEXT)
-        )
-        assertEquals(
-            data.summaryText,
-            notification.extras.getString(NotificationCompat.EXTRA_SUMMARY_TEXT)
-        )
-        val picture = notification.extras.getParcelable<Bitmap>(NotificationCompat.EXTRA_PICTURE)
-        assertTrue(data.image!!.sameAs(picture))
-        assertEquals(data.title, notification.extras.getString(NotificationCompat.EXTRA_TITLE))
-        assertEquals(data.smallIcon, notification.smallIcon.resId)
-        val largeIcon = notification.extras.getParcelable<Icon>(NotificationCompat.EXTRA_LARGE_ICON)
-        assertTrue(data.largeIcon!!.sameAs(largeIcon?.toBitmap()))
-        assertEquals(data.priority, notification.priority)
-        assertEquals(data.contentIntent, notification.contentIntent)
-        assertEquals(
-            data.autoCancel,
-            notification.flags and NotificationCompat.FLAG_AUTO_CANCEL != 0
-        )
+        assertEquals(expectedData.title, actualExtras.getString(NotificationCompat.EXTRA_TITLE))
+        assertEquals(expectedData.text, actualExtras.getString(NotificationCompat.EXTRA_TEXT))
+        assertEquals(expectedData.summaryText, actualSummaryText)
+        assertTrue(expectedData.image!!.sameAs(actualPicture))
+        checkCommonData(expectedData, notification)
     }
 
     @Test
-    @Suppress("DEPRECATION")
     fun applyData_asMessageData_apply() {
-        val data = TestDataProvider.messageData()
-        assignContent.applyData(data, builder)
+        val expectedData = TestDataProvider.messageData()
+        assignContent.applyData(expectedData, builder)
         val notification = builder.build()
+        val actualExtras = notification.extras
+        val actualMessages = actualExtras.getParcelableArray(NotificationCompat.EXTRA_MESSAGES)
+        val actualUserName = actualExtras.getString(NotificationCompat.EXTRA_SELF_DISPLAY_NAME)
+        val actualConversationTitle =
+            actualExtras.getString(NotificationCompat.EXTRA_CONVERSATION_TITLE)
 
-        assertEquals(
-            data.conversationTitle,
-            notification.extras.getString(NotificationCompat.EXTRA_CONVERSATION_TITLE)
-        )
-        assertEquals(
-            data.user.name,
-            notification.extras.getString(NotificationCompat.EXTRA_SELF_DISPLAY_NAME)
-        )
-        val messages = notification.extras.getParcelableArray(NotificationCompat.EXTRA_MESSAGES)
-        assertEquals(data.messages.size, messages?.size)
-        assertEquals(data.smallIcon, notification.smallIcon.resId)
-        val largeIcon = notification.extras.getParcelable<Icon>(NotificationCompat.EXTRA_LARGE_ICON)
-        assertTrue(data.largeIcon!!.sameAs(largeIcon?.toBitmap()))
-        assertEquals(data.priority, notification.priority)
-        assertEquals(data.contentIntent, notification.contentIntent)
-        assertEquals(
-            data.autoCancel,
-            notification.flags and NotificationCompat.FLAG_AUTO_CANCEL != 0
-        )
+        assertEquals(expectedData.user.name, actualUserName)
+        assertEquals(expectedData.conversationTitle, actualConversationTitle)
+        assertEquals(expectedData.messages.size, actualMessages!!.size)
+        checkCommonData(expectedData, notification)
     }
 
     @Test
-    @Suppress("DEPRECATION")
     fun applyData_asCustomDesignData_apply() {
         val context: Context = ApplicationProvider.getApplicationContext()
         val expectedData = TestDataProvider.customDesignData(context)
+        val expectedSmallRemoteView = expectedData.smallRemoteViews
+        val expectedLargeRemoteView = expectedData.largeRemoteViews
         assignContent.applyData(expectedData, builder)
         val notification = builder.build()
+        val actualSmallRemoteView = notification.contentView
+        val actualLargeRemoteView = notification.bigContentView
 
-        assertNotNull(notification.contentView)
-        assertEquals(
-            expectedData.smallRemoteViews.invoke()?.layoutId,
-            notification.contentView.layoutId
-        )
-        assertNotNull(notification.bigContentView)
-        assertEquals(
-            expectedData.largeRemoteViews.invoke()?.layoutId,
-            notification.bigContentView.layoutId
-        )
-        assertEquals(expectedData.smallIcon, notification.smallIcon.resId)
-        val largeIcon = notification.extras.getParcelable<Icon>(NotificationCompat.EXTRA_LARGE_ICON)
-        assertTrue(expectedData.largeIcon!!.sameAs(largeIcon?.toBitmap()))
-        assertEquals(expectedData.contentIntent, notification.contentIntent)
-        assertEquals(
-            expectedData.autoCancel,
-            notification.flags and NotificationCompat.FLAG_AUTO_CANCEL != 0
-        )
-        assertEquals(expectedData.priority, notification.priority)
+        assertEquals(expectedSmallRemoteView.invoke()!!.layoutId, actualSmallRemoteView.layoutId)
+        assertEquals(expectedLargeRemoteView.invoke()!!.layoutId, actualLargeRemoteView.layoutId)
+        checkCommonData(expectedData, notification)
     }
 
     @Test
     fun applyExtras_apply() {
-        val extraData = TestDataProvider.extraData()
-        assignContent.applyExtras(extraData, builder)
+        val expectedExtraData = TestDataProvider.extraData()
+        assignContent.applyExtras(expectedExtraData, builder)
         val notification = builder.build()
+        val actualExtras = notification.extras
+        val actualOngoing = notification.flags and NotificationCompat.FLAG_ONGOING_EVENT != 0
+        val actualOnlyAlertOnce = notification.flags and Notification.FLAG_ONLY_ALERT_ONCE != 0
+        val actualSubText = actualExtras.getString(NotificationCompat.EXTRA_SUB_TEXT)
+        val actualShowWhen = actualExtras.getBoolean(NotificationCompat.EXTRA_SHOW_WHEN)
+        val actualUsesChronometer = NotificationCompat.getUsesChronometer(notification)
 
-        assertEquals(extraData.category, notification.category)
-        assertEquals(extraData.visibility, notification.visibility)
-        assertEquals(extraData.color, notification.color)
-        assertEquals(
-            extraData.ongoing,
-            notification.flags and NotificationCompat.FLAG_ONGOING_EVENT != 0
-        )
-        assertEquals(extraData.timestampWhen, notification.`when`)
-        assertEquals(extraData.deleteIntent, notification.deleteIntent)
-        assertEquals(extraData.fullScreenIntent?.first, notification.fullScreenIntent)
-        assertEquals(
-            extraData.onlyAlertOnce,
-            notification.flags and Notification.FLAG_ONLY_ALERT_ONCE != 0
-        )
-        assertEquals(
-            extraData.subText,
-            notification.extras.getString(NotificationCompat.EXTRA_SUB_TEXT)
-        )
-        assertEquals(
-            extraData.showWhen,
-            notification.extras.getBoolean(NotificationCompat.EXTRA_SHOW_WHEN)
-        )
-        assertEquals(extraData.useChronometer, NotificationCompat.getUsesChronometer(notification))
+        assertEquals(expectedExtraData.category, notification.category)
+        assertEquals(expectedExtraData.visibility, notification.visibility)
+        assertEquals(expectedExtraData.ongoing, actualOngoing)
+        assertEquals(expectedExtraData.color, notification.color)
+        assertEquals(expectedExtraData.timestampWhen, notification.`when`)
+        assertEquals(expectedExtraData.deleteIntent, notification.deleteIntent)
+        assertEquals(expectedExtraData.fullScreenIntent?.first, notification.fullScreenIntent)
+        assertEquals(expectedExtraData.onlyAlertOnce, actualOnlyAlertOnce)
+        assertEquals(expectedExtraData.subText, actualSubText)
+        assertEquals(expectedExtraData.showWhen, actualShowWhen)
+        assertEquals(expectedExtraData.useChronometer, actualUsesChronometer)
     }
 
     @Test
-    @Suppress("DEPRECATION")
     fun applyAction_apply() {
-        val basicActionData = ActionData.BasicAction(
-            icon = R.drawable.test_ic_mail_24,
-            label = "Any Label",
-            pending = TestDataProvider.pendingIntent()
-        )
-        val replyAction = ActionData.ReplyAction(
-            icon = R.drawable.test_ic_archive_24,
-            label = "Any Label",
-            replyPending = TestDataProvider.pendingIntent(),
-            remote = RemoteInput.Builder("any_key").build()
-        )
-        assignContent.applyAction(basicActionData, builder)
-        assignContent.applyAction(replyAction, builder)
+        val expectedBasicAction = TestDataProvider.basicAction()
+        val expectedReplyAction = TestDataProvider.replyAction()
+        assignContent.applyAction(expectedBasicAction, builder)
+        assignContent.applyAction(expectedReplyAction, builder)
         val notification = builder.build()
+        val actualActions = notification.actions
 
-        assertEquals(2, notification.actions.size)
-        assertEquals(basicActionData.icon, notification.actions[0].icon)
-        assertEquals(basicActionData.label, notification.actions[0].title)
-        assertEquals(basicActionData.pending, notification.actions[0].actionIntent)
-        assertEquals(replyAction.icon, notification.actions[1].icon)
-        assertEquals(replyAction.label, notification.actions[1].title)
-        assertEquals(replyAction.replyPending, notification.actions[1].actionIntent)
-        assertNotNull(notification.actions[1].remoteInputs[0])
+        assertEquals(2, actualActions.size)
+        assertEquals(expectedBasicAction.icon, actualActions[0].icon)
+        assertEquals(expectedBasicAction.label, actualActions[0].title)
+        assertEquals(expectedBasicAction.pending, actualActions[0].actionIntent)
+        assertEquals(expectedReplyAction.icon, actualActions[1].icon)
+        assertEquals(expectedReplyAction.label, actualActions[1].title)
+        assertEquals(expectedReplyAction.replyPending, actualActions[1].actionIntent)
+        assertNotNull(actualActions[1].remoteInputs[0])
     }
 
     @Test
     fun applyProgress_whenIsNotHide_apply() {
-        val progressData = ProgressData(
-            currentValue = 50,
-            indeterminate = true,
-            hide = false
-        )
+        val progressData = TestDataProvider.progressData(false)
         assignContent.applyProgress(progressData, builder)
         val notification = builder.build()
+        val actualExtras = notification.extras
+        val actualProgress = actualExtras.getInt(NotificationCompat.EXTRA_PROGRESS)
+        val actualIndeterminate =
+            actualExtras.getBoolean(NotificationCompat.EXTRA_PROGRESS_INDETERMINATE)
 
-        assertEquals(
-            progressData.currentValue,
-            notification.extras.getInt(NotificationCompat.EXTRA_PROGRESS)
-        )
-        assertEquals(
-            progressData.indeterminate,
-            notification.extras.getBoolean(NotificationCompat.EXTRA_PROGRESS_INDETERMINATE)
-        )
+        assertEquals(progressData.currentValue, actualProgress)
+        assertEquals(progressData.indeterminate, actualIndeterminate)
     }
 
     @Test
     fun applyProgress_whenIsHide_apply() {
-        val progressData = ProgressData(
-            currentValue = 50,
-            indeterminate = true,
-            hide = true
-        )
+        val progressData = TestDataProvider.progressData(true)
         assignContent.applyProgress(progressData, builder)
         val notification = builder.build()
+        val actualExtras = notification.extras
+        val actualProgress = actualExtras.getInt(NotificationCompat.EXTRA_PROGRESS)
+        val actualIndeterminate =
+            actualExtras.getBoolean(NotificationCompat.EXTRA_PROGRESS_INDETERMINATE)
 
-        assertEquals(0, notification.extras.getInt(NotificationCompat.EXTRA_PROGRESS))
-        assertFalse(notification.extras.getBoolean(NotificationCompat.EXTRA_PROGRESS_INDETERMINATE))
+        assertEquals(0, actualProgress)
+        assertFalse(actualIndeterminate)
+    }
+
+    private fun checkCommonData(expectedData: Data, actualNotification: Notification) {
+        val extras = actualNotification.extras
+        val expectedLargeIcon = extras.getParcelable<Icon>(NotificationCompat.EXTRA_LARGE_ICON)
+        val actualAutoCancel = actualNotification.flags and NotificationCompat.FLAG_AUTO_CANCEL != 0
+
+        assertEquals(expectedData.smallIcon, actualNotification.smallIcon.resId)
+        assertTrue(expectedData.largeIcon!!.sameAs(expectedLargeIcon!!.toBitmap()))
+        assertEquals(expectedData.contentIntent, actualNotification.contentIntent)
+        assertEquals(expectedData.autoCancel, actualAutoCancel)
+        assertEquals(expectedData.priority, actualNotification.priority)
     }
 
     private fun Icon.toBitmap(): Bitmap? {

@@ -8,9 +8,12 @@ import android.graphics.Color
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
+import androidx.core.app.RemoteInput
 import androidx.test.core.app.ApplicationProvider
+import com.vanskarner.samplenotify.ActionData
 import com.vanskarner.samplenotify.Data
 import com.vanskarner.samplenotify.ExtraData
+import com.vanskarner.samplenotify.ProgressData
 import com.vanskarner.simplenotify.test.R
 
 class TestDataProvider {
@@ -108,12 +111,14 @@ class TestDataProvider {
             val data = Data.CustomDesignData().apply {
                 hasStyle = false
                 smallRemoteViews = {
-                    val remoteViews = RemoteViews(context.packageName, R.layout.test_small_notification)
+                    val remoteViews =
+                        RemoteViews(context.packageName, R.layout.test_small_notification)
                     remoteViews.setTextViewText(R.id.notification_title, "Small title")
                     remoteViews
                 }
                 largeRemoteViews = {
-                    val remoteViews = RemoteViews(context.packageName, R.layout.test_large_notification)
+                    val remoteViews =
+                        RemoteViews(context.packageName, R.layout.test_large_notification)
                     remoteViews.setTextViewText(R.id.notification_title, "Large title")
                     remoteViews
                 }
@@ -143,6 +148,40 @@ class TestDataProvider {
             showWhen = true,
             useChronometer = true
         )
+
+        fun basicAction(): ActionData.BasicAction {
+            return ActionData.BasicAction().apply {
+                icon = R.drawable.test_ic_mail_24
+                label = "Any Label"
+                pending = pendingIntent()
+            }
+        }
+
+        fun replyAction(): ActionData.ReplyAction {
+            return ActionData.ReplyAction().apply {
+                icon = R.drawable.test_ic_mail_24
+                label = "Any Label"
+                replyPending = pendingIntent()
+                remote = RemoteInput.Builder("any_key").build()
+            }
+        }
+
+        fun progressData(isHide: Boolean): ProgressData {
+            return if (isHide) {
+                ProgressData(
+                    currentValue = 50,
+                    indeterminate = true,
+                    hide = true
+                )
+
+            } else {
+                ProgressData(
+                    currentValue = 50,
+                    indeterminate = true,
+                    hide = false
+                )
+            }
+        }
 
         fun pendingIntent(): PendingIntent {
             return PendingIntent.getBroadcast(

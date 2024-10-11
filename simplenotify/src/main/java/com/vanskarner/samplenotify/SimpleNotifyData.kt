@@ -72,15 +72,14 @@ data class ExtraData(
 )
 
 sealed class ActionData {
+    var icon: Int = 0
+    var label: String? = null
+
     data class BasicAction(
-        var icon: Int = 0,
-        var label: String? = null,
         var pending: PendingIntent? = null
     ) : ActionData()
 
     data class ReplyAction(
-        var icon: Int = 0,
-        var label: String? = null,
         var replyPending: PendingIntent? = null,
         var remote: RemoteInput? = null
     ) : ActionData()
