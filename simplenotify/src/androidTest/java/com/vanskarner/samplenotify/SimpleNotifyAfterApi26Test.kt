@@ -6,15 +6,17 @@ import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
 import androidx.core.app.NotificationCompat
-import androidx.test.espresso.Espresso
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SdkSuppress
 import androidx.test.platform.app.InstrumentationRegistry
 import com.vanskarner.samplenotify.common.ConditionalPermissionRule
+import com.vanskarner.samplenotify.common.waitForActiveNotifications
 import com.vanskarner.samplenotify.internal.DEFAULT_CHANNEL_ID
 import com.vanskarner.simplenotify.test.R
+import kotlinx.coroutines.test.runTest
+import org.junit.After
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -24,7 +26,7 @@ import org.junit.runner.RunWith
 @SdkSuppress(minSdkVersion = Build.VERSION_CODES.O)
 class SimpleNotifyAfterApi26Test {
     private lateinit var appContext: Context
-    private lateinit var notificationManager: NotificationManager
+    private lateinit var manager: NotificationManager
 
     @get:Rule
     val permissionRule = ConditionalPermissionRule(
@@ -35,37 +37,36 @@ class SimpleNotifyAfterApi26Test {
     @Before
     fun setup() {
         appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        notificationManager =
+        manager =
             appContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    }
 
-        Espresso.onIdle()
-        notificationManager.cancelAll()
+    @After
+    fun tearDown() {
+        manager.cancelAll()
     }
 
     @Test
-    fun with_usingBasicFormAndNoId_shouldBeShow() {
+    fun with_usingBasicFormAndNoId_shouldBeShow() = runTest {
         val expectedNotificationId = SimpleNotify.with(appContext)
             .asBasic {
                 title = "Any title"
                 text = "Any text"
             }
             .show()
-        val statusBarNotification =
-            notificationManager.activeNotifications.first()
-        val actualNotification = statusBarNotification.notification
+        val activeNotifications = waitForActiveNotifications(manager)
+        val actualStatusBarNotification = activeNotifications.first()
+        val actualNotification = actualStatusBarNotification.notification
+        val actualExtras = actualNotification.extras
 
-        assertNotNull(actualNotification)
         assertEquals(DEFAULT_CHANNEL_ID, actualNotification.channelId)
-        assertEquals(expectedNotificationId, statusBarNotification.id)
-        assertEquals(
-            "Any title",
-            actualNotification.extras.getString(NotificationCompat.EXTRA_TITLE)
-        )
-        assertEquals("Any text", actualNotification.extras.getString(NotificationCompat.EXTRA_TEXT))
+        assertEquals(expectedNotificationId, actualStatusBarNotification.id)
+        assertEquals("Any title", actualExtras.getString(NotificationCompat.EXTRA_TITLE))
+        assertEquals("Any text", actualExtras.getString(NotificationCompat.EXTRA_TEXT))
     }
 
     @Test
-    fun with_usingBasicFormAndWithId_shouldBeShow() {
+    fun with_usingBasicFormAndWithId_shouldBeShow() = runTest {
         SimpleNotify.with(appContext)
             .asBasic {
                 id = 123
@@ -73,62 +74,53 @@ class SimpleNotifyAfterApi26Test {
                 text = "Any text"
             }
             .show()
-        val statusBarNotification =
-            notificationManager.activeNotifications.first()
-        val actualNotification = statusBarNotification.notification
+        val activeNotifications = waitForActiveNotifications(manager)
+        val actualStatusBarNotification = activeNotifications.first()
+        val actualNotification = actualStatusBarNotification.notification
+        val actualExtras = actualNotification.extras
 
-        assertNotNull(actualNotification)
         assertEquals(DEFAULT_CHANNEL_ID, actualNotification.channelId)
-        assertEquals(123, statusBarNotification.id)
-        assertEquals(
-            "Any title",
-            actualNotification.extras.getString(NotificationCompat.EXTRA_TITLE)
-        )
-        assertEquals("Any text", actualNotification.extras.getString(NotificationCompat.EXTRA_TEXT))
+        assertEquals(123, actualStatusBarNotification.id)
+        assertEquals("Any title", actualExtras.getString(NotificationCompat.EXTRA_TITLE))
+        assertEquals("Any text", actualExtras.getString(NotificationCompat.EXTRA_TEXT))
     }
 
     @Test
-    fun cancel_shouldBeCancel() {
+    fun cancel_shouldBeCancel() = runTest {
         val testChannel =
             NotificationChannel("testId1", "Test Name1", NotificationManager.IMPORTANCE_DEFAULT)
-        notificationManager.createNotificationChannel(testChannel)
-        val notificationId = 123
+        manager.createNotificationChannel(testChannel)
+        val notificationId = 124
         val notifyBuilder = NotificationCompat.Builder(appContext, testChannel.id)
             .setSmallIcon(R.drawable.test_ic_notification_24)
             .setContentTitle("Any Title")
             .setContentText("Any Text")
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-        notificationManager.notify(notificationId, notifyBuilder.build())
+        manager.notify(notificationId, notifyBuilder.build())
+        val actualActiveNotifications = waitForActiveNotifications(manager)
 
-        Espresso.onIdle()
-        val statusBarNotification =
-            notificationManager.activeNotifications.first { it.id == notificationId }
-        assertNotNull(statusBarNotification.notification)
-        SimpleNotify.cancel(appContext, notificationId)
-        Espresso.onIdle()
-        assertEquals(0, notificationManager.activeNotifications.size)
+        assertEquals(1, actualActiveNotifications.size)
+        SimpleNotify.cancelAll(appContext)
+        assertTrue(waitForActiveNotifications(manager).isEmpty())
     }
 
     @Test
-    fun cancelAllNotifications_shouldBeCancel() {
+    fun cancelAllNotifications_shouldBeCancel() = runTest {
         val testChannel =
             NotificationChannel("testId2", "Test Name2", NotificationManager.IMPORTANCE_DEFAULT)
-        notificationManager.createNotificationChannel(testChannel)
-        val notificationId = 123
+        manager.createNotificationChannel(testChannel)
+        val notificationId = 125
         val notifyBuilder = NotificationCompat.Builder(appContext, testChannel.id)
             .setSmallIcon(R.drawable.test_ic_notification_24)
             .setContentTitle("Any Title")
             .setContentText("Any Text")
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-        notificationManager.notify(notificationId, notifyBuilder.build())
+        manager.notify(notificationId, notifyBuilder.build())
+        val actualActiveNotifications = waitForActiveNotifications(manager)
 
-        Espresso.onIdle()
-        val statusBarNotification =
-            notificationManager.activeNotifications.first { it.id == notificationId }
-        assertNotNull(statusBarNotification.notification)
+        assertEquals(1, actualActiveNotifications.size)
         SimpleNotify.cancelAll(appContext)
-        Espresso.onIdle()
-        assertEquals(0, notificationManager.activeNotifications.size)
+        assertTrue(waitForActiveNotifications(manager).isEmpty())
     }
 
 }
