@@ -10,7 +10,9 @@ import androidx.test.filters.SdkSuppress
 import com.vanskarner.samplenotify.ExtraData
 import com.vanskarner.samplenotify.ProgressData
 import com.vanskarner.samplenotify.common.TestDataProvider
+import com.vanskarner.samplenotify.common.waitActiveNotifications
 import kotlinx.coroutines.test.runTest
+import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
@@ -30,6 +32,11 @@ class NotifyGeneratorBeforeApi26Test {
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     }
 
+    @After
+    fun tearDown() {
+        notificationManager.cancelAll()
+    }
+
     @Test
     fun show_whenHasProgressAndHasNoChannel_shouldBeShown() = runTest {
         val data = TestDataProvider.basicData()
@@ -47,20 +54,17 @@ class NotifyGeneratorBeforeApi26Test {
             channelId = null,
             actions = emptyArray(),
         )
-        val actualNotificationId = notifyGenerator.show()
-        val statusBarNotification =
-            notificationManager.activeNotifications.first { it.id == actualNotificationId }
-        val actualNotification = statusBarNotification.notification
+        notifyGenerator.show()
+        val actualStatusBarNotification =
+            notificationManager.waitActiveNotifications(1).firstOrNull()
+        val actualNotification = actualStatusBarNotification?.notification
+        val actualProgress = actualNotification?.extras?.getInt(NotificationCompat.EXTRA_PROGRESS)
+        val actualIndeterminate =
+            actualNotification?.extras?.getBoolean(NotificationCompat.EXTRA_PROGRESS_INDETERMINATE)
 
-        assertEquals(DEFAULT_PROGRESS_NOTIFICATION_ID, statusBarNotification.id)
-        assertEquals(
-            progressData.currentValue,
-            actualNotification.extras.getInt(NotificationCompat.EXTRA_PROGRESS)
-        )
-        assertEquals(
-            progressData.indeterminate,
-            actualNotification.extras.getBoolean(NotificationCompat.EXTRA_PROGRESS_INDETERMINATE)
-        )
+        assertEquals(DEFAULT_PROGRESS_NOTIFICATION_ID, actualStatusBarNotification?.id)
+        assertEquals(progressData.currentValue, actualProgress)
+        assertEquals(progressData.indeterminate, actualIndeterminate)
     }
 
     @Test
@@ -75,17 +79,17 @@ class NotifyGeneratorBeforeApi26Test {
             channelId = null,
             actions = emptyArray(),
         )
-        val actualNotificationId = notifyGenerator.show()
-        val statusBarNotification =
-            notificationManager.activeNotifications.first { it.id == actualNotificationId }
-        val actualNotification = statusBarNotification.notification
+        val expectedNotificationId = notifyGenerator.show()
+        val actualStatusBarNotification =
+            notificationManager.waitActiveNotifications(1).firstOrNull()
+        val actualNotification = actualStatusBarNotification?.notification
+        val actualProgress = actualNotification?.extras?.getInt(NotificationCompat.EXTRA_PROGRESS)
+        val actualIndeterminate =
+            actualNotification?.extras?.getBoolean(NotificationCompat.EXTRA_PROGRESS_INDETERMINATE)
 
-        assertNotNull(actualNotification)
-        assertEquals(0, actualNotification.extras.getInt(NotificationCompat.EXTRA_PROGRESS))
-        assertEquals(
-            false,
-            actualNotification.extras.getBoolean(NotificationCompat.EXTRA_PROGRESS_INDETERMINATE)
-        )
+        assertEquals(expectedNotificationId, actualStatusBarNotification?.id)
+        assertEquals(0, actualProgress)
+        assertEquals(false, actualIndeterminate)
     }
 
     @Test
@@ -106,19 +110,16 @@ class NotifyGeneratorBeforeApi26Test {
             actions = emptyArray(),
         )
         notifyGenerator.show()
-        val statusBarNotification =
-            notificationManager.activeNotifications.first { it.id == data.id }
-        val actualNotification = statusBarNotification.notification
+        val actualStatusBarNotification =
+            notificationManager.waitActiveNotifications(1).firstOrNull()
+        val actualNotification = actualStatusBarNotification?.notification
+        val actualProgress = actualNotification?.extras?.getInt(NotificationCompat.EXTRA_PROGRESS)
+        val actualIndeterminate =
+            actualNotification?.extras?.getBoolean(NotificationCompat.EXTRA_PROGRESS_INDETERMINATE)
 
-        assertNotNull(actualNotification)
-        assertEquals(
-            progressData.currentValue,
-            actualNotification.extras.getInt(NotificationCompat.EXTRA_PROGRESS)
-        )
-        assertEquals(
-            progressData.indeterminate,
-            actualNotification.extras.getBoolean(NotificationCompat.EXTRA_PROGRESS_INDETERMINATE)
-        )
+        assertEquals(data.id, actualStatusBarNotification?.id)
+        assertEquals(progressData.currentValue, actualProgress)
+        assertEquals(progressData.indeterminate, actualIndeterminate)
     }
 
     @Test
@@ -134,16 +135,16 @@ class NotifyGeneratorBeforeApi26Test {
             actions = emptyArray(),
         )
         notifyGenerator.show()
-        val statusBarNotification =
-            notificationManager.activeNotifications.first { it.id == data.id }
-        val actualNotification = statusBarNotification.notification
+        val actualStatusBarNotification =
+            notificationManager.waitActiveNotifications(1).firstOrNull()
+        val actualNotification = actualStatusBarNotification?.notification
+        val actualProgress = actualNotification?.extras?.getInt(NotificationCompat.EXTRA_PROGRESS)
+        val actualIndeterminate =
+            actualNotification?.extras?.getBoolean(NotificationCompat.EXTRA_PROGRESS_INDETERMINATE)
 
-        assertNotNull(actualNotification)
-        assertEquals(0, actualNotification.extras.getInt(NotificationCompat.EXTRA_PROGRESS))
-        assertEquals(
-            false,
-            actualNotification.extras.getBoolean(NotificationCompat.EXTRA_PROGRESS_INDETERMINATE)
-        )
+        assertEquals(data.id, actualStatusBarNotification?.id)
+        assertEquals(0, actualProgress)
+        assertEquals(false, actualIndeterminate)
     }
 
 }

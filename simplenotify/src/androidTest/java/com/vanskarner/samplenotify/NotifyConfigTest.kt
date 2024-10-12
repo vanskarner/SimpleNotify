@@ -14,8 +14,10 @@ import androidx.core.app.RemoteInput
 import androidx.test.core.app.ApplicationProvider
 import com.vanskarner.samplenotify.common.ConditionalPermissionRule
 import com.vanskarner.samplenotify.common.TestDataProvider
+import com.vanskarner.samplenotify.common.waitActiveNotifications
 import com.vanskarner.simplenotify.test.R
 import kotlinx.coroutines.test.runTest
+import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
@@ -33,6 +35,14 @@ class NotifyConfigTest {
     @Before
     fun setUp() {
         notifyConfig = NotifyConfig(ApplicationProvider.getApplicationContext())
+    }
+
+    @After
+    fun tearDown() {
+        val context: Context = ApplicationProvider.getApplicationContext()
+        val notificationManager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.cancelAll()
     }
 
     @Test
@@ -379,18 +389,15 @@ class NotifyConfigTest {
         val context: Context = ApplicationProvider.getApplicationContext()
         val notificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val statusBarNotify =
-            notificationManager.activeNotifications.first { it.id == expectedNotificationId }
+        val actualStatusBarNotification =
+            notificationManager.waitActiveNotifications(1).firstOrNull()
+        val actualExtras = actualStatusBarNotification?.notification?.extras
+        val actualTitle = actualExtras?.getString(NotificationCompat.EXTRA_TITLE)
+        val actualText = actualExtras?.getString(NotificationCompat.EXTRA_TEXT)
 
-        assertNotNull(statusBarNotify.notification)
-        assertEquals(
-            "Test Title",
-            statusBarNotify.notification.extras.getString(NotificationCompat.EXTRA_TITLE)
-        )
-        assertEquals(
-            "Test Text",
-            statusBarNotify.notification.extras.getString(NotificationCompat.EXTRA_TEXT)
-        )
+        assertNotNull(actualStatusBarNotification?.notification)
+        assertEquals("Test Title", actualTitle)
+        assertEquals("Test Text", actualText)
     }
 
 }

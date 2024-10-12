@@ -10,13 +10,12 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SdkSuppress
 import androidx.test.platform.app.InstrumentationRegistry
 import com.vanskarner.samplenotify.common.ConditionalPermissionRule
-import com.vanskarner.samplenotify.common.waitForActiveNotifications
+import com.vanskarner.samplenotify.common.waitActiveNotifications
 import com.vanskarner.samplenotify.internal.DEFAULT_CHANNEL_ID
 import com.vanskarner.simplenotify.test.R
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -54,7 +53,7 @@ class SimpleNotifyAfterApi26Test {
                 text = "Any text"
             }
             .show()
-        val activeNotifications = waitForActiveNotifications(manager)
+        val activeNotifications = manager.waitActiveNotifications(1)
         val actualStatusBarNotification = activeNotifications.first()
         val actualNotification = actualStatusBarNotification.notification
         val actualExtras = actualNotification.extras
@@ -74,7 +73,7 @@ class SimpleNotifyAfterApi26Test {
                 text = "Any text"
             }
             .show()
-        val activeNotifications = waitForActiveNotifications(manager)
+        val activeNotifications = manager.waitActiveNotifications(1)
         val actualStatusBarNotification = activeNotifications.first()
         val actualNotification = actualStatusBarNotification.notification
         val actualExtras = actualNotification.extras
@@ -90,18 +89,18 @@ class SimpleNotifyAfterApi26Test {
         val testChannel =
             NotificationChannel("testId1", "Test Name1", NotificationManager.IMPORTANCE_DEFAULT)
         manager.createNotificationChannel(testChannel)
-        val notificationId = 124
+        val expectedNotificationId = 124
         val notifyBuilder = NotificationCompat.Builder(appContext, testChannel.id)
             .setSmallIcon(R.drawable.test_ic_notification_24)
             .setContentTitle("Any Title")
             .setContentText("Any Text")
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-        manager.notify(notificationId, notifyBuilder.build())
-        val actualActiveNotifications = waitForActiveNotifications(manager)
+        manager.notify(expectedNotificationId, notifyBuilder.build())
+        val actualStatusBarNotification = manager.waitActiveNotifications(1).firstOrNull()
 
-        assertEquals(1, actualActiveNotifications.size)
-        SimpleNotify.cancelAll(appContext)
-        assertTrue(waitForActiveNotifications(manager).isEmpty())
+        assertEquals(expectedNotificationId, actualStatusBarNotification?.id)
+        SimpleNotify.cancel(appContext, expectedNotificationId)
+        assertEquals(0, manager.waitActiveNotifications(0).size)
     }
 
     @Test
@@ -109,18 +108,18 @@ class SimpleNotifyAfterApi26Test {
         val testChannel =
             NotificationChannel("testId2", "Test Name2", NotificationManager.IMPORTANCE_DEFAULT)
         manager.createNotificationChannel(testChannel)
-        val notificationId = 125
+        val expectedNotificationId = 125
         val notifyBuilder = NotificationCompat.Builder(appContext, testChannel.id)
             .setSmallIcon(R.drawable.test_ic_notification_24)
             .setContentTitle("Any Title")
             .setContentText("Any Text")
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-        manager.notify(notificationId, notifyBuilder.build())
-        val actualActiveNotifications = waitForActiveNotifications(manager)
+        manager.notify(expectedNotificationId, notifyBuilder.build())
+        val actualStatusBarNotification = manager.waitActiveNotifications(1).firstOrNull()
 
-        assertEquals(1, actualActiveNotifications.size)
+        assertEquals(expectedNotificationId, actualStatusBarNotification?.id)
         SimpleNotify.cancelAll(appContext)
-        assertTrue(waitForActiveNotifications(manager).isEmpty())
+        assertEquals(0, manager.waitActiveNotifications(0).size)
     }
 
 }

@@ -4,13 +4,14 @@ import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
 import androidx.core.app.NotificationCompat
-import androidx.test.espresso.Espresso
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SdkSuppress
 import androidx.test.platform.app.InstrumentationRegistry
+import com.vanskarner.samplenotify.common.waitActiveNotifications
 import com.vanskarner.simplenotify.test.R
+import kotlinx.coroutines.test.runTest
+import org.junit.After
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -30,6 +31,11 @@ class NotifyChannelBeforeApi26Test {
             appContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         notifyChannel = NotifyChannel
+    }
+
+    @After
+    fun tearDown() {
+        notificationManager.cancelAll()
     }
 
     @Test
@@ -54,39 +60,40 @@ class NotifyChannelBeforeApi26Test {
     }
 
     @Test
-    fun cancelNotification_shouldBeCanceled() {
+    fun cancelNotification_shouldBeCanceled() = runTest {
         val channelId = notifyChannel.applyDefaultChannel(appContext)
-        val notificationId = 123
+        val expectedNotificationId = 123
         val notifyBuilder = NotificationCompat.Builder(appContext, channelId)
             .setSmallIcon(R.drawable.test_ic_notification_24)
             .setContentTitle("Any Title")
             .setContentText("Any Text")
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-        notificationManager.notify(notificationId, notifyBuilder.build())
+        notificationManager.notify(expectedNotificationId, notifyBuilder.build())
+        val actualStatusBarNotification =
+            notificationManager.waitActiveNotifications(1).firstOrNull()
 
-        Espresso.onIdle()
-        assertNotNull(notificationManager.activeNotifications.first { it.id == notificationId })
-        notifyChannel.cancelNotification(appContext, notificationId)
-        Espresso.onIdle()
-        assertEquals(0, notificationManager.activeNotifications.size)
+        assertEquals(expectedNotificationId, actualStatusBarNotification?.id)
+        notifyChannel.cancelNotification(appContext, expectedNotificationId)
+        assertEquals(0, notificationManager.waitActiveNotifications(0).size)
     }
 
     @Test
-    fun cancelAllNotification_shouldBeCanceled() {
+    fun cancelAllNotification_shouldBeCanceled() = runTest {
         val channelId = notifyChannel.applyDefaultChannel(appContext)
-        val notificationId = 123
+        val expectedNotificationId = 123
         val notifyBuilder = NotificationCompat.Builder(appContext, channelId)
             .setSmallIcon(R.drawable.test_ic_notification_24)
             .setContentTitle("Any Title")
             .setContentText("Any Text")
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-        notificationManager.notify(notificationId, notifyBuilder.build())
+        notificationManager.notify(expectedNotificationId, notifyBuilder.build())
+        notificationManager.notify(expectedNotificationId, notifyBuilder.build())
+        val actualStatusBarNotification =
+            notificationManager.waitActiveNotifications(1).firstOrNull()
 
-        Espresso.onIdle()
-        assertNotNull(notificationManager.activeNotifications.first { it.id == notificationId })
+        assertEquals(expectedNotificationId, actualStatusBarNotification?.id)
         notifyChannel.cancelAllNotification(appContext)
-        Espresso.onIdle()
-        assertEquals(0, notificationManager.activeNotifications.size)
+        assertEquals(0, notificationManager.waitActiveNotifications(0).size)
     }
 
 }
