@@ -9,8 +9,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SdkSuppress
 import androidx.test.platform.app.InstrumentationRegistry
 import com.vanskarner.samplenotify.common.ConditionalPermissionRule
+import com.vanskarner.samplenotify.common.TestDataProvider
 import com.vanskarner.samplenotify.common.waitActiveNotifications
-import com.vanskarner.simplenotify.test.R
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -23,7 +23,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 @SdkSuppress(maxSdkVersion = Build.VERSION_CODES.N_MR1)
 class SimpleNotifyBeforeApi26Test {
-    private lateinit var appContext: Context
+    private lateinit var context: Context
     private lateinit var notificationManager: NotificationManager
 
     @get:Rule
@@ -34,9 +34,9 @@ class SimpleNotifyBeforeApi26Test {
 
     @Before
     fun setup() {
-        appContext = InstrumentationRegistry.getInstrumentation().targetContext
+        context = InstrumentationRegistry.getInstrumentation().targetContext
         notificationManager =
-            appContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     }
 
     @After
@@ -46,7 +46,7 @@ class SimpleNotifyBeforeApi26Test {
 
     @Test
     fun with_usingBasicFormAndNoId_shouldBeShow() = runTest {
-        val expectedNotificationId = SimpleNotify.with(appContext)
+        val expectedNotificationId = SimpleNotify.with(context)
             .asBasic {
                 title = "Any title"
                 text = "Any text"
@@ -66,7 +66,7 @@ class SimpleNotifyBeforeApi26Test {
 
     @Test
     fun with_usingBasicFormAndWithId_shouldBeShow() = runTest {
-        SimpleNotify.with(appContext)
+        SimpleNotify.with(context)
             .asBasic {
                 id = 123
                 title = "Any title"
@@ -88,34 +88,24 @@ class SimpleNotifyBeforeApi26Test {
     @Test
     fun cancel_shouldBeCancel() = runTest {
         val expectedNotificationId = 123
-        val notifyBuilder = NotificationCompat.Builder(appContext, "anyId")
-            .setSmallIcon(R.drawable.test_ic_notification_24)
-            .setContentTitle("Any Title")
-            .setContentText("Any Text")
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+        val notifyBuilder = TestDataProvider.basicNotification(context, "AnyId")
         notificationManager.notify(expectedNotificationId, notifyBuilder.build())
-        val statusBarNotification =
-            notificationManager.waitActiveNotifications(1).first()
+        val statusBarNotification = notificationManager.waitActiveNotifications(1).first()
 
         assertEquals(expectedNotificationId, statusBarNotification.id)
-        SimpleNotify.cancel(appContext, expectedNotificationId)
+        SimpleNotify.cancel(context, expectedNotificationId)
         assertEquals(0, notificationManager.waitActiveNotifications(0).size)
     }
 
     @Test
-    fun cancelAllNotifications_shouldBeCancel()= runTest {
+    fun cancelAllNotifications_shouldBeCancel() = runTest {
         val expectedNotificationId = 123
-        val notifyBuilder = NotificationCompat.Builder(appContext, "anyId")
-            .setSmallIcon(R.drawable.test_ic_notification_24)
-            .setContentTitle("Any Title")
-            .setContentText("Any Text")
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+        val notifyBuilder = TestDataProvider.basicNotification(context, "AnyId")
         notificationManager.notify(expectedNotificationId, notifyBuilder.build())
-        val statusBarNotification =
-            notificationManager.waitActiveNotifications(1).first()
+        val statusBarNotification = notificationManager.waitActiveNotifications(1).first()
 
         assertEquals(expectedNotificationId, statusBarNotification.id)
-        SimpleNotify.cancelAll(appContext)
+        SimpleNotify.cancelAll(context)
         assertEquals(0, notificationManager.waitActiveNotifications(0).size)
     }
 }

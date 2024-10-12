@@ -3,12 +3,11 @@ package com.vanskarner.samplenotify.internal
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
-import androidx.core.app.NotificationCompat
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SdkSuppress
 import androidx.test.platform.app.InstrumentationRegistry
+import com.vanskarner.samplenotify.common.TestDataProvider
 import com.vanskarner.samplenotify.common.waitActiveNotifications
-import com.vanskarner.simplenotify.test.R
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -21,14 +20,14 @@ import org.junit.runner.RunWith
 @SdkSuppress(maxSdkVersion = Build.VERSION_CODES.N_MR1)
 class NotifyChannelBeforeApi26Test {
     private lateinit var notifyChannel: NotifyChannel
-    private lateinit var appContext: Context
+    private lateinit var context: Context
     private lateinit var notificationManager: NotificationManager
 
     @Before
     fun setup() {
-        appContext = InstrumentationRegistry.getInstrumentation().targetContext
+        context = InstrumentationRegistry.getInstrumentation().targetContext
         notificationManager =
-            appContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         notifyChannel = NotifyChannel
     }
@@ -40,59 +39,51 @@ class NotifyChannelBeforeApi26Test {
 
     @Test
     fun applyDefaultChannel_shouldOnlyReturnId() {
-        val channelId = notifyChannel.applyDefaultChannel(appContext)
+        val channelId = notifyChannel.applyDefaultChannel(context)
 
         assertEquals(DEFAULT_CHANNEL_ID, channelId)
     }
 
     @Test
     fun applyProgressChannel_shouldOnlyReturnId() {
-        val channelId = notifyChannel.applyProgressChannel(appContext)
+        val channelId = notifyChannel.applyProgressChannel(context)
 
         assertEquals(DEFAULT_PROGRESS_CHANNEL_ID, channelId)
     }
 
     @Test
     fun checkChannelNotExists_shouldOnlyReturnTrue() {
-        val channel1 = notifyChannel.checkChannelNotExists(appContext, "anyId")
+        val channel1 = notifyChannel.checkChannelNotExists(context, "anyId")
 
         assertTrue(channel1)
     }
 
     @Test
     fun cancelNotification_shouldBeCanceled() = runTest {
-        val channelId = notifyChannel.applyDefaultChannel(appContext)
+        val channelId = notifyChannel.applyDefaultChannel(context)
         val expectedNotificationId = 123
-        val notifyBuilder = NotificationCompat.Builder(appContext, channelId)
-            .setSmallIcon(R.drawable.test_ic_notification_24)
-            .setContentTitle("Any Title")
-            .setContentText("Any Text")
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+        val notifyBuilder = TestDataProvider.basicNotification(context,channelId)
         notificationManager.notify(expectedNotificationId, notifyBuilder.build())
         val actualStatusBarNotification =
             notificationManager.waitActiveNotifications(1).firstOrNull()
 
         assertEquals(expectedNotificationId, actualStatusBarNotification?.id)
-        notifyChannel.cancelNotification(appContext, expectedNotificationId)
+        notifyChannel.cancelNotification(context, expectedNotificationId)
         assertEquals(0, notificationManager.waitActiveNotifications(0).size)
     }
 
     @Test
     fun cancelAllNotification_shouldBeCanceled() = runTest {
-        val channelId = notifyChannel.applyDefaultChannel(appContext)
+        val channelId = notifyChannel.applyDefaultChannel(context)
         val expectedNotificationId = 123
-        val notifyBuilder = NotificationCompat.Builder(appContext, channelId)
-            .setSmallIcon(R.drawable.test_ic_notification_24)
-            .setContentTitle("Any Title")
-            .setContentText("Any Text")
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+        val notifyBuilder = TestDataProvider.basicNotification(context,channelId)
         notificationManager.notify(expectedNotificationId, notifyBuilder.build())
         notificationManager.notify(expectedNotificationId, notifyBuilder.build())
         val actualStatusBarNotification =
             notificationManager.waitActiveNotifications(1).firstOrNull()
 
         assertEquals(expectedNotificationId, actualStatusBarNotification?.id)
-        notifyChannel.cancelAllNotification(appContext)
+        notifyChannel.cancelAllNotification(context)
         assertEquals(0, notificationManager.waitActiveNotifications(0).size)
     }
 

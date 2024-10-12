@@ -1,5 +1,7 @@
 package com.vanskarner.samplenotify.common
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -190,6 +192,22 @@ class TestDataProvider {
                 Intent(),
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
+        }
+
+        fun notificationChannel(): NotificationChannel {
+            return NotificationChannel(
+                "testId",
+                "Test Channel",
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
+        }
+
+        fun basicNotification(context: Context, channelId:String): NotificationCompat.Builder {
+            return NotificationCompat.Builder(context, channelId)
+                .setSmallIcon(R.drawable.test_ic_notification_24)
+                .setContentTitle("Any Title")
+                .setContentText("Any Text")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
         }
     }
 

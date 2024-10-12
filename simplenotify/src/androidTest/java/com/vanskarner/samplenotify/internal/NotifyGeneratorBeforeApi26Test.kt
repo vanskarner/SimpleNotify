@@ -41,11 +41,7 @@ class NotifyGeneratorBeforeApi26Test {
     fun show_whenHasProgressAndHasNoChannel_shouldBeShown() = runTest {
         val data = TestDataProvider.basicData()
         data.id = null
-        val progressData = ProgressData(
-            currentValue = 50,
-            indeterminate = true,
-            hide = false
-        )
+        val progressData = TestDataProvider.progressData(false)
         notifyGenerator = NotifyGenerator(
             context = context,
             data = data,
@@ -96,11 +92,7 @@ class NotifyGeneratorBeforeApi26Test {
     fun show_whenHasIdAndHasProgressAndHasChannel_shouldBeShown() = runTest {
         val data = TestDataProvider.basicData()
         data.id = 111
-        val progressData = ProgressData(
-            currentValue = 50,
-            indeterminate = true,
-            hide = false
-        )
+        val progressData = TestDataProvider.progressData(false)
         notifyGenerator = NotifyGenerator(
             context = context,
             data = data,

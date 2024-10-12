@@ -12,6 +12,7 @@ import androidx.core.app.NotificationCompat.MessagingStyle.Message
 import androidx.core.app.Person
 import androidx.core.app.RemoteInput
 import androidx.test.core.app.ApplicationProvider
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.vanskarner.samplenotify.common.ConditionalPermissionRule
 import com.vanskarner.samplenotify.common.TestDataProvider
 import com.vanskarner.samplenotify.common.waitActiveNotifications
@@ -22,7 +23,9 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 
+@RunWith(AndroidJUnit4::class)
 class NotifyConfigTest {
     private lateinit var notifyConfig: NotifyConfig
 
@@ -81,7 +84,7 @@ class NotifyConfigTest {
             id = 123
             smallIcon = R.drawable.test_ic_notification_24
             title = "Test Title"
-            bigText = "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+            bigText = "Lorem Ipsum is simply dummy text of ..."
             text = "Contrary to popular belief"
             summaryText = "Lorem Ipsum is not simply random text"
             largeIcon = expectedLargeIcon
@@ -96,10 +99,7 @@ class NotifyConfigTest {
         assertEquals(123, actualBigTextData.id)
         assertEquals(R.drawable.test_ic_notification_24, actualBigTextData.smallIcon)
         assertEquals("Test Title", actualBigTextData.title)
-        assertEquals(
-            "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-            actualBigTextData.bigText
-        )
+        assertEquals("Lorem Ipsum is simply dummy text of ...", actualBigTextData.bigText)
         assertEquals("Contrary to popular belief", actualBigTextData.text)
         assertEquals("Lorem Ipsum is not simply random text", actualBigTextData.summaryText)
         assertTrue(actualBigTextData.largeIcon?.sameAs(expectedLargeIcon)!!)
@@ -149,7 +149,7 @@ class NotifyConfigTest {
             smallIcon = R.drawable.test_ic_notification_24
             title = "Test Title"
             text = "Contrary to popular belief"
-            summaryText = "Lorem Ipsum is not simply random text"
+            summaryText = "Lorem Ipsum is not simply..."
             image = expectedImage
             largeIcon = expectedLargeIcon
             priority = NotificationCompat.PRIORITY_HIGH
@@ -161,13 +161,10 @@ class NotifyConfigTest {
         val actualBigPictureData = dataField.get(notifyConfig) as Data.BigPictureData
 
         assertEquals(123, actualBigPictureData.id)
-        assertEquals(
-            R.drawable.test_ic_notification_24,
-            actualBigPictureData.smallIcon
-        )
+        assertEquals(R.drawable.test_ic_notification_24, actualBigPictureData.smallIcon)
         assertEquals("Test Title", actualBigPictureData.title)
         assertEquals("Contrary to popular belief", actualBigPictureData.text)
-        assertEquals("Lorem Ipsum is not simply random text", actualBigPictureData.summaryText)
+        assertEquals("Lorem Ipsum is not simply...", actualBigPictureData.summaryText)
         assertTrue(actualBigPictureData.image?.sameAs(expectedImage)!!)
         assertTrue(actualBigPictureData.largeIcon?.sameAs(expectedLargeIcon)!!)
         assertEquals(NotificationCompat.PRIORITY_HIGH, actualBigPictureData.priority)
@@ -230,19 +227,12 @@ class NotifyConfigTest {
         val dataField = notifyConfig.javaClass.getDeclaredField("data")
         dataField.isAccessible = true
         val actualCustomDesignData = dataField.get(notifyConfig) as Data.CustomDesignData
+        val actualSmallRemoteView = actualCustomDesignData.smallRemoteViews.invoke()
+        val actualLargeRemoteView = actualCustomDesignData.largeRemoteViews.invoke()
 
-        assertEquals(
-            R.drawable.test_ic_notification_24,
-            actualCustomDesignData.smallIcon
-        )
-        assertEquals(
-            R.layout.test_small_notification,
-            actualCustomDesignData.smallRemoteViews.invoke()?.layoutId
-        )
-        assertEquals(
-            R.layout.test_large_notification,
-            actualCustomDesignData.largeRemoteViews.invoke()?.layoutId
-        )
+        assertEquals(R.drawable.test_ic_notification_24, actualCustomDesignData.smallIcon)
+        assertEquals(R.layout.test_small_notification, actualSmallRemoteView?.layoutId)
+        assertEquals(R.layout.test_large_notification, actualLargeRemoteView?.layoutId)
     }
 
     @Test
@@ -379,8 +369,7 @@ class NotifyConfigTest {
     @Test
     fun show_whenDataIsNotNull_shouldBeShown() = runTest {
         val expectedNotificationId = 123
-        notifyConfig
-            .asBasic {
+        notifyConfig.asBasic {
                 id = expectedNotificationId
                 title = "Test Title"
                 text = "Test Text"

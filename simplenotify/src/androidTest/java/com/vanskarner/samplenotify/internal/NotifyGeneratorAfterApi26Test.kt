@@ -1,7 +1,6 @@
 package com.vanskarner.samplenotify.internal
 
 import  android.Manifest
-import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
@@ -11,7 +10,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SdkSuppress
 import com.vanskarner.samplenotify.common.ConditionalPermissionRule
 import com.vanskarner.samplenotify.ExtraData
-import com.vanskarner.samplenotify.ProgressData
 import com.vanskarner.samplenotify.common.TestDataProvider
 import com.vanskarner.samplenotify.common.waitActiveNotifications
 import kotlinx.coroutines.test.runTest
@@ -51,11 +49,7 @@ class NotifyGeneratorAfterApi26Test {
     fun show_whenHasProgressAndHasNoChannel_setDefaultProgressChannel() = runTest {
         val data = TestDataProvider.basicData()
         data.id = null
-        val progressData = ProgressData(
-            currentValue = 50,
-            indeterminate = true,
-            hide = false
-        )
+        val progressData = TestDataProvider.progressData(false)
         notifyGenerator = NotifyGenerator(
             context = context,
             data = data,
@@ -108,16 +102,11 @@ class NotifyGeneratorAfterApi26Test {
 
     @Test
     fun show_whenHasIdAndHasProgressAndHasChannel_useSpecifiedChannel() = runTest {
-        val expectedChannel =
-            NotificationChannel("testId", "Any Name", NotificationManager.IMPORTANCE_DEFAULT)
+        val expectedChannel = TestDataProvider.notificationChannel()
         notificationManager.createNotificationChannel(expectedChannel)
         val data = TestDataProvider.basicData()
         data.id = 111
-        val progressData = ProgressData(
-            currentValue = 50,
-            indeterminate = true,
-            hide = false
-        )
+        val progressData = TestDataProvider.progressData(false)
         notifyGenerator = NotifyGenerator(
             context = context,
             data = data,
@@ -142,8 +131,7 @@ class NotifyGeneratorAfterApi26Test {
 
     @Test
     fun show_whenHasIdAndHasNoProgressAndHasChannel_useSpecifiedChannel() = runTest {
-        val expectedChannel =
-            NotificationChannel("testId", "Any Name", NotificationManager.IMPORTANCE_DEFAULT)
+        val expectedChannel = TestDataProvider.notificationChannel()
         notificationManager.createNotificationChannel(expectedChannel)
         val data = TestDataProvider.basicData()
         data.id = 111

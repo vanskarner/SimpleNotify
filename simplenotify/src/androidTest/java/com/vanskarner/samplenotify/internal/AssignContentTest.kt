@@ -3,13 +3,13 @@ package com.vanskarner.samplenotify.internal
 import android.app.Notification
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Icon
 import androidx.core.app.NotificationCompat
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.vanskarner.samplenotify.Data
 import com.vanskarner.samplenotify.common.TestDataProvider
+import com.vanskarner.samplenotify.common.toBitmap
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
@@ -200,13 +200,6 @@ class AssignContentTest {
         assertEquals(expectedData.contentIntent, actualNotification.contentIntent)
         assertEquals(expectedData.autoCancel, actualAutoCancel)
         assertEquals(expectedData.priority, actualNotification.priority)
-    }
-
-    private fun Icon.toBitmap(): Bitmap? {
-        return when (type) {
-            Icon.TYPE_BITMAP -> (loadDrawable(ApplicationProvider.getApplicationContext()) as? BitmapDrawable)?.bitmap
-            else -> null
-        }
     }
 
 }
