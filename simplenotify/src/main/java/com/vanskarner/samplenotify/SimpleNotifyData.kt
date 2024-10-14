@@ -70,7 +70,8 @@ data class ExtraData(
     var useChronometer: Boolean? = null,
     var badgeNumber: Int? = null,//from API 26
     var badgeIconType: Int? = null,//from API 26
-    var badgeShortCutId: String? = null//from API 26
+    var badgeShortCutId: String? = null,//from API 26
+    var allowSystemGeneratedContextualActions: Boolean? = null//from API 29
 )
 
 sealed class ActionData {
@@ -83,7 +84,8 @@ sealed class ActionData {
 
     data class ReplyAction(
         var replyPending: PendingIntent? = null,
-        var remote: RemoteInput? = null
+        var remote: RemoteInput? = null,
+        var allowGeneratedReplies: Boolean? = null,//from API 29
     ) : ActionData()
 }
 

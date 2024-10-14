@@ -151,7 +151,8 @@ class TestDataProvider {
             useChronometer = true,
             badgeNumber = 15,
             badgeIconType = NotificationCompat.BADGE_ICON_SMALL,
-            badgeShortCutId = "anyShortCutId"
+            badgeShortCutId = "anyShortCutId",
+            allowSystemGeneratedContextualActions = true
         )
 
         fun basicAction(): ActionData.BasicAction {
@@ -168,6 +169,7 @@ class TestDataProvider {
                 label = "Any Label"
                 replyPending = pendingIntent()
                 remote = RemoteInput.Builder("any_key").build()
+                allowGeneratedReplies = true
             }
         }
 

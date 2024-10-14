@@ -151,6 +151,13 @@ class AssignContentTest {
             assertEquals(expectedExtraData.badgeIconType, actualBadgeIconType)
             assertEquals(expectedExtraData.badgeShortCutId, actualShortcutId)
         }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            val actualSystemGeneratedActions = notification.allowSystemGeneratedContextualActions
+            assertEquals(
+                expectedExtraData.allowSystemGeneratedContextualActions,
+                actualSystemGeneratedActions
+            )
+        }
     }
 
     @Test
@@ -169,6 +176,7 @@ class AssignContentTest {
         assertEquals(expectedReplyAction.icon, actualActions[1].icon)
         assertEquals(expectedReplyAction.label, actualActions[1].title)
         assertEquals(expectedReplyAction.replyPending, actualActions[1].actionIntent)
+        assertEquals(expectedReplyAction.allowGeneratedReplies, actualActions[1].allowGeneratedReplies)
         assertNotNull(actualActions[1].remoteInputs[0])
     }
 
