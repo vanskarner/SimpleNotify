@@ -79,6 +79,7 @@ internal object AssignContent {
         extras.allowSystemGeneratedContextualActions?.let {
             builder.setAllowSystemGeneratedContextualActions(it)
         }
+        extras.remoteInputHistory?.let{ builder.setRemoteInputHistory(it) }
     }
 
     fun applyAction(actionData: ActionData, builder: NotificationCompat.Builder) {

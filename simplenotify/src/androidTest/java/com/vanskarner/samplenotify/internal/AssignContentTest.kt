@@ -131,6 +131,8 @@ class AssignContentTest {
         val actualShowWhen = actualExtras.getBoolean(NotificationCompat.EXTRA_SHOW_WHEN)
         val actualUsesChronometer = NotificationCompat.getUsesChronometer(notification)
         val actualBadgeNumber = notification.number
+        val actualRemoteInputHistory =
+            actualExtras.getCharSequenceArray(NotificationCompat.EXTRA_REMOTE_INPUT_HISTORY)
 
         assertEquals(expectedExtraData.category, notification.category)
         assertEquals(expectedExtraData.visibility, notification.visibility)
@@ -158,6 +160,7 @@ class AssignContentTest {
                 actualSystemGeneratedActions
             )
         }
+        assertEquals(expectedExtraData.remoteInputHistory?.size, actualRemoteInputHistory?.size)
     }
 
     @Test
@@ -176,7 +179,10 @@ class AssignContentTest {
         assertEquals(expectedReplyAction.icon, actualActions[1].icon)
         assertEquals(expectedReplyAction.label, actualActions[1].title)
         assertEquals(expectedReplyAction.replyPending, actualActions[1].actionIntent)
-        assertEquals(expectedReplyAction.allowGeneratedReplies, actualActions[1].allowGeneratedReplies)
+        assertEquals(
+            expectedReplyAction.allowGeneratedReplies,
+            actualActions[1].allowGeneratedReplies
+        )
         assertNotNull(actualActions[1].remoteInputs[0])
     }
 

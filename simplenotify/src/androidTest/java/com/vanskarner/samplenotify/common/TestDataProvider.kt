@@ -152,7 +152,8 @@ class TestDataProvider {
             badgeNumber = 15,
             badgeIconType = NotificationCompat.BADGE_ICON_SMALL,
             badgeShortCutId = "anyShortCutId",
-            allowSystemGeneratedContextualActions = true
+            allowSystemGeneratedContextualActions = true,
+            remoteInputHistory = arrayOf("History 1", "History 2")
         )
 
         fun basicAction(): ActionData.BasicAction {
@@ -207,7 +208,7 @@ class TestDataProvider {
             )
         }
 
-        fun basicNotification(context: Context, channelId:String): NotificationCompat.Builder {
+        fun basicNotification(context: Context, channelId: String): NotificationCompat.Builder {
             return NotificationCompat.Builder(context, channelId)
                 .setSmallIcon(R.drawable.test_ic_notification_24)
                 .setContentTitle("Any Title")

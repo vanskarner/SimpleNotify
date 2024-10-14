@@ -56,6 +56,7 @@ sealed class Data {
     ) : Data()
 }
 
+@Suppress("ArrayInDataClass")
 data class ExtraData(
     var category: String? = null,
     var visibility: Int? = null,
@@ -71,7 +72,8 @@ data class ExtraData(
     var badgeNumber: Int? = null,//from API 26
     var badgeIconType: Int? = null,//from API 26
     var badgeShortCutId: String? = null,//from API 26
-    var allowSystemGeneratedContextualActions: Boolean? = null//from API 29
+    var allowSystemGeneratedContextualActions: Boolean? = null,//from API 29
+    var remoteInputHistory: Array<CharSequence>? = null
 )
 
 sealed class ActionData {
