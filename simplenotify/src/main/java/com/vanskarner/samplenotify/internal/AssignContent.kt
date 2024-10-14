@@ -1,5 +1,6 @@
 package com.vanskarner.samplenotify.internal
 
+import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.vanskarner.samplenotify.ActionData
 import com.vanskarner.samplenotify.Data
@@ -73,6 +74,10 @@ internal object AssignContent {
         extras.onlyAlertOnce?.let { builder.setOnlyAlertOnce(it) }
         extras.showWhen?.let { builder.setShowWhen(it) }
         extras.useChronometer?.let { builder.setUsesChronometer(it) }
+        //Notification dots
+        builder.setShortcutId(extras.badgeShortCutId)
+        extras.badgeNumber?.let { builder.setNumber(it) }
+        extras.badgeIconType?.let { builder.setBadgeIconType(it) }
     }
 
     fun applyAction(actionData: ActionData, builder: NotificationCompat.Builder) {

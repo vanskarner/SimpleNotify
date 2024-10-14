@@ -148,7 +148,10 @@ class TestDataProvider {
             onlyAlertOnce = true,
             subText = "Any SubText",
             showWhen = true,
-            useChronometer = true
+            useChronometer = true,
+            badgeNumber = 15,
+            badgeIconType = NotificationCompat.BADGE_ICON_SMALL,
+            badgeShortCutId = "anyShortCutId"
         )
 
         fun basicAction(): ActionData.BasicAction {

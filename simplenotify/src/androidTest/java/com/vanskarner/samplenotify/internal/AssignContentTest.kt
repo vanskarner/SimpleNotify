@@ -4,6 +4,7 @@ import android.app.Notification
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.Icon
+import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -129,6 +130,7 @@ class AssignContentTest {
         val actualSubText = actualExtras.getString(NotificationCompat.EXTRA_SUB_TEXT)
         val actualShowWhen = actualExtras.getBoolean(NotificationCompat.EXTRA_SHOW_WHEN)
         val actualUsesChronometer = NotificationCompat.getUsesChronometer(notification)
+        val actualBadgeNumber = notification.number
 
         assertEquals(expectedExtraData.category, notification.category)
         assertEquals(expectedExtraData.visibility, notification.visibility)
@@ -141,6 +143,14 @@ class AssignContentTest {
         assertEquals(expectedExtraData.subText, actualSubText)
         assertEquals(expectedExtraData.showWhen, actualShowWhen)
         assertEquals(expectedExtraData.useChronometer, actualUsesChronometer)
+        assertEquals(expectedExtraData.badgeNumber, actualBadgeNumber)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val actualBadgeIconType = notification.badgeIconType
+            val actualShortcutId = notification.shortcutId
+
+            assertEquals(expectedExtraData.badgeIconType, actualBadgeIconType)
+            assertEquals(expectedExtraData.badgeShortCutId, actualShortcutId)
+        }
     }
 
     @Test

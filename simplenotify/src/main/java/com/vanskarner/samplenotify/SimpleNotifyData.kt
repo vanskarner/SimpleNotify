@@ -17,7 +17,6 @@ sealed class Data {
     var autoCancel: Boolean = true
     var priority: Int = NotificationCompat.PRIORITY_DEFAULT
 //    var timeoutAfter: Long? = null
-//    var badgeIconType: Int? = null
 
     data class BasicData(
         var title: String? = null,
@@ -68,7 +67,10 @@ data class ExtraData(
     var onlyAlertOnce: Boolean? = null,
     var subText: String? = null,
     var showWhen: Boolean? = null,
-    var useChronometer: Boolean? = null
+    var useChronometer: Boolean? = null,
+    var badgeNumber: Int? = null,//from API 26
+    var badgeIconType: Int? = null,//from API 26
+    var badgeShortCutId: String? = null//from API 26
 )
 
 sealed class ActionData {
