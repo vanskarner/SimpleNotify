@@ -31,6 +31,7 @@ class TestDataProvider {
                 priority = NotificationCompat.PRIORITY_DEFAULT
                 contentIntent = pendingIntent
                 autoCancel = true
+                timeoutAfter = 5000
             }
             return basicData
         }
@@ -47,6 +48,7 @@ class TestDataProvider {
                 priority = NotificationCompat.PRIORITY_DEFAULT
                 contentIntent = pendingIntent
                 autoCancel = true
+                timeoutAfter = 5000
             }
             return data
         }
@@ -63,6 +65,7 @@ class TestDataProvider {
                 priority = NotificationCompat.PRIORITY_HIGH
                 contentIntent = pendingIntent
                 autoCancel = true
+                timeoutAfter = 5000
             }
             return data
         }
@@ -79,6 +82,7 @@ class TestDataProvider {
                 priority = NotificationCompat.PRIORITY_HIGH
                 contentIntent = pendingIntent
                 autoCancel = true
+                timeoutAfter = 5000
             }
             return data
         }
@@ -105,6 +109,7 @@ class TestDataProvider {
                 priority = NotificationCompat.PRIORITY_HIGH
                 contentIntent = pendingIntent
                 autoCancel = true
+                timeoutAfter = 5000
             }
             return data
         }
@@ -129,6 +134,7 @@ class TestDataProvider {
                 autoCancel = true
                 priority = NotificationCompat.PRIORITY_HIGH
                 largeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
+                timeoutAfter = 5000
             }
             return data
         }

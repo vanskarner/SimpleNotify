@@ -224,6 +224,9 @@ class AssignContentTest {
         assertEquals(expectedData.contentIntent, actualNotification.contentIntent)
         assertEquals(expectedData.autoCancel, actualAutoCancel)
         assertEquals(expectedData.priority, actualNotification.priority)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            assertEquals(expectedData.timeoutAfter, actualNotification.timeoutAfter)
+        }
     }
 
 }

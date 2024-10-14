@@ -54,6 +54,7 @@ internal object AssignContent {
                     .setCustomBigContentView(data.largeRemoteViews.invoke())
             }
         }
+        data.timeoutAfter?.let { builder.setTimeoutAfter(it) }
         filteredBuilder.setSmallIcon(data.smallIcon)
             .setLargeIcon(data.largeIcon)
             .setContentIntent(data.contentIntent)

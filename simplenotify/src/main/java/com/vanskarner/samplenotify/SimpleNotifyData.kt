@@ -16,7 +16,7 @@ sealed class Data {
     var contentIntent: PendingIntent? = null
     var autoCancel: Boolean = true
     var priority: Int = NotificationCompat.PRIORITY_DEFAULT
-//    var timeoutAfter: Long? = null
+    var timeoutAfter: Long? = null
 
     data class BasicData(
         var title: String? = null,
