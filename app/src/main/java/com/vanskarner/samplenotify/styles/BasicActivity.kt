@@ -111,7 +111,7 @@ class BasicActivity : BaseActivity() {
                 smallIcon = R.drawable.baseline_handshake_24
                 title = "Dina Balearte: Order with bullets and promotions"
                 text = "Promotions after repression, a touch of presidential irony."
-                largeIcon = BitmapFactory.decodeResource(resources, R.drawable.dina4)
+                largeIcon = BitmapFactory.decodeStream(assets.open("dina2.jpg"))
                 contentIntent = getSimplePendingIntent(BasicActivity::class.java)
             }
             .show()
