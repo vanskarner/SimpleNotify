@@ -7,7 +7,6 @@ import android.content.Context
 import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
 import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.MessagingStyle.Message
 import androidx.core.app.Person
@@ -18,7 +17,6 @@ import com.vanskarner.samplenotify.BasicBubbleActivity
 import com.vanskarner.samplenotify.MainActivity
 import com.vanskarner.samplenotify.R
 
-@RequiresApi(Build.VERSION_CODES.N_MR1)
 class SampleBubbleNotificationView(private val context: Context) {
     private val notificationManager: NotificationManager by lazy {
         context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager

@@ -29,6 +29,9 @@
             android:name=".styles.BasicActivity"
             android:exported="true" />
         <activity
+            android:name=".styles.MessagingActivity"
+            android:exported="true" />
+        <activity
             android:name=".BasicBubbleActivity"
             android:allowEmbedded="true"
             android:documentLaunchMode="always"
