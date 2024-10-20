@@ -111,7 +111,8 @@ sealed class NotifyMessaging {
         val timestamp: Long
     ) : NotifyMessaging()
 
-    fun setData(dataMimeType: String, dataUri: Uri) {
+    fun setData(dataMimeType: String, dataUri: Uri): NotifyMessaging {
         mimeData = Pair(dataMimeType, dataUri)
+        return this
     }
 }
