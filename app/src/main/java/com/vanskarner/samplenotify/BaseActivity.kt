@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.PendingIntent
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
@@ -11,6 +12,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.IconCompat
 
 abstract class BaseActivity : AppCompatActivity() {
     companion object {
@@ -61,6 +63,9 @@ abstract class BaseActivity : AppCompatActivity() {
 
     fun getPermissionMsg(hasPermission: Boolean): String =
         if (hasPermission) "Granted" else "Not Granted"
+
+    fun iconFromAssets(fileName: String): IconCompat =
+        IconCompat.createWithAdaptiveBitmap(BitmapFactory.decodeStream(assets.open(fileName)))
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     fun hasNotificationPermission(): Boolean {

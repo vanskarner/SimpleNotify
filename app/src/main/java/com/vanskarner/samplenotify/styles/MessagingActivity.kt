@@ -75,11 +75,11 @@ class MessagingActivity : BaseActivity() {
             .asDuoMessaging {
                 you = Person.Builder()
                     .setName("You")
-                    .setIcon(iconFromFilename("dina1.jpg"))
+                    .setIcon(iconFromAssets("dina1.jpg"))
                     .build()
                 contact = Person.Builder()
                     .setName("Ministroll")
-                    .setIcon(iconFromFilename("ministroll.jpg"))
+                    .setIcon(iconFromAssets("ministroll.jpg"))
                     .build()
                 messages = arrayListOf(
                     NotifyMessaging.YourMsg(
@@ -98,8 +98,5 @@ class MessagingActivity : BaseActivity() {
             }
             .show()
     }
-
-    private fun iconFromFilename(fileName: String): IconCompat =
-        IconCompat.createWithAdaptiveBitmap(BitmapFactory.decodeStream(assets.open(fileName)))
 
 }
