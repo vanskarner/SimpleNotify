@@ -31,8 +31,8 @@ class NotifyConfig(private val context: Context) {
         return this
     }
 
-    fun asMessaging(content: Data.MessageData.() -> Unit): NotifyConfig {
-        this.data = Data.MessageData().apply(content)
+    fun asDuoMessaging(content: Data.DuoMessageData.() -> Unit): NotifyConfig {
+        this.data = Data.DuoMessageData().apply(content)
         return this
     }
 

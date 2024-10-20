@@ -10,6 +10,7 @@ import androidx.core.app.NotificationCompat.MessagingStyle.Message
 import androidx.core.app.Person
 import androidx.core.graphics.drawable.IconCompat
 import com.vanskarner.samplenotify.BaseActivity
+import com.vanskarner.samplenotify.NotifyMessaging
 import com.vanskarner.samplenotify.R
 import com.vanskarner.samplenotify.SimpleNotify
 import com.vanskarner.samplenotify.bubbles.SampleBubbleNotificationView
@@ -35,7 +36,7 @@ class MessagingActivity : BaseActivity() {
         }
         findViewById<Button>(R.id.btnSetting).setOnClickListener { }
         findViewById<Button>(R.id.btnType1).setOnClickListener { simple() }
-        findViewById<Button>(R.id.btnType2).setOnClickListener {  }
+        findViewById<Button>(R.id.btnType2).setOnClickListener { }
         findViewById<Button>(R.id.btnType3).setOnClickListener { }
         findViewById<Button>(R.id.btnType4).setOnClickListener { }
         findViewById<Button>(R.id.btnType5).setOnClickListener {
@@ -71,35 +72,27 @@ class MessagingActivity : BaseActivity() {
 
     private fun simple() {
         SimpleNotify.with(this)
-            .asMessaging {
-                user = Person.Builder()
-                    .setName("Wayki")
+            .asDuoMessaging {
+                you = Person.Builder()
+                    .setName("You")
+                    .setIcon(iconFromFilename("dina1.jpg"))
                     .build()
-                conversationTitle = "The Big Show"
+                contact = Person.Builder()
+                    .setName("Ministroll")
+                    .setIcon(iconFromFilename("ministroll.jpg"))
+                    .build()
                 messages = arrayListOf(
-                    Message(
+                    NotifyMessaging.YourMsg(
                         "Help me find my rolex...",
-                        System.currentTimeMillis() - (5 * 60 * 1000),
-                        Person.Builder()
-                            .setName("Balearte")
-                            .setIcon(iconFromFilename("dina1.jpg"))
-                            .build()
+                        System.currentTimeMillis() - (3 * 60 * 1000)
                     ),
-                    Message(
+                    NotifyMessaging.ContactMsg(
                         "I'm sorry, but I already supported her by making Harvey Colchado fall.",
-                        System.currentTimeMillis() - (5 * 60 * 1000),
-                        Person.Builder()
-                            .setName("Ministroll")
-                            .setIcon(iconFromFilename("ministroll.jpg"))
-                            .build()
+                        System.currentTimeMillis() - (1 * 60 * 1000)
                     ),
-                    Message(
-                        "Hey don't bother me, I supported it by unsubscribing people in December 2022.",
-                        System.currentTimeMillis() - (5 * 60 * 1000),
-                        Person.Builder()
-                            .setName("Carnicero")
-                            .setIcon(iconFromFilename("carnicero.jpg"))
-                            .build()
+                    NotifyMessaging.YourMsg(
+                        "Only for this detail you are Minister, otherwise it would be a different story.",
+                        System.currentTimeMillis()
                     )
                 )
             }

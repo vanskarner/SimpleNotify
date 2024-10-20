@@ -8,7 +8,6 @@ import android.graphics.Color
 import android.os.Build
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationCompat.MessagingStyle.Message
 import androidx.core.app.Person
 import androidx.core.app.RemoteInput
 import androidx.test.core.app.ApplicationProvider
@@ -173,19 +172,21 @@ class NotifyConfigTest {
     }
 
     @Test
-    fun asMessaging_shouldSetData() {
+    fun asDuoMessaging_shouldSetData() {
         val expectedPendingIntent = TestDataProvider.pendingIntent()
         val expectedLargeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
         val expectedUser = Person.Builder().build()
+        val expectedContact = Person.Builder().build()
         val expectedMessage = arrayListOf(
-            Message("Any Text 1", 1000, Person.Builder().build()),
-            Message("Any Text 2", 2000, Person.Builder().build())
+            NotifyMessaging.ContactMsg("Any Text 1", 1000),
+            NotifyMessaging.YourMsg("Any Text 2", 2000)
         )
-        notifyConfig.asMessaging {
+        notifyConfig.asDuoMessaging {
             id = 123
             smallIcon = R.drawable.test_ic_notification_24
             conversationTitle = "Contrary to popular belief"
-            user = expectedUser
+            you = expectedUser
+            contact = expectedContact
             messages = expectedMessage
             largeIcon = expectedLargeIcon
             priority = NotificationCompat.PRIORITY_HIGH
@@ -194,17 +195,18 @@ class NotifyConfigTest {
         }
         val dataField = notifyConfig.javaClass.getDeclaredField("data")
         dataField.isAccessible = true
-        val actualMessageData = dataField.get(notifyConfig) as Data.MessageData
+        val actualDuoMessageData = dataField.get(notifyConfig) as Data.DuoMessageData
 
-        assertEquals(123, actualMessageData.id)
-        assertEquals(R.drawable.test_ic_notification_24, actualMessageData.smallIcon)
-        assertEquals("Contrary to popular belief", actualMessageData.conversationTitle)
-        assertEquals(expectedUser, actualMessageData.user)
-        assertEquals(expectedMessage, actualMessageData.messages)
-        assertTrue(actualMessageData.largeIcon?.sameAs(expectedLargeIcon)!!)
-        assertEquals(NotificationCompat.PRIORITY_HIGH, actualMessageData.priority)
-        assertEquals(expectedPendingIntent, actualMessageData.contentIntent)
-        assertEquals(false, actualMessageData.autoCancel)
+        assertEquals(123, actualDuoMessageData.id)
+        assertEquals(R.drawable.test_ic_notification_24, actualDuoMessageData.smallIcon)
+        assertEquals("Contrary to popular belief", actualDuoMessageData.conversationTitle)
+        assertEquals(expectedUser, actualDuoMessageData.you)
+        assertEquals(expectedContact, actualDuoMessageData.contact)
+        assertEquals(expectedMessage, actualDuoMessageData.messages)
+        assertTrue(actualDuoMessageData.largeIcon?.sameAs(expectedLargeIcon)!!)
+        assertEquals(NotificationCompat.PRIORITY_HIGH, actualDuoMessageData.priority)
+        assertEquals(expectedPendingIntent, actualDuoMessageData.contentIntent)
+        assertEquals(false, actualDuoMessageData.autoCancel)
     }
 
     @Test

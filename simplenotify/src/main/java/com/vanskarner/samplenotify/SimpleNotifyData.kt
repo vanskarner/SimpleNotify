@@ -1,8 +1,8 @@
 package com.vanskarner.samplenotify
 
-import androidx.core.app.NotificationCompat.MessagingStyle.Message
 import android.app.PendingIntent
 import android.graphics.Bitmap
+import android.net.Uri
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
@@ -43,10 +43,11 @@ sealed class Data {
         var image: Bitmap? = null
     ) : Data()
 
-    data class MessageData(
-        var user: Person = Person.Builder().build(),
+    data class DuoMessageData(
+        var you: Person = Person.Builder().setName("You").build(),
+        var contact: Person = Person.Builder().setName("Someone").build(),
         var conversationTitle: String? = null,
-        var messages: ArrayList<Message> = arrayListOf()
+        var messages: ArrayList<NotifyMessaging> = arrayListOf()
     ) : Data()
 
     data class CustomDesignData(
@@ -96,3 +97,21 @@ data class ProgressData(
     var indeterminate: Boolean = false,
     var hide: Boolean = false
 )
+
+sealed class NotifyMessaging {
+    internal var mimeData: Pair<String, Uri>? = null
+
+    data class YourMsg(
+        val msg: String,
+        val timestamp: Long
+    ) : NotifyMessaging()
+
+    data class ContactMsg(
+        val msg: String,
+        val timestamp: Long
+    ) : NotifyMessaging()
+
+    fun setData(dataMimeType: String, dataUri: Uri) {
+        mimeData = Pair(dataMimeType, dataUri)
+    }
+}

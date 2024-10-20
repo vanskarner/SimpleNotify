@@ -1,9 +1,12 @@
 package com.vanskarner.samplenotify.internal
 
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationCompat.MessagingStyle.Message
+import androidx.core.app.Person
 import com.vanskarner.samplenotify.ActionData
 import com.vanskarner.samplenotify.Data
 import com.vanskarner.samplenotify.ExtraData
+import com.vanskarner.samplenotify.NotifyMessaging
 import com.vanskarner.samplenotify.ProgressData
 
 internal object AssignContent {
@@ -41,11 +44,30 @@ internal object AssignContent {
                     .setStyle(style)
             }
 
-            is Data.MessageData -> {
-                val style = NotificationCompat.MessagingStyle(data.user)
+            is Data.DuoMessageData -> {
+                val style = NotificationCompat.MessagingStyle(data.you)
                     .setConversationTitle(data.conversationTitle)
-                data.messages.forEach { style.addMessage(it.text, it.timestamp, it.person) }
+                    .setGroupConversation(false)
+                data.messages.forEach {
+                    val message = when (it) {
+                        is NotifyMessaging.ContactMsg -> {
+                            Message(it.msg, it.timestamp, data.contact)
+                        }
+
+                        is NotifyMessaging.YourMsg -> {
+                            val person: Person? = null
+                            Message(it.msg, it.timestamp, person)
+                        }
+                    }
+                    it.mimeData?.let { pair -> message.setData(pair.first, pair.second) }
+                    style.addMessage(message)
+                }
                 builder.setStyle(style)
+                    .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                    .setShowWhen(true)
+                    .addPerson(data.contact)
+//                    .setWhen(chat.messages.last().timestamp)
+//                    .setOnlyAlertOnce(true)
             }
 
             is Data.CustomDesignData -> {
@@ -63,9 +85,9 @@ internal object AssignContent {
     }
 
     fun applyExtras(extras: ExtraData, builder: NotificationCompat.Builder) {
-        builder.setCategory(extras.category)
-        builder.setSubText(extras.subText)
-        builder.setDeleteIntent(extras.deleteIntent)
+        extras.category?.let { builder.setCategory(it) }
+        extras.subText?.let { builder.setSubText(it) }
+        extras.deleteIntent?.let { builder.setDeleteIntent(it) }
         extras.visibility?.let { builder.setVisibility(it) }
         extras.ongoing?.let { builder.setOngoing(it) }
         extras.color?.let { builder.setColor(it) }
@@ -74,13 +96,13 @@ internal object AssignContent {
         extras.onlyAlertOnce?.let { builder.setOnlyAlertOnce(it) }
         extras.showWhen?.let { builder.setShowWhen(it) }
         extras.useChronometer?.let { builder.setUsesChronometer(it) }
-        builder.setShortcutId(extras.badgeShortCutId)
+//        builder.setShortcutId(extras.badgeShortCutId)
         extras.badgeNumber?.let { builder.setNumber(it) }
         extras.badgeIconType?.let { builder.setBadgeIconType(it) }
         extras.allowSystemGeneratedContextualActions?.let {
             builder.setAllowSystemGeneratedContextualActions(it)
         }
-        extras.remoteInputHistory?.let{ builder.setRemoteInputHistory(it) }
+        extras.remoteInputHistory?.let { builder.setRemoteInputHistory(it) }
     }
 
     fun applyAction(actionData: ActionData, builder: NotificationCompat.Builder) {

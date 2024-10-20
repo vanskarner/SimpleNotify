@@ -15,6 +15,7 @@ import androidx.test.core.app.ApplicationProvider
 import com.vanskarner.samplenotify.ActionData
 import com.vanskarner.samplenotify.Data
 import com.vanskarner.samplenotify.ExtraData
+import com.vanskarner.samplenotify.NotifyMessaging
 import com.vanskarner.samplenotify.ProgressData
 import com.vanskarner.simplenotify.test.R
 
@@ -87,21 +88,20 @@ class TestDataProvider {
             return data
         }
 
-        fun messageData(): Data.MessageData {
+        fun messageData(): Data.DuoMessageData {
             val pendingIntent = pendingIntent()
-            val data = Data.MessageData().apply {
+            val data = Data.DuoMessageData().apply {
                 conversationTitle = "Any conversationTitle"
-                user = Person.Builder().setName("Albert").build()
+                you = Person.Builder().setName("Albert").build()
+                contact = Person.Builder().setName("Chris").build()
                 messages = arrayListOf(
-                    NotificationCompat.MessagingStyle.Message(
+                    NotifyMessaging.ContactMsg(
                         "Any Message 1",
-                        System.currentTimeMillis() - (5 * 60 * 1000),
-                        Person.Builder().setName("Chris").build()
+                        System.currentTimeMillis() - (5 * 60 * 1000)
                     ),
-                    NotificationCompat.MessagingStyle.Message(
+                    NotifyMessaging.YourMsg(
                         "Any Message 2",
-                        System.currentTimeMillis() - (10 * 60 * 1000),
-                        Person.Builder().setName("Max").build()
+                        System.currentTimeMillis()
                     )
                 )
                 smallIcon = R.drawable.test_ic_notification_24

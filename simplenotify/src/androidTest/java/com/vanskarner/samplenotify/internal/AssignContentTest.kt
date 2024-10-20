@@ -97,7 +97,7 @@ class AssignContentTest {
         val actualConversationTitle =
             actualExtras.getString(NotificationCompat.EXTRA_CONVERSATION_TITLE)
 
-        assertEquals(expectedData.user.name, actualUserName)
+        assertEquals(expectedData.you.name, actualUserName)
         assertEquals(expectedData.conversationTitle, actualConversationTitle)
         assertEquals(expectedData.messages.size, actualMessages!!.size)
         checkCommonData(expectedData, notification)
