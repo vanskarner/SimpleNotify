@@ -18,6 +18,7 @@ abstract class BaseActivity : AppCompatActivity() {
     companion object {
         const val REMOTE_INPUT_KEY = "some_key"
         const val INTENT_EXTRA_NOTIFY_ID = "notificationId"
+        const val INTENT_EXTRA_ACTIVITY = "ACTIVITY_TYPE"
     }
 
     fun openSettings() {
@@ -35,9 +36,11 @@ abstract class BaseActivity : AppCompatActivity() {
             .getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
     }
 
-    fun getReplyPendingIntent(notifyId: Int): PendingIntent {
+    fun getReplyPendingIntent(extraNotifyId: Int, extraTypeActivity: String): PendingIntent {
         val replyIntent = Intent(this, RemoteInputBroadcast::class.java).apply {
-            putExtra(INTENT_EXTRA_NOTIFY_ID, notifyId)
+            putExtra(INTENT_EXTRA_NOTIFY_ID, extraNotifyId)
+            putExtra(INTENT_EXTRA_ACTIVITY, extraTypeActivity)
+
         }
         return PendingIntent.getBroadcast(
             this,

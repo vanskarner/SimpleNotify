@@ -18,6 +18,9 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class BasicActivity : BaseActivity() {
+    companion object {
+        const val TYPE = "Basic"
+    }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     val requestPermissionLauncher =
@@ -91,7 +94,7 @@ class BasicActivity : BaseActivity() {
             }
             .addReplyAction {
                 label = "Respond"
-                replyPending = getReplyPendingIntent(notifyId)
+                replyPending = getReplyPendingIntent(notifyId, TYPE)
                 remote = RemoteInput.Builder(REMOTE_INPUT_KEY).setLabel("response").build()
             }
             .addAction {

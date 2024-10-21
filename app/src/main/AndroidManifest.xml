@@ -37,6 +37,11 @@
             android:documentLaunchMode="always"
             android:exported="true"
             android:resizeableActivity="true" />
+        <provider
+            android:name=".AssetFileProvider"
+            android:authorities="com.vanskarner.samplenotify"
+            android:exported="true"
+            tools:ignore="ExportedContentProvider" />
     </application>
 
 </manifest>

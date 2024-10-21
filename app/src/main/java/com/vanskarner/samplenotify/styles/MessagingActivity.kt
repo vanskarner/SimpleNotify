@@ -8,7 +8,9 @@ import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.NotificationCompat.MessagingStyle.Message
 import androidx.core.app.Person
+import androidx.core.app.RemoteInput
 import androidx.core.graphics.drawable.IconCompat
+import androidx.core.net.toUri
 import com.vanskarner.samplenotify.BaseActivity
 import com.vanskarner.samplenotify.NotifyMessaging
 import com.vanskarner.samplenotify.R
@@ -16,6 +18,9 @@ import com.vanskarner.samplenotify.SimpleNotify
 import com.vanskarner.samplenotify.bubbles.SampleBubbleNotificationView
 
 class MessagingActivity : BaseActivity() {
+    companion object{
+        const val TYPE = "Messaging"
+    }
 
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
@@ -36,7 +41,7 @@ class MessagingActivity : BaseActivity() {
         }
         findViewById<Button>(R.id.btnSetting).setOnClickListener { }
         findViewById<Button>(R.id.btnType1).setOnClickListener { simple() }
-        findViewById<Button>(R.id.btnType2).setOnClickListener { }
+        findViewById<Button>(R.id.btnType2).setOnClickListener { withImages() }
         findViewById<Button>(R.id.btnType3).setOnClickListener { }
         findViewById<Button>(R.id.btnType4).setOnClickListener { }
         findViewById<Button>(R.id.btnType5).setOnClickListener {
@@ -95,6 +100,45 @@ class MessagingActivity : BaseActivity() {
                         System.currentTimeMillis()
                     )
                 )
+            }
+            .show()
+    }
+
+    private fun withImages() {
+        val notificationId = 123
+        SimpleNotify.with(this)
+            .asDuoMessaging {
+                id = notificationId
+                you = Person.Builder()
+                    .setName("You")
+                    .setIcon(iconFromAssets("dina1.jpg"))
+                    .build()
+                contact = Person.Builder()
+                    .setName("Ministroll")
+                    .setIcon(iconFromAssets("ministroll.jpg"))
+                    .build()
+                messages = arrayListOf(
+                    NotifyMessaging.YourMsg(
+                        "Do you like my rolex?",
+                        System.currentTimeMillis() - (3 * 60 * 1000)
+                    ).setData(
+                        "image/jpeg",
+                        "content://com.vanskarner.samplenotify/photo/rolex_dina.jpg".toUri()
+                    ),
+                    NotifyMessaging.ContactMsg(
+                        "Yes, my most excellent president... Don't you also want to use me as a mat? ",
+                        System.currentTimeMillis() - (1 * 60 * 1000)
+                    )
+                )
+            }
+            .addReplyAction {
+                label = "Respond"
+                replyPending = getReplyPendingIntent(notificationId, TYPE)
+                remote = RemoteInput.Builder(REMOTE_INPUT_KEY).setLabel("response").build()
+            }
+            .addAction {
+                label = "Mute"
+                pending = getSimplePendingIntent(MessagingActivity::class.java)
             }
             .show()
     }
