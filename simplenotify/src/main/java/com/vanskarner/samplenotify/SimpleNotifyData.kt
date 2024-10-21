@@ -88,7 +88,7 @@ sealed class ActionData {
     data class ReplyAction(
         var replyPending: PendingIntent? = null,
         var remote: RemoteInput? = null,
-        var allowGeneratedReplies: Boolean? = null,//from API 29
+        var allowGeneratedReplies: Boolean = false,//from API 29
     ) : ActionData()
 }
 

@@ -118,7 +118,7 @@ internal object AssignContent {
                     actionData.replyPending
                 )
                     .addRemoteInput(actionData.remote)
-                actionData.allowGeneratedReplies?.let { builderAction.setAllowGeneratedReplies(it) }
+                    .setAllowGeneratedReplies(actionData.allowGeneratedReplies)
                 builder.addAction(builderAction.build())
             }
         }
