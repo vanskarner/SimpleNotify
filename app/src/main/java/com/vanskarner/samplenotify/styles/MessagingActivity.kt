@@ -18,7 +18,7 @@ import com.vanskarner.samplenotify.SimpleNotify
 import com.vanskarner.samplenotify.bubbles.SampleBubbleNotificationView
 
 class MessagingActivity : BaseActivity() {
-    companion object{
+    companion object {
         const val TYPE = "Messaging"
     }
 
@@ -40,8 +40,8 @@ class MessagingActivity : BaseActivity() {
             }
         }
         findViewById<Button>(R.id.btnSetting).setOnClickListener { }
-        findViewById<Button>(R.id.btnType1).setOnClickListener { simple() }
-        findViewById<Button>(R.id.btnType2).setOnClickListener { withImages() }
+        findViewById<Button>(R.id.btnType1).setOnClickListener { individualConversation1() }
+        findViewById<Button>(R.id.btnType2).setOnClickListener { individualConversation2() }
         findViewById<Button>(R.id.btnType3).setOnClickListener { }
         findViewById<Button>(R.id.btnType4).setOnClickListener { }
         findViewById<Button>(R.id.btnType5).setOnClickListener {
@@ -75,9 +75,10 @@ class MessagingActivity : BaseActivity() {
         }
     }
 
-    private fun simple() {
+    private fun individualConversation1(notifyId: Int = 10) {
         SimpleNotify.with(this)
             .asDuoMessaging {
+                id = notifyId
                 you = Person.Builder()
                     .setName("You")
                     .setIcon(iconFromAssets("dina1.jpg"))
@@ -101,14 +102,22 @@ class MessagingActivity : BaseActivity() {
                     )
                 )
             }
+            .addReplyAction {
+                label = "Respond"
+                replyPending = getReplyPendingIntent(notifyId, TYPE)
+                remote = RemoteInput.Builder(REMOTE_INPUT_KEY).setLabel("response").build()
+            }
+            .addAction {
+                label = "Mute"
+                pending = getSimplePendingIntent(MessagingActivity::class.java)
+            }
             .show()
     }
 
-    private fun withImages() {
-        val notificationId = 123
+    private fun individualConversation2(notifyId: Int = 20) {
         SimpleNotify.with(this)
             .asDuoMessaging {
-                id = notificationId
+                id = notifyId
                 you = Person.Builder()
                     .setName("You")
                     .setIcon(iconFromAssets("dina1.jpg"))
@@ -133,7 +142,7 @@ class MessagingActivity : BaseActivity() {
             }
             .addReplyAction {
                 label = "Respond"
-                replyPending = getReplyPendingIntent(notificationId, TYPE)
+                replyPending = getReplyPendingIntent(notifyId, TYPE)
                 remote = RemoteInput.Builder(REMOTE_INPUT_KEY).setLabel("response").build()
             }
             .addAction {

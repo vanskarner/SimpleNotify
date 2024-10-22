@@ -21,34 +21,29 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
-            android:text="Simple" />
+            android:text="Individual Conversation" />
 
         <Button
             android:id="@+id/btnType2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
-            android:text="Detailed" />
+            android:text="Individual multimedia conversation" />
 
         <Button
             android:id="@+id/btnType3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
-            android:text="Actions" />
+            android:text="Group Conversation" />
 
         <Button
             android:id="@+id/btnType4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
-            android:text="Progress" />
-        <Button
-            android:id="@+id/btnType5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:text="Undetermined Progress" />
+            android:text="Bubble Conversation" />
+
     </LinearLayout>
 
     <LinearLayout
