@@ -47,7 +47,8 @@ sealed class Data {
         var you: Person = Person.Builder().setName("You").build(),
         var contact: Person = Person.Builder().setName("Someone").build(),
         var conversationTitle: String? = null,
-        var messages: ArrayList<NotifyMessaging> = arrayListOf()
+        var messages: ArrayList<NotifyMessaging> = arrayListOf(),
+        var useHistoricMessage: Boolean = false
     ) : Data()
 
     data class CustomDesignData(

@@ -48,19 +48,24 @@ internal object AssignContent {
                 val style = NotificationCompat.MessagingStyle(data.you)
                     .setConversationTitle(data.conversationTitle)
                     .setGroupConversation(false)
-                data.messages.forEach {
-                    val message = when (it) {
+                data.messages.forEachIndexed { index, item ->
+                    val message = when (item) {
                         is NotifyMessaging.ContactMsg -> {
-                            Message(it.msg, it.timestamp, data.contact)
+                            Message(item.msg, item.timestamp, data.contact)
                         }
 
                         is NotifyMessaging.YourMsg -> {
                             val person: Person? = null
-                            Message(it.msg, it.timestamp, person)
+                            Message(item.msg, item.timestamp, person)
                         }
                     }
-                    it.mimeData?.let { pair -> message.setData(pair.first, pair.second) }
-                    style.addMessage(message)
+                    item.mimeData?.let { pair -> message.setData(pair.first, pair.second) }
+                    if (data.useHistoricMessage){
+                        if (index == data.messages.lastIndex) style.addMessage(message)
+                        else style.addHistoricMessage(message)
+                    }else{
+                        style.addMessage(message)
+                    }
                 }
                 builder.setStyle(style)
                     .setCategory(NotificationCompat.CATEGORY_MESSAGE)
