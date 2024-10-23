@@ -5,8 +5,10 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationCompat.BubbleMetadata
 import androidx.core.app.Person
 import androidx.core.app.RemoteInput
+import androidx.core.content.pm.ShortcutInfoCompat
 import com.vanskarner.simplenotify.R
 
 sealed class Data {
@@ -47,14 +49,16 @@ sealed class Data {
         var you: Person = Person.Builder().setName("You").build(),
         var contact: Person = Person.Builder().setName("Someone").build(),
         var messages: ArrayList<NotifyMessaging> = arrayListOf(),
-        var useHistoricMessage: Boolean = false
+        var useHistoricMessage: Boolean = false,
+        var bubble: Pair<BubbleMetadata, ShortcutInfoCompat>? = null
     ) : Data()
 
     data class GroupMessageData(
         var you: Person = Person.Builder().setName("You").build(),
         var conversationTitle: String? = null,
         var messages: ArrayList<NotifyMessaging> = arrayListOf(),
-        var useHistoricMessage: Boolean = false
+        var useHistoricMessage: Boolean = false,
+        var bubble: Pair<BubbleMetadata, ShortcutInfoCompat>? = null
     ) : Data()
 
     data class CustomDesignData(
@@ -79,7 +83,7 @@ data class ExtraData(
     var useChronometer: Boolean? = null,
     var badgeNumber: Int? = null,//from API 26
     var badgeIconType: Int? = null,//from API 26
-    var badgeShortCutId: String? = null,//from API 26
+    var shortCutId: String? = null,//from API 26
     var allowSystemGeneratedContextualActions: Boolean? = null,//from API 29
     var remoteInputHistory: Array<CharSequence>? = null
 )

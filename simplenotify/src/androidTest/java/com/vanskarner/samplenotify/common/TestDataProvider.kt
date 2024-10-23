@@ -11,6 +11,8 @@ import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
 import androidx.core.app.RemoteInput
+import androidx.core.content.pm.ShortcutInfoCompat
+import androidx.core.graphics.drawable.IconCompat
 import androidx.core.net.toUri
 import androidx.test.core.app.ApplicationProvider
 import com.vanskarner.samplenotify.ActionData
@@ -89,11 +91,18 @@ class TestDataProvider {
             return data
         }
 
-        fun duoMessageData(): Data.DuoMessageData {
+        fun duoMessageData(
+            context: Context,
+            shortcutId: String
+        ): Data.DuoMessageData {
             val pendingIntent = pendingIntent()
             val data = Data.DuoMessageData().apply {
                 you = Person.Builder().setName("Albert").build()
-                contact = Person.Builder().setName("Chris").build()
+                contact = Person.Builder().setName("Chris").setIcon(
+                    IconCompat.createWithAdaptiveBitmap(
+                        Bitmap.createBitmap(20, 20, Bitmap.Config.ARGB_8888)
+                    )
+                ).build()
                 messages = arrayListOf(
                     NotifyMessaging.ContactMsg(
                         "Any Message 1",
@@ -107,6 +116,20 @@ class TestDataProvider {
                         "content://com.any.sample/photo/image.jpg".toUri()
                     )
                 )
+                bubble = Pair(
+                    first = NotificationCompat.BubbleMetadata.Builder(pendingIntent, contact.icon!!)
+                        .setDesiredHeight(500)
+                        .setAutoExpandBubble(true)
+                        .setSuppressNotification(true)
+                        .build(),
+                    second = ShortcutInfoCompat.Builder(context, shortcutId)
+                        .setLongLived(true)
+                        .setIntent(Intent())
+                        .setShortLabel(contact.name!!)
+                        .setIcon(contact.icon)
+                        .setPerson(contact)
+                        .build()
+                )
                 smallIcon = R.drawable.test_ic_notification_24
                 largeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
                 priority = NotificationCompat.PRIORITY_HIGH
@@ -117,7 +140,7 @@ class TestDataProvider {
             return data
         }
 
-        fun groupMessageData(): Data.GroupMessageData {
+        fun groupMessageData(context: Context,shortcutId: String): Data.GroupMessageData {
             val pendingIntent = pendingIntent()
             val data = Data.GroupMessageData().apply {
                 conversationTitle = "Any conversationTitle"
@@ -140,6 +163,23 @@ class TestDataProvider {
                         "image/jpeg",
                         "content://com.any.sample/photo/image.jpg".toUri()
                     )
+                )
+                val groupIcon=IconCompat.createWithAdaptiveBitmap(
+                    Bitmap.createBitmap(20, 20, Bitmap.Config.ARGB_8888)
+                )
+                bubble = Pair(
+                    first = NotificationCompat.BubbleMetadata.Builder(pendingIntent, groupIcon)
+                        .setDesiredHeight(500)
+                        .setAutoExpandBubble(true)
+                        .setSuppressNotification(true)
+                        .build(),
+                    second = ShortcutInfoCompat.Builder(context, shortcutId)
+                        .setLongLived(true)
+                        .setIntent(Intent())
+                        .setShortLabel(conversationTitle!!)
+                        .setIcon(groupIcon)
+//                        .setPerson(contact)
+                        .build()
                 )
                 smallIcon = R.drawable.test_ic_notification_24
                 largeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
@@ -194,7 +234,7 @@ class TestDataProvider {
             useChronometer = true,
             badgeNumber = 15,
             badgeIconType = NotificationCompat.BADGE_ICON_SMALL,
-            badgeShortCutId = "anyShortCutId",
+            shortCutId = "anyShortCutId",
             allowSystemGeneratedContextualActions = true,
             remoteInputHistory = arrayOf("History 1", "History 2")
         )

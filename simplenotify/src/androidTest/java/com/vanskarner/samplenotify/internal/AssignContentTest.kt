@@ -88,7 +88,11 @@ class AssignContentTest {
 
     @Test
     fun applyData_asDuoMessageData_apply() {
-        val expectedData = TestDataProvider.duoMessageData()
+        val expectedShortCutId = "contact_123"
+        val expectedData = TestDataProvider.duoMessageData(
+            context = ApplicationProvider.getApplicationContext(),
+            shortcutId = expectedShortCutId
+        )
         assignContent.applyData(expectedData, builder)
         val notification = builder.build()
         val actualExtras = notification.extras
@@ -109,11 +113,30 @@ class AssignContentTest {
         assertEquals(NotificationCompat.CATEGORY_MESSAGE, notification.category)
         assertEquals(expectedData.contact.name, actualNamePersonAdded)
         checkCommonData(expectedData, notification)
+        //Notification bubbles are available from API 29
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            val expectedBubble = expectedData.bubble!!.first
+            val actualBubble = notification.bubbleMetadata!!
+            assertEquals(expectedBubble.desiredHeight, actualBubble.desiredHeight)
+            assertEquals(expectedBubble.autoExpandBubble, actualBubble.autoExpandBubble)
+            assertEquals(
+                expectedBubble.isNotificationSuppressed,
+                actualBubble.isNotificationSuppressed
+            )
+        }
+        //Notification ShortCut are available from API 26
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            assertEquals(expectedShortCutId, notification.shortcutId)
+        }
     }
 
     @Test
     fun applyData_asGroupMessageData_apply() {
-        val expectedData = TestDataProvider.groupMessageData()
+        val expectedShortCutId = "contact_123"
+        val expectedData = TestDataProvider.groupMessageData(
+            context = ApplicationProvider.getApplicationContext(),
+            shortcutId = expectedShortCutId
+        )
         assignContent.applyData(expectedData, builder)
         val notification = builder.build()
         val actualExtras = notification.extras
@@ -135,6 +158,21 @@ class AssignContentTest {
         assertTrue(expectedData.messages.last().mimeData!!.second == actualLastMsg.dataUri)
         assertEquals(NotificationCompat.CATEGORY_MESSAGE, notification.category)
         checkCommonData(expectedData, notification)
+        //Notification bubbles are available from API 29
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            val expectedBubble = expectedData.bubble!!.first
+            val actualBubble = notification.bubbleMetadata!!
+            assertEquals(expectedBubble.desiredHeight, actualBubble.desiredHeight)
+            assertEquals(expectedBubble.autoExpandBubble, actualBubble.autoExpandBubble)
+            assertEquals(
+                expectedBubble.isNotificationSuppressed,
+                actualBubble.isNotificationSuppressed
+            )
+        }
+        //Notification ShortCut are available from API 26
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            assertEquals(expectedShortCutId, notification.shortcutId)
+        }
     }
 
     @Test
@@ -185,7 +223,7 @@ class AssignContentTest {
             val actualShortcutId = notification.shortcutId
 
             assertEquals(expectedExtraData.badgeIconType, actualBadgeIconType)
-            assertEquals(expectedExtraData.badgeShortCutId, actualShortcutId)
+            assertEquals(expectedExtraData.shortCutId, actualShortcutId)
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             val actualSystemGeneratedActions = notification.allowSystemGeneratedContextualActions

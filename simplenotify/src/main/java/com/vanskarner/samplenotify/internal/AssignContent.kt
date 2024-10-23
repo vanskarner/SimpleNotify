@@ -66,6 +66,10 @@ internal object AssignContent {
                         style.addMessage(message)
                     }
                 }
+                data.bubble?.let {
+                    builder.setBubbleMetadata(it.first)
+                        .setShortcutInfo(it.second)
+                }
                 builder.setStyle(style)
                     .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                     .addPerson(data.contact)
@@ -93,6 +97,10 @@ internal object AssignContent {
                     } else {
                         style.addMessage(message)
                     }
+                }
+                data.bubble?.let {
+                    builder.setBubbleMetadata(it.first)
+                        .setShortcutInfo(it.second)
                 }
                 builder.setStyle(style)
                     .setCategory(NotificationCompat.CATEGORY_MESSAGE)
@@ -124,7 +132,7 @@ internal object AssignContent {
         extras.onlyAlertOnce?.let { builder.setOnlyAlertOnce(it) }
         extras.showWhen?.let { builder.setShowWhen(it) }
         extras.useChronometer?.let { builder.setUsesChronometer(it) }
-//        builder.setShortcutId(extras.badgeShortCutId)
+        extras.shortCutId?.let { builder.setShortcutId(it) }
         extras.badgeNumber?.let { builder.setNumber(it) }
         extras.badgeIconType?.let { builder.setBadgeIconType(it) }
         extras.allowSystemGeneratedContextualActions?.let {
