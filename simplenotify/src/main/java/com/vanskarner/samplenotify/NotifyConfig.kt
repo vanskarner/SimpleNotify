@@ -36,6 +36,11 @@ class NotifyConfig(private val context: Context) {
         return this
     }
 
+    fun asGroupMessaging(content: Data.GroupMessageData.() -> Unit): NotifyConfig{
+        this.data = Data.GroupMessageData().apply(content)
+        return this
+    }
+
     fun asCustomDesign(content: Data.CustomDesignData.() -> Unit): NotifyConfig {
         this.data = Data.CustomDesignData().apply(content)
         return this

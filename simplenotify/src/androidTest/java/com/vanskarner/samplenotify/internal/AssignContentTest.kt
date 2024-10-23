@@ -87,19 +87,53 @@ class AssignContentTest {
     }
 
     @Test
-    fun applyData_asMessageData_apply() {
-        val expectedData = TestDataProvider.messageData()
+    fun applyData_asDuoMessageData_apply() {
+        val expectedData = TestDataProvider.duoMessageData()
         assignContent.applyData(expectedData, builder)
         val notification = builder.build()
         val actualExtras = notification.extras
         val actualMessages = actualExtras.getParcelableArray(NotificationCompat.EXTRA_MESSAGES)
         val actualUserName = actualExtras.getString(NotificationCompat.EXTRA_SELF_DISPLAY_NAME)
-        val actualConversationTitle =
-            actualExtras.getString(NotificationCompat.EXTRA_CONVERSATION_TITLE)
+        val actualIsGroupConversation =
+            actualExtras.getBoolean(NotificationCompat.EXTRA_IS_GROUP_CONVERSATION)
+        val actualNamePersonAdded = actualExtras.getString("android.title")
+        val actualStyle =
+            NotificationCompat.MessagingStyle.extractMessagingStyleFromNotification(notification)
+        val actualLastMsg = actualStyle!!.messages.last()
 
         assertEquals(expectedData.you.name, actualUserName)
+        assertFalse(actualIsGroupConversation)
+        assertEquals(expectedData.messages.size, actualMessages!!.size)
+        assertEquals(expectedData.messages.last().mimeData!!.first, actualLastMsg.dataMimeType)
+        assertTrue(expectedData.messages.last().mimeData!!.second == actualLastMsg.dataUri)
+        assertEquals(NotificationCompat.CATEGORY_MESSAGE, notification.category)
+        assertEquals(expectedData.contact.name, actualNamePersonAdded)
+        checkCommonData(expectedData, notification)
+    }
+
+    @Test
+    fun applyData_asGroupMessageData_apply() {
+        val expectedData = TestDataProvider.groupMessageData()
+        assignContent.applyData(expectedData, builder)
+        val notification = builder.build()
+        val actualExtras = notification.extras
+        val actualMessages = actualExtras.getParcelableArray(NotificationCompat.EXTRA_MESSAGES)
+        val actualUserName = actualExtras.getString(NotificationCompat.EXTRA_SELF_DISPLAY_NAME)
+        val actualIsGroupConversation =
+            actualExtras.getBoolean(NotificationCompat.EXTRA_IS_GROUP_CONVERSATION)
+        val actualConversationTitle =
+            actualExtras.getString(NotificationCompat.EXTRA_CONVERSATION_TITLE)
+        val actualStyle =
+            NotificationCompat.MessagingStyle.extractMessagingStyleFromNotification(notification)
+        val actualLastMsg = actualStyle!!.messages.last()
+
+        assertEquals(expectedData.you.name, actualUserName)
+        assertTrue(actualIsGroupConversation)
         assertEquals(expectedData.conversationTitle, actualConversationTitle)
         assertEquals(expectedData.messages.size, actualMessages!!.size)
+        assertEquals(expectedData.messages.last().mimeData!!.first, actualLastMsg.dataMimeType)
+        assertTrue(expectedData.messages.last().mimeData!!.second == actualLastMsg.dataUri)
+        assertEquals(NotificationCompat.CATEGORY_MESSAGE, notification.category)
         checkCommonData(expectedData, notification)
     }
 

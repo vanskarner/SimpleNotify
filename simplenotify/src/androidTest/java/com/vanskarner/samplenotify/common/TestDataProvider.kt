@@ -11,6 +11,7 @@ import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
 import androidx.core.app.RemoteInput
+import androidx.core.net.toUri
 import androidx.test.core.app.ApplicationProvider
 import com.vanskarner.samplenotify.ActionData
 import com.vanskarner.samplenotify.Data
@@ -88,10 +89,9 @@ class TestDataProvider {
             return data
         }
 
-        fun messageData(): Data.DuoMessageData {
+        fun duoMessageData(): Data.DuoMessageData {
             val pendingIntent = pendingIntent()
             val data = Data.DuoMessageData().apply {
-                conversationTitle = "Any conversationTitle"
                 you = Person.Builder().setName("Albert").build()
                 contact = Person.Builder().setName("Chris").build()
                 messages = arrayListOf(
@@ -102,6 +102,43 @@ class TestDataProvider {
                     NotifyMessaging.YourMsg(
                         "Any Message 2",
                         System.currentTimeMillis()
+                    ).setData(
+                        "image/jpeg",
+                        "content://com.any.sample/photo/image.jpg".toUri()
+                    )
+                )
+                smallIcon = R.drawable.test_ic_notification_24
+                largeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
+                priority = NotificationCompat.PRIORITY_HIGH
+                contentIntent = pendingIntent
+                autoCancel = true
+                timeoutAfter = 5000
+            }
+            return data
+        }
+
+        fun groupMessageData(): Data.GroupMessageData {
+            val pendingIntent = pendingIntent()
+            val data = Data.GroupMessageData().apply {
+                conversationTitle = "Any conversationTitle"
+                you = Person.Builder().setName("You").build()
+                messages = arrayListOf(
+                    NotifyMessaging.ContactMsg(
+                        "Any Message 1",
+                        System.currentTimeMillis() - (5 * 60 * 1000),
+                        Person.Builder().setName("Max").build()
+                    ),
+                    NotifyMessaging.ContactMsg(
+                        "Any Message 2",
+                        System.currentTimeMillis() - (3 * 60 * 1000),
+                        Person.Builder().setName("Albert").build()
+                    ),
+                    NotifyMessaging.YourMsg(
+                        "Any Message 3",
+                        System.currentTimeMillis()
+                    ).setData(
+                        "image/jpeg",
+                        "content://com.any.sample/photo/image.jpg".toUri()
                     )
                 )
                 smallIcon = R.drawable.test_ic_notification_24

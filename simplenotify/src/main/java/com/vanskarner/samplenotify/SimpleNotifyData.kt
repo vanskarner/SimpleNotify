@@ -46,6 +46,12 @@ sealed class Data {
     data class DuoMessageData(
         var you: Person = Person.Builder().setName("You").build(),
         var contact: Person = Person.Builder().setName("Someone").build(),
+        var messages: ArrayList<NotifyMessaging> = arrayListOf(),
+        var useHistoricMessage: Boolean = false
+    ) : Data()
+
+    data class GroupMessageData(
+        var you: Person = Person.Builder().setName("You").build(),
         var conversationTitle: String? = null,
         var messages: ArrayList<NotifyMessaging> = arrayListOf(),
         var useHistoricMessage: Boolean = false
@@ -109,11 +115,13 @@ sealed class NotifyMessaging {
 
     data class ContactMsg(
         val msg: String,
-        val timestamp: Long
+        val timestamp: Long,
+        val person: Person = Person.Builder().setName("Someone").build()
     ) : NotifyMessaging()
 
     fun setData(dataMimeType: String, dataUri: Uri): NotifyMessaging {
         mimeData = Pair(dataMimeType, dataUri)
         return this
     }
+
 }

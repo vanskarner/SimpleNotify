@@ -184,7 +184,6 @@ class NotifyConfigTest {
         notifyConfig.asDuoMessaging {
             id = 123
             smallIcon = R.drawable.test_ic_notification_24
-            conversationTitle = "Contrary to popular belief"
             you = expectedUser
             contact = expectedContact
             messages = expectedMessage
@@ -199,10 +198,56 @@ class NotifyConfigTest {
 
         assertEquals(123, actualDuoMessageData.id)
         assertEquals(R.drawable.test_ic_notification_24, actualDuoMessageData.smallIcon)
-        assertEquals("Contrary to popular belief", actualDuoMessageData.conversationTitle)
         assertEquals(expectedUser, actualDuoMessageData.you)
         assertEquals(expectedContact, actualDuoMessageData.contact)
         assertEquals(expectedMessage, actualDuoMessageData.messages)
+        assertTrue(actualDuoMessageData.largeIcon?.sameAs(expectedLargeIcon)!!)
+        assertEquals(NotificationCompat.PRIORITY_HIGH, actualDuoMessageData.priority)
+        assertEquals(expectedPendingIntent, actualDuoMessageData.contentIntent)
+        assertEquals(false, actualDuoMessageData.autoCancel)
+    }
+
+    @Test
+    fun asGroupMessaging_shouldSetData() {
+        val expectedPendingIntent = TestDataProvider.pendingIntent()
+        val expectedLargeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
+        val expectedUser = Person.Builder().setName("You").build()
+        val expectedMessage = arrayListOf(
+            NotifyMessaging.ContactMsg(
+                "Any Text 1",
+                System.currentTimeMillis(),
+                Person.Builder().setName("Max").build()
+            ),
+            NotifyMessaging.ContactMsg(
+                "Any Text 2",
+                1000,
+                Person.Builder().setName("Albert").build()
+            ),
+            NotifyMessaging.YourMsg(
+                "Any Text 3",
+                1000
+            )
+        )
+        notifyConfig.asGroupMessaging {
+            id = 123
+            smallIcon = R.drawable.test_ic_notification_24
+            conversationTitle = "Contrary to popular belief"
+            you = expectedUser
+            messages = expectedMessage
+            largeIcon = expectedLargeIcon
+            priority = NotificationCompat.PRIORITY_HIGH
+            contentIntent = expectedPendingIntent
+            autoCancel = false
+        }
+        val dataField = notifyConfig.javaClass.getDeclaredField("data")
+        dataField.isAccessible = true
+        val actualDuoMessageData = dataField.get(notifyConfig) as Data.GroupMessageData
+
+        assertEquals(123, actualDuoMessageData.id)
+        assertEquals(R.drawable.test_ic_notification_24, actualDuoMessageData.smallIcon)
+        assertEquals("Contrary to popular belief", actualDuoMessageData.conversationTitle)
+        assertEquals(expectedUser, actualDuoMessageData.you)
+        assertEquals(expectedMessage.size, actualDuoMessageData.messages.size)
         assertTrue(actualDuoMessageData.largeIcon?.sameAs(expectedLargeIcon)!!)
         assertEquals(NotificationCompat.PRIORITY_HIGH, actualDuoMessageData.priority)
         assertEquals(expectedPendingIntent, actualDuoMessageData.contentIntent)
@@ -372,10 +417,10 @@ class NotifyConfigTest {
     fun show_whenDataIsNotNull_shouldBeShown() = runTest {
         val expectedNotificationId = 123
         notifyConfig.asBasic {
-                id = expectedNotificationId
-                title = "Test Title"
-                text = "Test Text"
-            }
+            id = expectedNotificationId
+            title = "Test Title"
+            text = "Test Text"
+        }
             .show()
         val context: Context = ApplicationProvider.getApplicationContext()
         val notificationManager =

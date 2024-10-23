@@ -46,7 +46,6 @@ internal object AssignContent {
 
             is Data.DuoMessageData -> {
                 val style = NotificationCompat.MessagingStyle(data.you)
-                    .setConversationTitle(data.conversationTitle)
                     .setGroupConversation(false)
                 data.messages.forEachIndexed { index, item ->
                     val message = when (item) {
@@ -69,10 +68,34 @@ internal object AssignContent {
                 }
                 builder.setStyle(style)
                     .setCategory(NotificationCompat.CATEGORY_MESSAGE)
-                    .setShowWhen(true)
                     .addPerson(data.contact)
-//                    .setWhen(chat.messages.last().timestamp)
-//                    .setOnlyAlertOnce(true)
+            }
+
+            is Data.GroupMessageData -> {
+                val style = NotificationCompat.MessagingStyle(data.you)
+                    .setConversationTitle(data.conversationTitle)
+                    .setGroupConversation(true)
+                data.messages.forEachIndexed { index, item ->
+                    val message = when (item) {
+                        is NotifyMessaging.ContactMsg -> {
+                            Message(item.msg, item.timestamp, item.person)
+                        }
+
+                        is NotifyMessaging.YourMsg -> {
+                            val person: Person? = null
+                            Message(item.msg, item.timestamp, person)
+                        }
+                    }
+                    item.mimeData?.let { pair -> message.setData(pair.first, pair.second) }
+                    if (data.useHistoricMessage){
+                        if (index == data.messages.lastIndex) style.addMessage(message)
+                        else style.addHistoricMessage(message)
+                    }else{
+                        style.addMessage(message)
+                    }
+                }
+                builder.setStyle(style)
+                    .setCategory(NotificationCompat.CATEGORY_MESSAGE)
             }
 
             is Data.CustomDesignData -> {

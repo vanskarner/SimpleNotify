@@ -44,35 +44,35 @@ class MessagingActivity : BaseActivity() {
         findViewById<Button>(R.id.btnType2).setOnClickListener { individualConversation2() }
         findViewById<Button>(R.id.btnType3).setOnClickListener { }
         findViewById<Button>(R.id.btnType4).setOnClickListener { }
-        findViewById<Button>(R.id.btnType5).setOnClickListener {
-            val notification = SampleBubbleNotificationView(this)
-            notification.showNotification(
-                title = "Any title",
-                mySelf = Person.Builder()
-                    .setName("Jennifer")
-                    .setIcon(
-                        IconCompat.createWithAdaptiveBitmap(
-                            BitmapFactory.decodeStream(assets.open("sample_avatar.jpg"))
-                        )
-                    )
-                    .setImportant(true)
-                    .build(),
-                message = Message(
-                    "Look at my Rolex, loser...",
-                    System.currentTimeMillis(),
-                    Person.Builder()
-                        .setName("Dina Balearte")
-                        .setIcon(
-                            IconCompat.createWithAdaptiveBitmap(
-                                BitmapFactory.decodeStream(assets.open("dina1.jpg"))
-                            )
-                        )
-                        .setImportant(true)
-                        .build()
-                ),
-                notificationId = 123
-            )
-        }
+//        findViewById<Button>(R.id.btnType5).setOnClickListener {
+//            val notification = SampleBubbleNotificationView(this)
+//            notification.showNotification(
+//                title = "Any title",
+//                mySelf = Person.Builder()
+//                    .setName("Jennifer")
+//                    .setIcon(
+//                        IconCompat.createWithAdaptiveBitmap(
+//                            BitmapFactory.decodeStream(assets.open("sample_avatar.jpg"))
+//                        )
+//                    )
+//                    .setImportant(true)
+//                    .build(),
+//                message = Message(
+//                    "Look at my Rolex, loser...",
+//                    System.currentTimeMillis(),
+//                    Person.Builder()
+//                        .setName("Dina Balearte")
+//                        .setIcon(
+//                            IconCompat.createWithAdaptiveBitmap(
+//                                BitmapFactory.decodeStream(assets.open("dina1.jpg"))
+//                            )
+//                        )
+//                        .setImportant(true)
+//                        .build()
+//                ),
+//                notificationId = 123
+//            )
+//        }
     }
 
     private fun individualConversation1(notifyId: Int = 10) {
