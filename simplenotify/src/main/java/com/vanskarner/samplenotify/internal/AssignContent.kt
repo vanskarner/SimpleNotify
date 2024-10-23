@@ -59,10 +59,10 @@ internal object AssignContent {
                         }
                     }
                     item.mimeData?.let { pair -> message.setData(pair.first, pair.second) }
-                    if (data.useHistoricMessage){
+                    if (data.useHistoricMessage) {
                         if (index == data.messages.lastIndex) style.addMessage(message)
                         else style.addHistoricMessage(message)
-                    }else{
+                    } else {
                         style.addMessage(message)
                     }
                 }
@@ -87,10 +87,10 @@ internal object AssignContent {
                         }
                     }
                     item.mimeData?.let { pair -> message.setData(pair.first, pair.second) }
-                    if (data.useHistoricMessage){
+                    if (data.useHistoricMessage) {
                         if (index == data.messages.lastIndex) style.addMessage(message)
                         else style.addHistoricMessage(message)
-                    }else{
+                    } else {
                         style.addMessage(message)
                     }
                 }

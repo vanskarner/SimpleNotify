@@ -42,7 +42,7 @@ class MessagingActivity : BaseActivity() {
         findViewById<Button>(R.id.btnSetting).setOnClickListener { }
         findViewById<Button>(R.id.btnType1).setOnClickListener { individualConversation1() }
         findViewById<Button>(R.id.btnType2).setOnClickListener { individualConversation2() }
-        findViewById<Button>(R.id.btnType3).setOnClickListener { }
+        findViewById<Button>(R.id.btnType3).setOnClickListener { groupConversation() }
         findViewById<Button>(R.id.btnType4).setOnClickListener { }
 //        findViewById<Button>(R.id.btnType5).setOnClickListener {
 //            val notification = SampleBubbleNotificationView(this)
@@ -73,6 +73,44 @@ class MessagingActivity : BaseActivity() {
 //                notificationId = 123
 //            )
 //        }
+    }
+
+    private fun groupConversation(notifyId: Int = 30) {
+        SimpleNotify.with(this)
+            .asGroupMessaging {
+                id = notifyId
+                conversationTitle = "The Big Show"
+                you = Person.Builder()
+                    .setName("You")
+                    .setIcon(iconFromAssets("dina1.jpg"))
+                    .build()
+                messages = arrayListOf(
+                    NotifyMessaging.YourMsg(
+                        "Help me find my rolex...",
+                        System.currentTimeMillis() - (3 * 60 * 1000)
+                    ),
+                    NotifyMessaging.ContactMsg(
+                        "I'm sorry, but I already supported her by making Harvey Colchado fall.",
+                        System.currentTimeMillis() - (1 * 60 * 1000),
+                        Person.Builder().setName("Ministroll").setIcon(iconFromAssets("ministroll.jpg")).build()
+                    ),
+                    NotifyMessaging.ContactMsg(
+                        "Hey don't bother me, I supported it by unsubscribing people in December 2022.",
+                        System.currentTimeMillis(),
+                        Person.Builder().setName("Carnicero").setIcon(iconFromAssets("carnicero.jpg")).build()
+                    )
+                )
+            }
+            .addReplyAction {
+                label = "Respond"
+                replyPending = getReplyPendingIntent(notifyId, TYPE)
+                remote = RemoteInput.Builder(REMOTE_INPUT_KEY).setLabel("Response").build()
+            }
+            .addAction {
+                label = "Mute"
+                pending = getSimplePendingIntent(MessagingActivity::class.java)
+            }
+            .show()
     }
 
     private fun individualConversation1(notifyId: Int = 10) {
