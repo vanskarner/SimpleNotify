@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">SimpleNotify</string>
+    <string name="description_send">Send</string>
+    <string name="hint_input">Type a message…</string>
 </resources>

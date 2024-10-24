@@ -78,4 +78,15 @@ abstract class BaseActivity : AppCompatActivity() {
         ) == PackageManager.PERMISSION_GRANTED
     }
 
+    fun flagUpdateCurrent(mutable: Boolean = true): Int {
+        return when {
+            mutable && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S ->
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
+
+            mutable -> PendingIntent.FLAG_UPDATE_CURRENT
+
+            else -> PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        }
+    }
+
 }
