@@ -88,6 +88,7 @@ class MessagingActivity : BaseActivity() {
                     )
                     .setShortLabel(contact.name!!)
                     .setIcon(contact.icon)
+                    .setPerson(contact)
                     .build()
             }
             .show()
