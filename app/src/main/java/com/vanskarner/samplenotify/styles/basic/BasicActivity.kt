@@ -1,4 +1,4 @@
-package com.vanskarner.samplenotify.styles
+package com.vanskarner.samplenotify.styles.basic
 
 import android.content.Context
 import android.graphics.BitmapFactory

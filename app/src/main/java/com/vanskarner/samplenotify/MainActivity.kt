@@ -2,8 +2,8 @@ package com.vanskarner.samplenotify
 
 import android.os.Bundle
 import android.widget.Button
-import com.vanskarner.samplenotify.styles.BasicActivity
-import com.vanskarner.samplenotify.styles.MessagingActivity
+import com.vanskarner.samplenotify.styles.basic.BasicActivity
+import com.vanskarner.samplenotify.styles.messaging.MessagingActivity
 
 class MainActivity : BaseActivity() {
 

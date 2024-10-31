@@ -1,4 +1,4 @@
-package com.vanskarner.samplenotify.styles
+package com.vanskarner.samplenotify.styles.messaging
 
 import android.app.PendingIntent
 import android.content.Intent
@@ -14,7 +14,6 @@ import androidx.core.content.LocusIdCompat
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.net.toUri
 import com.vanskarner.samplenotify.BaseActivity
-import com.vanskarner.samplenotify.BasicBubbleActivity
 import com.vanskarner.samplenotify.MainActivity
 import com.vanskarner.samplenotify.NotifyMessaging
 import com.vanskarner.samplenotify.R

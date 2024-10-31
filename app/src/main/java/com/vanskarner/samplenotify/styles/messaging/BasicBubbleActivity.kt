@@ -1,12 +1,13 @@
-package com.vanskarner.samplenotify
+package com.vanskarner.samplenotify.styles.messaging
 
 import android.os.Bundle
 import android.widget.EditText
 import android.widget.ImageButton
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.vanskarner.samplenotify.bubbles.Messages
-import com.vanskarner.samplenotify.bubbles.MessagesAdapter
+import com.vanskarner.samplenotify.BaseActivity
+import com.vanskarner.samplenotify.NotifyMessaging
+import com.vanskarner.samplenotify.R
 
 //This is just a very simple example of the bubble content.
 class BasicBubbleActivity : BaseActivity() {

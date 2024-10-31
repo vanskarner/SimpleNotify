@@ -26,13 +26,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".styles.BasicActivity"
+            android:name=".styles.basic.BasicActivity"
             android:exported="true" />
         <activity
-            android:name=".styles.MessagingActivity"
+            android:name=".styles.messaging.MessagingActivity"
             android:exported="true" />
         <activity
-            android:name=".BasicBubbleActivity"
+            android:name=".styles.messaging.BasicBubbleActivity"
             android:allowEmbedded="true"
             android:documentLaunchMode="always"
             android:exported="true"

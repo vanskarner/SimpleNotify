@@ -1,4 +1,4 @@
-package com.vanskarner.samplenotify.bubbles
+package com.vanskarner.samplenotify.styles.messaging
 
 import android.content.Context
 import android.content.res.ColorStateList
