@@ -8,7 +8,6 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SdkSuppress
 import com.vanskarner.samplenotify.ExtraData
-import com.vanskarner.samplenotify.ProgressData
 import com.vanskarner.samplenotify.common.TestDataProvider
 import com.vanskarner.samplenotify.common.waitActiveNotifications
 import kotlinx.coroutines.test.runTest

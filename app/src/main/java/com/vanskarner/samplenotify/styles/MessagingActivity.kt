@@ -10,8 +10,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
 import androidx.core.app.RemoteInput
+import androidx.core.content.LocusIdCompat
 import androidx.core.content.pm.ShortcutInfoCompat
-import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.net.toUri
 import com.vanskarner.samplenotify.BaseActivity
 import com.vanskarner.samplenotify.BasicBubbleActivity
@@ -65,42 +65,31 @@ class MessagingActivity : BaseActivity() {
                     "https://android.example.com/chat/yourChatId".toUri()
                 val bubbleIntent = PendingIntent.getActivity(
                     this@MessagingActivity,
-                    2,//requestCode:Int
+                    2,
                     Intent(
                         this@MessagingActivity,
                         BasicBubbleActivity::class.java
-                    )//cls:Class<Activity>
+                    )
                         .setAction(Intent.ACTION_VIEW)
                         .setData(contentUri),
                     flagUpdateCurrent()
                 )
-                bubble = Pair(
-                    first = NotificationCompat.BubbleMetadata.Builder(
-                        bubbleIntent,
-                        iconFromAssets("almirante_charco.jpg")
-                    )//groupIcon:IconCompact
-                        .setDesiredHeight(500)
-                        .setAutoExpandBubble(true)//*
-                        .setSuppressNotification(true)//*
-                        .build(),
-                    second = ShortcutInfoCompat.Builder(
-                        this@MessagingActivity,
-                        "group_123"
-                    )//groupId:String
-                        .setLongLived(true)
-                        .setIntent(
-                            Intent(
-                                this@MessagingActivity,
-                                MainActivity::class.java
-                            )//cls:Class<Activity>
-                                .setAction(Intent.ACTION_VIEW)
-                                .setData(contentUri)
-                        )
-                        .setShortLabel("Admiral of Charco")
-                        .setIcon(iconFromAssets("almirante_charco.jpg"))
-                        .build()
-                )
-                ShortcutManagerCompat.pushDynamicShortcut(this@MessagingActivity, bubble!!.second)
+                bubble = NotificationCompat.BubbleMetadata.Builder(bubbleIntent, contact.icon!!)
+                    .setDesiredHeight(500)
+                    .setAutoExpandBubble(true)
+                    .setSuppressNotification(true)
+                    .build()
+                shortcut = ShortcutInfoCompat.Builder(this@MessagingActivity, "contact_1")
+                    .setLocusId(LocusIdCompat("contact_1"))
+                    .setLongLived(true)
+                    .setIntent(
+                        Intent(this@MessagingActivity, MainActivity::class.java)
+                            .setAction(Intent.ACTION_VIEW)
+                            .setData(contentUri)
+                    )
+                    .setShortLabel(contact.name!!)
+                    .setIcon(contact.icon)
+                    .build()
             }
             .show()
     }

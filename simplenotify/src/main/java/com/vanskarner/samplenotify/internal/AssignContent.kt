@@ -1,8 +1,10 @@
 package com.vanskarner.samplenotify.internal
 
+import android.content.Context
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.MessagingStyle.Message
 import androidx.core.app.Person
+import androidx.core.content.pm.ShortcutManagerCompat
 import com.vanskarner.samplenotify.ActionData
 import com.vanskarner.samplenotify.Data
 import com.vanskarner.samplenotify.ExtraData
@@ -11,7 +13,7 @@ import com.vanskarner.samplenotify.ProgressData
 
 internal object AssignContent {
 
-    fun applyData(data: Data, builder: NotificationCompat.Builder) {
+    fun applyData(context: Context, data: Data, builder: NotificationCompat.Builder) {
         val filteredBuilder = when (data) {
             is Data.BasicData -> {
                 builder.setContentTitle(data.title)
@@ -66,9 +68,15 @@ internal object AssignContent {
                         style.addMessage(message)
                     }
                 }
-                data.bubble?.let {
-                    builder.setBubbleMetadata(it.first)
-                        .setShortcutInfo(it.second)
+                data.bubble?.let { builder.setBubbleMetadata(it) }
+                data.shortcut?.let { shortcut ->
+                    if (data.addShortcutIfNotExists) {
+                        val shortcutList = ShortcutManagerCompat.getDynamicShortcuts(context)
+                        val shortcutFound = shortcutList.find { it.id == shortcut.id }
+                        if (shortcutFound == null)
+                            ShortcutManagerCompat.pushDynamicShortcut(context, shortcut)
+                    }
+                    builder.setShortcutInfo(shortcut)
                 }
                 builder.setStyle(style)
                     .setCategory(NotificationCompat.CATEGORY_MESSAGE)
@@ -98,9 +106,15 @@ internal object AssignContent {
                         style.addMessage(message)
                     }
                 }
-                data.bubble?.let {
-                    builder.setBubbleMetadata(it.first)
-                        .setShortcutInfo(it.second)
+                data.bubble?.let { builder.setBubbleMetadata(it) }
+                data.shortcut?.let { shortcut ->
+                    if (data.addShortcutIfNotExists) {
+                        val shortcutList = ShortcutManagerCompat.getDynamicShortcuts(context)
+                        val shortcutFound = shortcutList.find { it.id == shortcut.id }
+                        if (shortcutFound == null)
+                            ShortcutManagerCompat.pushDynamicShortcut(context, shortcut)
+                    }
+                    builder.setShortcutInfo(shortcut)
                 }
                 builder.setStyle(style)
                     .setCategory(NotificationCompat.CATEGORY_MESSAGE)

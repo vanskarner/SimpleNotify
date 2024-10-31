@@ -25,7 +25,7 @@ internal class NotifyGenerator(
 
     fun show(): Int {
         val notifyBuilder = NotificationCompat.Builder(context, selectChannelId())
-        assignContent.applyData(data, notifyBuilder)
+        assignContent.applyData(context, data, notifyBuilder)
         assignContent.applyExtras(extra, notifyBuilder)
         applyActions(notifyBuilder)
         progressData?.let { assignContent.applyProgress(it, notifyBuilder) }

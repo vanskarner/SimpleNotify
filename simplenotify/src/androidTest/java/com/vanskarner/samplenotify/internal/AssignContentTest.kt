@@ -20,18 +20,19 @@ import org.junit.runner.RunWith
 class AssignContentTest {
     private lateinit var builder: NotificationCompat.Builder
     private lateinit var assignContent: AssignContent
+    private lateinit var appContext: Context
 
     @Before
     fun setUp() {
-        builder = NotificationCompat
-            .Builder(ApplicationProvider.getApplicationContext(), "test_channel")
+        appContext = ApplicationProvider.getApplicationContext()
+        builder = NotificationCompat.Builder(appContext, "test_channel")
         assignContent = AssignContent
     }
 
     @Test
     fun applyData_asBasicData_apply() {
         val expectedData = TestDataProvider.basicData()
-        assignContent.applyData(expectedData, builder)
+        assignContent.applyData(appContext,expectedData, builder)
         val notification = builder.build()
         val actualExtras = notification.extras
 
@@ -43,7 +44,7 @@ class AssignContentTest {
     @Test
     fun applyData_asBigTextData_apply() {
         val expectedData = TestDataProvider.bigTextData()
-        assignContent.applyData(expectedData, builder)
+        assignContent.applyData(appContext,expectedData, builder)
         val notification = builder.build()
         val actualExtras = notification.extras
         val actualBigText = actualExtras.getString(NotificationCompat.EXTRA_BIG_TEXT)
@@ -59,7 +60,7 @@ class AssignContentTest {
     @Test
     fun applyData_asInboxData_apply() {
         val expectedData = TestDataProvider.inboxData()
-        assignContent.applyData(expectedData, builder)
+        assignContent.applyData(appContext,expectedData, builder)
         val notification = builder.build()
         val actualExtras = notification.extras
         val actualTextLines = actualExtras.getCharSequenceArray(NotificationCompat.EXTRA_TEXT_LINES)
@@ -73,7 +74,7 @@ class AssignContentTest {
     @Test
     fun applyData_asBigPictureData_apply() {
         val expectedData = TestDataProvider.bigPictureData()
-        assignContent.applyData(expectedData, builder)
+        assignContent.applyData(appContext,expectedData, builder)
         val notification = builder.build()
         val actualExtras = notification.extras
         val actualPicture = actualExtras.getParcelable<Bitmap>(NotificationCompat.EXTRA_PICTURE)
@@ -93,7 +94,7 @@ class AssignContentTest {
             context = ApplicationProvider.getApplicationContext(),
             shortcutId = expectedShortCutId
         )
-        assignContent.applyData(expectedData, builder)
+        assignContent.applyData(appContext,expectedData, builder)
         val notification = builder.build()
         val actualExtras = notification.extras
         val actualMessages = actualExtras.getParcelableArray(NotificationCompat.EXTRA_MESSAGES)
@@ -115,7 +116,7 @@ class AssignContentTest {
         checkCommonData(expectedData, notification)
         //Notification bubbles are available from API 29
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            val expectedBubble = expectedData.bubble!!.first
+            val expectedBubble = expectedData.bubble!!
             val actualBubble = notification.bubbleMetadata!!
             assertEquals(expectedBubble.desiredHeight, actualBubble.desiredHeight)
             assertEquals(expectedBubble.autoExpandBubble, actualBubble.autoExpandBubble)
@@ -137,7 +138,7 @@ class AssignContentTest {
             context = ApplicationProvider.getApplicationContext(),
             shortcutId = expectedShortCutId
         )
-        assignContent.applyData(expectedData, builder)
+        assignContent.applyData(appContext,expectedData, builder)
         val notification = builder.build()
         val actualExtras = notification.extras
         val actualMessages = actualExtras.getParcelableArray(NotificationCompat.EXTRA_MESSAGES)
@@ -160,7 +161,7 @@ class AssignContentTest {
         checkCommonData(expectedData, notification)
         //Notification bubbles are available from API 29
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            val expectedBubble = expectedData.bubble!!.first
+            val expectedBubble = expectedData.bubble!!
             val actualBubble = notification.bubbleMetadata!!
             assertEquals(expectedBubble.desiredHeight, actualBubble.desiredHeight)
             assertEquals(expectedBubble.autoExpandBubble, actualBubble.autoExpandBubble)
@@ -181,7 +182,7 @@ class AssignContentTest {
         val expectedData = TestDataProvider.customDesignData(context)
         val expectedSmallRemoteView = expectedData.smallRemoteViews
         val expectedLargeRemoteView = expectedData.largeRemoteViews
-        assignContent.applyData(expectedData, builder)
+        assignContent.applyData(appContext,expectedData, builder)
         val notification = builder.build()
         val actualSmallRemoteView = notification.contentView
         val actualLargeRemoteView = notification.bigContentView

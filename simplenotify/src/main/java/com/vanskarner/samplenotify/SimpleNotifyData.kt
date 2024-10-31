@@ -50,7 +50,9 @@ sealed class Data {
         var contact: Person = Person.Builder().setName("Someone").build(),
         var messages: ArrayList<NotifyMessaging> = arrayListOf(),
         var useHistoricMessage: Boolean = false,
-        var bubble: Pair<BubbleMetadata, ShortcutInfoCompat>? = null
+        var bubble: BubbleMetadata? = null,
+        var shortcut: ShortcutInfoCompat? = null,
+        var addShortcutIfNotExists: Boolean = true
     ) : Data()
 
     data class GroupMessageData(
@@ -58,7 +60,9 @@ sealed class Data {
         var conversationTitle: String? = null,
         var messages: ArrayList<NotifyMessaging> = arrayListOf(),
         var useHistoricMessage: Boolean = false,
-        var bubble: Pair<BubbleMetadata, ShortcutInfoCompat>? = null
+        var bubble: BubbleMetadata? = null,
+        var shortcut: ShortcutInfoCompat? = null,
+        var addShortcutIfNotExists: Boolean = true
     ) : Data()
 
     data class CustomDesignData(

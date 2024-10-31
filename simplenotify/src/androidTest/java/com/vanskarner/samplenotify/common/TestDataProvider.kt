@@ -116,20 +116,19 @@ class TestDataProvider {
                         "content://com.any.sample/photo/image.jpg".toUri()
                     )
                 )
-                bubble = Pair(
-                    first = NotificationCompat.BubbleMetadata.Builder(pendingIntent, contact.icon!!)
-                        .setDesiredHeight(500)
-                        .setAutoExpandBubble(true)
-                        .setSuppressNotification(true)
-                        .build(),
-                    second = ShortcutInfoCompat.Builder(context, shortcutId)
-                        .setLongLived(true)
-                        .setIntent(Intent())
-                        .setShortLabel(contact.name!!)
-                        .setIcon(contact.icon)
-                        .setPerson(contact)
-                        .build()
-                )
+                bubble = NotificationCompat.BubbleMetadata.Builder(pendingIntent, contact.icon!!)
+                    .setDesiredHeight(500)
+                    .setAutoExpandBubble(true)
+                    .setSuppressNotification(true)
+                    .build()
+                shortcut = ShortcutInfoCompat.Builder(context, shortcutId)
+                    .setLongLived(true)
+                    .setIntent(Intent().setAction(Intent.ACTION_VIEW))
+                    .setShortLabel(contact.name!!)
+                    .setIcon(contact.icon)
+                    .setPerson(contact)
+                    .build()
+                addShortcutIfNotExists = false
                 smallIcon = R.drawable.test_ic_notification_24
                 largeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
                 priority = NotificationCompat.PRIORITY_HIGH
@@ -140,7 +139,7 @@ class TestDataProvider {
             return data
         }
 
-        fun groupMessageData(context: Context,shortcutId: String): Data.GroupMessageData {
+        fun groupMessageData(context: Context, shortcutId: String): Data.GroupMessageData {
             val pendingIntent = pendingIntent()
             val data = Data.GroupMessageData().apply {
                 conversationTitle = "Any conversationTitle"
@@ -164,23 +163,22 @@ class TestDataProvider {
                         "content://com.any.sample/photo/image.jpg".toUri()
                     )
                 )
-                val groupIcon=IconCompat.createWithAdaptiveBitmap(
+                val groupIcon = IconCompat.createWithAdaptiveBitmap(
                     Bitmap.createBitmap(20, 20, Bitmap.Config.ARGB_8888)
                 )
-                bubble = Pair(
-                    first = NotificationCompat.BubbleMetadata.Builder(pendingIntent, groupIcon)
-                        .setDesiredHeight(500)
-                        .setAutoExpandBubble(true)
-                        .setSuppressNotification(true)
-                        .build(),
-                    second = ShortcutInfoCompat.Builder(context, shortcutId)
-                        .setLongLived(true)
-                        .setIntent(Intent())
-                        .setShortLabel(conversationTitle!!)
-                        .setIcon(groupIcon)
+                bubble = NotificationCompat.BubbleMetadata.Builder(pendingIntent, groupIcon)
+                    .setDesiredHeight(500)
+                    .setAutoExpandBubble(true)
+                    .setSuppressNotification(true)
+                    .build()
+                shortcut = ShortcutInfoCompat.Builder(context, shortcutId)
+                    .setLongLived(true)
+                    .setIntent(Intent().setAction(Intent.ACTION_VIEW))
+                    .setShortLabel(conversationTitle!!)
+                    .setIcon(groupIcon)
 //                        .setPerson(contact)
-                        .build()
-                )
+                    .build()
+                addShortcutIfNotExists = false
                 smallIcon = R.drawable.test_ic_notification_24
                 largeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
                 priority = NotificationCompat.PRIORITY_HIGH
