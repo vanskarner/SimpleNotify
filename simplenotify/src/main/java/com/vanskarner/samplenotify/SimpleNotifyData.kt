@@ -89,7 +89,8 @@ data class ExtraData(
     var badgeIconType: Int? = null,//from API 26
     var shortCutId: String? = null,//from API 26
     var allowSystemGeneratedContextualActions: Boolean? = null,//from API 29
-    var remoteInputHistory: Array<CharSequence>? = null
+    var remoteInputHistory: Array<CharSequence>? = null,
+    var groupKey: String? = null
 )
 
 sealed class ActionData {
@@ -111,6 +112,14 @@ data class ProgressData(
     var currentValue: Int = 0,
     var indeterminate: Boolean = false,
     var hide: Boolean = false
+)
+
+data class StackableData(
+    var id: Int? = null,
+    var smallIcon: Int? = R.drawable.baseline_notifications_24,
+    var title: String? = null,
+    var summaryText: String = "Summary Group",
+    var initialAmount: Int = 3
 )
 
 sealed class NotifyMessaging {

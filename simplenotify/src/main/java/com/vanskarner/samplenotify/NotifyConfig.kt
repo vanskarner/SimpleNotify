@@ -1,6 +1,7 @@
 package com.vanskarner.samplenotify
 
 import android.content.Context
+import com.vanskarner.samplenotify.internal.INVALID_NOTIFICATION_ID
 import com.vanskarner.samplenotify.internal.MAXIMUM_ACTIONS
 import com.vanskarner.samplenotify.internal.NotifyGenerator
 
@@ -8,6 +9,7 @@ class NotifyConfig(private val context: Context) {
     private var data: Data? = null
     private var extras: ExtraData = ExtraData()
     private var progressData: ProgressData? = null
+    private var stackableData: StackableData? = null
     private var channelId: String? = null
     internal val actions: Array<ActionData?> by lazy { arrayOfNulls(MAXIMUM_ACTIONS) }
 
@@ -36,13 +38,18 @@ class NotifyConfig(private val context: Context) {
         return this
     }
 
-    fun asGroupMessaging(content: Data.GroupMessageData.() -> Unit): NotifyConfig{
+    fun asGroupMessaging(content: Data.GroupMessageData.() -> Unit): NotifyConfig {
         this.data = Data.GroupMessageData().apply(content)
         return this
     }
 
     fun asCustomDesign(content: Data.CustomDesignData.() -> Unit): NotifyConfig {
         this.data = Data.CustomDesignData().apply(content)
+        return this
+    }
+
+    fun stackable(content: StackableData.() -> Unit): NotifyConfig {
+        this.stackableData = StackableData().apply(content)
         return this
     }
 
@@ -73,17 +80,18 @@ class NotifyConfig(private val context: Context) {
         return this
     }
 
-    fun show(): Int {
+    fun show(): Pair<Int, Int> {
         return data?.let {
             NotifyGenerator(
                 context = context,
                 data = it,
                 extra = extras,
                 actions = actions,
+                stackableData = stackableData,
                 channelId = channelId,
                 progressData = progressData
             ).show()
-        } ?: -1
+        } ?: Pair(INVALID_NOTIFICATION_ID, INVALID_NOTIFICATION_ID)
     }
 
 }

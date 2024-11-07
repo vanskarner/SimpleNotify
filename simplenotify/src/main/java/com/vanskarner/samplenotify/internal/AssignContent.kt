@@ -153,6 +153,7 @@ internal object AssignContent {
             builder.setAllowSystemGeneratedContextualActions(it)
         }
         extras.remoteInputHistory?.let { builder.setRemoteInputHistory(it) }
+        extras.groupKey?.let { builder.setGroup(it) }
     }
 
     fun applyAction(actionData: ActionData, builder: NotificationCompat.Builder) {

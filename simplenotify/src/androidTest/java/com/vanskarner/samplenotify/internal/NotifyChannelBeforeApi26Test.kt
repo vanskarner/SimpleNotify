@@ -7,7 +7,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SdkSuppress
 import androidx.test.platform.app.InstrumentationRegistry
 import com.vanskarner.samplenotify.common.TestDataProvider
-import com.vanskarner.samplenotify.common.waitActiveNotifications
+import com.vanskarner.samplenotify.common.waitForNotification
+import com.vanskarner.samplenotify.common.waitForEmptyListNotifications
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -61,30 +62,30 @@ class NotifyChannelBeforeApi26Test {
     @Test
     fun cancelNotification_shouldBeCanceled() = runTest {
         val channelId = notifyChannel.applyDefaultChannel(context)
-        val expectedNotificationId = 123
+        val expectedNotificationId = 1
         val notifyBuilder = TestDataProvider.basicNotification(context,channelId)
         notificationManager.notify(expectedNotificationId, notifyBuilder.build())
         val actualStatusBarNotification =
-            notificationManager.waitActiveNotifications(1).firstOrNull()
+            notificationManager.waitForNotification(expectedNotificationId)
 
         assertEquals(expectedNotificationId, actualStatusBarNotification?.id)
         notifyChannel.cancelNotification(context, expectedNotificationId)
-        assertEquals(0, notificationManager.waitActiveNotifications(0).size)
+        assertEquals(0, notificationManager.waitForEmptyListNotifications().size)
     }
 
     @Test
     fun cancelAllNotification_shouldBeCanceled() = runTest {
         val channelId = notifyChannel.applyDefaultChannel(context)
-        val expectedNotificationId = 123
+        val expectedNotificationId = 2
         val notifyBuilder = TestDataProvider.basicNotification(context,channelId)
         notificationManager.notify(expectedNotificationId, notifyBuilder.build())
         notificationManager.notify(expectedNotificationId, notifyBuilder.build())
         val actualStatusBarNotification =
-            notificationManager.waitActiveNotifications(1).firstOrNull()
+            notificationManager.waitForNotification(expectedNotificationId)
 
         assertEquals(expectedNotificationId, actualStatusBarNotification?.id)
         notifyChannel.cancelAllNotification(context)
-        assertEquals(0, notificationManager.waitActiveNotifications(0).size)
+        assertEquals(0, notificationManager.waitForEmptyListNotifications().size)
     }
 
 }

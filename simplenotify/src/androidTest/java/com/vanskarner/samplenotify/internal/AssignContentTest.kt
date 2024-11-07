@@ -206,6 +206,7 @@ class AssignContentTest {
         val actualBadgeNumber = notification.number
         val actualRemoteInputHistory =
             actualExtras.getCharSequenceArray(NotificationCompat.EXTRA_REMOTE_INPUT_HISTORY)
+        val actualGroupKey = notification.group
 
         assertEquals(expectedExtraData.category, notification.category)
         assertEquals(expectedExtraData.visibility, notification.visibility)
@@ -234,6 +235,7 @@ class AssignContentTest {
             )
         }
         assertEquals(expectedExtraData.remoteInputHistory?.size, actualRemoteInputHistory?.size)
+        assertEquals(expectedExtraData.groupKey, actualGroupKey)
     }
 
     @Test

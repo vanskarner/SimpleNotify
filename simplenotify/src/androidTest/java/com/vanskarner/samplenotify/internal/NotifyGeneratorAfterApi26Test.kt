@@ -11,7 +11,7 @@ import androidx.test.filters.SdkSuppress
 import com.vanskarner.samplenotify.common.ConditionalPermissionRule
 import com.vanskarner.samplenotify.ExtraData
 import com.vanskarner.samplenotify.common.TestDataProvider
-import com.vanskarner.samplenotify.common.waitActiveNotifications
+import com.vanskarner.samplenotify.common.waitForNotification
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.*
@@ -57,10 +57,11 @@ class NotifyGeneratorAfterApi26Test {
             progressData = progressData,
             channelId = null,
             actions = emptyArray(),
+            stackableData = null
         )
-        notifyGenerator.show()
+        val expectedNotificationId = notifyGenerator.show().first
         val actualStatusBarNotification =
-            notificationManager.waitActiveNotifications(1).firstOrNull()
+            notificationManager.waitForNotification(expectedNotificationId)
         val actualNotification = actualStatusBarNotification?.notification
         val actualExtras = actualNotification?.extras
         val actualProgress = actualExtras?.getInt(NotificationCompat.EXTRA_PROGRESS)
@@ -84,10 +85,11 @@ class NotifyGeneratorAfterApi26Test {
             progressData = null,
             channelId = null,
             actions = emptyArray(),
+            stackableData = null
         )
-        val expectedNotificationId = notifyGenerator.show()
+        val expectedNotificationId = notifyGenerator.show().first
         val actualStatusBarNotification =
-            notificationManager.waitActiveNotifications(1).firstOrNull()
+            notificationManager.waitForNotification(expectedNotificationId)
         val actualNotification = actualStatusBarNotification?.notification
         val actualExtras = actualNotification?.extras
         val actualProgress = actualExtras?.getInt(NotificationCompat.EXTRA_PROGRESS)
@@ -105,7 +107,7 @@ class NotifyGeneratorAfterApi26Test {
         val expectedChannel = TestDataProvider.notificationChannel()
         notificationManager.createNotificationChannel(expectedChannel)
         val data = TestDataProvider.basicData()
-        data.id = 111
+        data.id = 1
         val progressData = TestDataProvider.progressData(false)
         notifyGenerator = NotifyGenerator(
             context = context,
@@ -114,10 +116,11 @@ class NotifyGeneratorAfterApi26Test {
             progressData = progressData,
             channelId = expectedChannel.id,
             actions = emptyArray(),
+            stackableData = null
         )
         notifyGenerator.show()
         val actualStatusBarNotification =
-            notificationManager.waitActiveNotifications(1).firstOrNull()
+            notificationManager.waitForNotification(data.id ?: 0)
         val actualExtras = actualStatusBarNotification?.notification?.extras
         val actualProgress = actualExtras?.getInt(NotificationCompat.EXTRA_PROGRESS)
         val actualIndeterminate =
@@ -134,7 +137,7 @@ class NotifyGeneratorAfterApi26Test {
         val expectedChannel = TestDataProvider.notificationChannel()
         notificationManager.createNotificationChannel(expectedChannel)
         val data = TestDataProvider.basicData()
-        data.id = 111
+        data.id = 2
         notifyGenerator = NotifyGenerator(
             context = context,
             data = data,
@@ -142,10 +145,11 @@ class NotifyGeneratorAfterApi26Test {
             progressData = null,
             channelId = expectedChannel.id,
             actions = emptyArray(),
+            stackableData = null
         )
         notifyGenerator.show()
         val actualStatusBarNotification =
-            notificationManager.waitActiveNotifications(1).firstOrNull()
+            notificationManager.waitForNotification(data.id ?: 0)
         val actualExtras = actualStatusBarNotification?.notification?.extras
         val actualProgress = actualExtras?.getInt(NotificationCompat.EXTRA_PROGRESS)
         val actualIndeterminate =

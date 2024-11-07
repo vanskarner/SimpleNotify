@@ -14,7 +14,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.vanskarner.samplenotify.common.ConditionalPermissionRule
 import com.vanskarner.samplenotify.common.TestDataProvider
-import com.vanskarner.samplenotify.common.waitActiveNotifications
+import com.vanskarner.samplenotify.common.waitForNotification
 import com.vanskarner.simplenotify.test.R
 import kotlinx.coroutines.test.runTest
 import org.junit.After
@@ -27,6 +27,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class NotifyConfigTest {
     private lateinit var notifyConfig: NotifyConfig
+    private lateinit var notificationManager: NotificationManager
 
     @get:Rule
     val permissionRule = ConditionalPermissionRule(
@@ -36,14 +37,14 @@ class NotifyConfigTest {
 
     @Before
     fun setUp() {
-        notifyConfig = NotifyConfig(ApplicationProvider.getApplicationContext())
+        val context: Context = ApplicationProvider.getApplicationContext()
+        notifyConfig = NotifyConfig(context)
+        notificationManager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     }
 
     @After
     fun tearDown() {
-        val context: Context = ApplicationProvider.getApplicationContext()
-        val notificationManager =
-            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.cancelAll()
     }
 
@@ -334,6 +335,26 @@ class NotifyConfigTest {
     }
 
     @Test
+    fun stackable_shouldSetData() {
+        notifyConfig.stackable {
+            id = 152
+            smallIcon = R.drawable.test_ic_notification_24
+            title = "My Group Summary"
+            summaryText = "Any description"
+            initialAmount = 5
+        }
+        val stackableField = notifyConfig.javaClass.getDeclaredField("stackableData")
+        stackableField.isAccessible = true
+        val actualExtraData = stackableField.get(notifyConfig) as StackableData
+
+        assertEquals(152, actualExtraData.id)
+        assertEquals(R.drawable.test_ic_notification_24, actualExtraData.smallIcon)
+        assertEquals("My Group Summary", actualExtraData.title)
+        assertEquals("Any description", actualExtraData.summaryText)
+        assertEquals(5, actualExtraData.initialAmount)
+    }
+
+    @Test
     fun useChannel_shouldSetChannel() {
         notifyConfig.useChannel("AnyChannelId")
         val channelIdField = notifyConfig.javaClass.getDeclaredField("channelId")
@@ -403,30 +424,99 @@ class NotifyConfigTest {
     }
 
     @Test
-    fun show_whenDataIsNull_shouldNotShow() {
-        val actualNotificationId = notifyConfig.show()
-        val context: Context = ApplicationProvider.getApplicationContext()
-        val notificationManager =
-            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    fun show_usingStackable_shouldShowGroup() = runTest {
+        val myGroupKey = "ANY_GROUP_KEY1"
+        val expectedNumberNotifications = 4
+        val expectedGroupNotificationId = 50
+        repeat(expectedNumberNotifications) { count ->
+            val actualNotificationId = notifyConfig.asBasic {
+                title = "Test Title $count"
+                text = "Test Text $count"
+            }.extras {
+                groupKey = myGroupKey
+            }.stackable {
+                id = expectedGroupNotificationId
+                title = "Any Group Title"
+                summaryText = "Any Group Summary"
+                initialAmount = expectedNumberNotifications
+            }.show()
+            //wait for the penultimate notification to be released
+            if (count == expectedNumberNotifications - 2)
+                notificationManager.waitForNotification(actualNotificationId.first)
+        }
+        val statusBarNotification =
+            notificationManager.waitForNotification(expectedGroupNotificationId)
+
+        assertEquals(expectedGroupNotificationId, statusBarNotification?.id)
+        val groupNotifications = notificationManager.activeNotifications
+            .filter { it.groupKey.contains(myGroupKey) }
+        assertEquals(expectedNumberNotifications + 1, groupNotifications.size)
+    }
+
+    @Test
+    fun show_usingStackableWithDifferentStyles_shouldShowGroup() = runTest {
+        val myGroupKey = "ANY_GROUP_KEY2"
+        notifyConfig.asBasic {
+            title = "Test Title 1"
+            text = "Test Text 1"
+        }.extras {
+            groupKey = myGroupKey
+        }.show()
+        notifyConfig.asBigPicture {
+            title = "Test Title 2"
+            text = "Test Text 2"
+            summaryText = "Any summary 2"
+        }.extras {
+            groupKey = myGroupKey
+        }.show()
+        val penultimateNotificationId = notifyConfig.asInbox {
+            title = "Test Title 2"
+            text = "Test Text 2"
+            lines = arrayListOf("item 1", "item 2")
+        }.extras {
+            groupKey = myGroupKey
+        }.show().first
+        notificationManager.waitForNotification(penultimateNotificationId)
+        val expectedGroupNotificationId = notifyConfig.asBigText {
+            title = "Test Title 2"
+            text = "Test Text 2"
+            bigText = "Any Big Text"
+        }.extras {
+            groupKey = myGroupKey
+        }.stackable {
+            title = "Any Group Title"
+            summaryText = "Any Group Summary"
+            initialAmount = 4
+        }.show().second
+        val statusBarNotification =
+            notificationManager.waitForNotification(expectedGroupNotificationId)
+
+        assertEquals(expectedGroupNotificationId, statusBarNotification?.id)
+        val groupNotifications = notificationManager.activeNotifications
+            .filter { it.groupKey.contains(myGroupKey) }
+        assertEquals(5, groupNotifications.size)
+    }
+
+    @Test
+    fun show_whenDataIsNull_shouldNotShow() = runTest {
+        val actualNotificationId = notifyConfig.show().first
 
         assertEquals(-1, actualNotificationId)
-        assertEquals(0, notificationManager.activeNotifications.size)
+        assertNull(notificationManager.waitForNotification(actualNotificationId, timeout = 2000))
     }
 
     @Test
     fun show_whenDataIsNotNull_shouldBeShown() = runTest {
-        val expectedNotificationId = 123
-        notifyConfig.asBasic {
-            id = expectedNotificationId
-            title = "Test Title"
-            text = "Test Text"
-        }
+        val expectedNotificationId = 1
+        notifyConfig
+            .asBasic {
+                id = expectedNotificationId
+                title = "Test Title"
+                text = "Test Text"
+            }
             .show()
-        val context: Context = ApplicationProvider.getApplicationContext()
-        val notificationManager =
-            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val actualStatusBarNotification =
-            notificationManager.waitActiveNotifications(1).firstOrNull()
+            notificationManager.waitForNotification(expectedNotificationId)
         val actualExtras = actualStatusBarNotification?.notification?.extras
         val actualTitle = actualExtras?.getString(NotificationCompat.EXTRA_TITLE)
         val actualText = actualExtras?.getString(NotificationCompat.EXTRA_TEXT)

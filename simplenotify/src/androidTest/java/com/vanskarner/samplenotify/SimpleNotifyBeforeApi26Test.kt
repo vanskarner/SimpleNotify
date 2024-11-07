@@ -10,7 +10,8 @@ import androidx.test.filters.SdkSuppress
 import androidx.test.platform.app.InstrumentationRegistry
 import com.vanskarner.samplenotify.common.ConditionalPermissionRule
 import com.vanskarner.samplenotify.common.TestDataProvider
-import com.vanskarner.samplenotify.common.waitActiveNotifications
+import com.vanskarner.samplenotify.common.waitForNotification
+import com.vanskarner.samplenotify.common.waitForEmptyListNotifications
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -51,9 +52,9 @@ class SimpleNotifyBeforeApi26Test {
                 title = "Any title"
                 text = "Any text"
             }
-            .show()
+            .show().first
         val statusBarNotification =
-            notificationManager.waitActiveNotifications(1).firstOrNull()
+            notificationManager.waitForNotification(expectedNotificationId)
         val actualNotification = statusBarNotification?.notification
         val actualTitle = actualNotification?.extras?.getString(NotificationCompat.EXTRA_TITLE)
         val actualText = actualNotification?.extras?.getString(NotificationCompat.EXTRA_TEXT)
@@ -66,46 +67,47 @@ class SimpleNotifyBeforeApi26Test {
 
     @Test
     fun with_usingBasicFormAndWithId_shouldBeShow() = runTest {
+        val expectedNotificationId = 1
         SimpleNotify.with(context)
             .asBasic {
-                id = 123
+                id = expectedNotificationId
                 title = "Any title"
                 text = "Any text"
             }
             .show()
         val statusBarNotification =
-            notificationManager.waitActiveNotifications(1).firstOrNull()
+            notificationManager.waitForNotification(expectedNotificationId)
         val actualNotification = statusBarNotification?.notification
         val actualTitle = actualNotification?.extras?.getString(NotificationCompat.EXTRA_TITLE)
         val actualText = actualNotification?.extras?.getString(NotificationCompat.EXTRA_TEXT)
 
         assertNotNull(actualNotification)
-        assertEquals(123, statusBarNotification?.id)
+        assertEquals(expectedNotificationId, statusBarNotification?.id)
         assertEquals("Any title", actualTitle)
         assertEquals("Any text", actualText)
     }
 
     @Test
     fun cancel_shouldBeCancel() = runTest {
-        val expectedNotificationId = 123
+        val expectedNotificationId = 2
         val notifyBuilder = TestDataProvider.basicNotification(context, "AnyId")
         notificationManager.notify(expectedNotificationId, notifyBuilder.build())
-        val statusBarNotification = notificationManager.waitActiveNotifications(1).first()
+        val statusBarNotification = notificationManager.waitForNotification(expectedNotificationId)
 
-        assertEquals(expectedNotificationId, statusBarNotification.id)
+        assertEquals(expectedNotificationId, statusBarNotification?.id)
         SimpleNotify.cancel(context, expectedNotificationId)
-        assertEquals(0, notificationManager.waitActiveNotifications(0).size)
+        assertEquals(0, notificationManager.waitForEmptyListNotifications().size)
     }
 
     @Test
     fun cancelAllNotifications_shouldBeCancel() = runTest {
-        val expectedNotificationId = 123
+        val expectedNotificationId = 3
         val notifyBuilder = TestDataProvider.basicNotification(context, "AnyId")
         notificationManager.notify(expectedNotificationId, notifyBuilder.build())
-        val statusBarNotification = notificationManager.waitActiveNotifications(1).first()
+        val statusBarNotification = notificationManager.waitForNotification(expectedNotificationId)
 
-        assertEquals(expectedNotificationId, statusBarNotification.id)
+        assertEquals(expectedNotificationId, statusBarNotification?.id)
         SimpleNotify.cancelAll(context)
-        assertEquals(0, notificationManager.waitActiveNotifications(0).size)
+        assertEquals(0, notificationManager.waitForEmptyListNotifications().size)
     }
 }
