@@ -3,6 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <!--    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />-->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_PHONE_CALL" />
+    <uses-permission android:name="android.permission.MANAGE_OWN_CALLS" />
+
 
     <application
         android:name=".MyApp"
@@ -37,11 +41,19 @@
             android:documentLaunchMode="always"
             android:exported="true"
             android:resizeableActivity="true" />
+        <activity
+            android:name=".styles.call.CallActivity"
+            android:exported="true" />
         <provider
             android:name=".AssetFileProvider"
             android:authorities="com.vanskarner.samplenotify"
             android:exported="true"
             tools:ignore="ExportedContentProvider" />
+        <service
+            android:name=".CallNotificationService"
+            android:enabled="true"
+            android:foregroundServiceType="phoneCall"
+            android:exported="false" />
     </application>
 
 </manifest>

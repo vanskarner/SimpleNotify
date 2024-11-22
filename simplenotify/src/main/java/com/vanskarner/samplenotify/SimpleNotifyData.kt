@@ -1,6 +1,8 @@
 package com.vanskarner.samplenotify
 
 import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.widget.RemoteViews
@@ -9,6 +11,7 @@ import androidx.core.app.NotificationCompat.BubbleMetadata
 import androidx.core.app.Person
 import androidx.core.app.RemoteInput
 import androidx.core.content.pm.ShortcutInfoCompat
+import androidx.core.graphics.drawable.IconCompat
 import com.vanskarner.simplenotify.R
 
 sealed class Data {
@@ -64,6 +67,48 @@ sealed class Data {
         var shortcut: ShortcutInfoCompat? = null,
         var addShortcutIfNotExists: Boolean = true
     ) : Data()
+
+    data class CallData(
+        var type: String = "incoming",
+        var caller: Person? = null,
+        var answer: PendingIntent? = null,
+        var declineOrHangup: PendingIntent? = null
+    ) : Data() {
+        companion object {
+            fun defaultAnswer(context: Context): PendingIntent {
+                return PendingIntent.getActivity(
+                    context,
+                    -333,
+                    Intent(),
+                    PendingIntent.FLAG_IMMUTABLE
+                )
+            }
+
+            fun defaultDeclineOrHangup(context: Context): PendingIntent {
+                return PendingIntent.getActivity(
+                    context,
+                    -333,
+                    Intent(),
+                    PendingIntent.FLAG_IMMUTABLE
+                )
+            }
+
+            fun defaultSecondCaller(context: Context): Person {
+                return Person.Builder()
+                    .setName("You")
+                    .setIcon(IconCompat.createWithResource(context,R.drawable.notify_user_48))
+                    .setImportant(true)
+                    .build()
+            }
+
+            fun defaultCaller(context: Context): Person {
+                return Person.Builder()
+                    .setName("Someone")
+                    .setIcon(IconCompat.createWithResource(context,R.drawable.notify_user_48))
+                    .build()
+            }
+        }
+    }
 
     data class CustomDesignData(
         var hasStyle: Boolean = true,

@@ -31,8 +31,9 @@ internal class NotifyGenerator(
     private val notifyChannel = NotifyChannel
 
     fun show(): Pair<Int, Int> {
-        val notificationId = generateNotificationId()
-        val notification = createNotification()
+        val notificationPair = generateNotificationWithId()
+        val notificationId = notificationPair.first
+        val notification = notificationPair.second
         val notificationsToPublish = mutableListOf<Pair<Int, Notification>>()
         notificationsToPublish.add(Pair(notificationId, notification.build()))
         val checkNotificationGroup = checkStackable()
@@ -62,8 +63,15 @@ internal class NotifyGenerator(
         return Pair(notificationId, groupId)
     }
 
+    fun generateNotificationWithId(): Pair<Int, NotificationCompat.Builder> {
+        val notificationId = generateNotificationId()
+        val notification = createNotification()
+        return Pair(notificationId, notification)
+    }
+
     fun selectChannelId(): String {
         return when {
+            data is Data.CallData -> notifyChannel.applyCallChannel(context)
             hasNoProgress() && channelNotExists() -> notifyChannel.applyDefaultChannel(context)
             hasProgress() && channelNotExists() -> notifyChannel.applyProgressChannel(context)
             else -> channelId ?: notifyChannel.applyDefaultChannel(context)

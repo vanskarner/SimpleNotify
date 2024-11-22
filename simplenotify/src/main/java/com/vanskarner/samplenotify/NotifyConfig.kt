@@ -1,6 +1,7 @@
 package com.vanskarner.samplenotify
 
 import android.content.Context
+import androidx.core.app.NotificationCompat
 import com.vanskarner.samplenotify.internal.INVALID_NOTIFICATION_ID
 import com.vanskarner.samplenotify.internal.MAXIMUM_ACTIONS
 import com.vanskarner.samplenotify.internal.NotifyGenerator
@@ -43,6 +44,11 @@ class NotifyConfig(private val context: Context) {
         return this
     }
 
+    fun asCall(content: Data.CallData.() -> Unit): NotifyConfig {
+        this.data = Data.CallData().apply(content)
+        return this
+    }
+
     fun asCustomDesign(content: Data.CustomDesignData.() -> Unit): NotifyConfig {
         this.data = Data.CustomDesignData().apply(content)
         return this
@@ -78,6 +84,18 @@ class NotifyConfig(private val context: Context) {
         val index = actions.indexOfFirst { it == null }
         if (index != -1) actions[index] = ActionData.ReplyAction().apply(action)
         return this
+    }
+
+    fun generateNotificationPair(): Pair<Int, NotificationCompat.Builder> {
+        return NotifyGenerator(
+            context = context,
+            data = data ?: Data.BasicData(),
+            extra = extras,
+            actions = actions,
+            stackableData = stackableData,
+            channelId = channelId,
+            progressData = progressData
+        ).generateNotificationWithId()
     }
 
     fun show(): Pair<Int, Int> {

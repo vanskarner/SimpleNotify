@@ -3,5 +3,7 @@
     <string name="chanel_name">Default channel</string>
     <string name="chanel_description">Application default notification channel</string>
     <string name="progress_channel_name">Default channel for progress</string>
+    <string name="call_channel_name">Default channel for calls</string>
     <string name="progress_channel_description">Default app progress notification channel</string>
+    <string name="call_channel_description">Default notification channel for calls</string>
 </resources>

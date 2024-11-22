@@ -1,6 +1,7 @@
 package com.vanskarner.samplenotify.internal
 
 import android.content.Context
+import android.media.RingtoneManager
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.MessagingStyle.Message
 import androidx.core.app.Person
@@ -14,7 +15,13 @@ import com.vanskarner.samplenotify.ProgressData
 internal object AssignContent {
 
     fun applyData(context: Context, data: Data, builder: NotificationCompat.Builder) {
-        val filteredBuilder = when (data) {
+        data.timeoutAfter?.let { builder.setTimeoutAfter(it) }
+        builder.setSmallIcon(data.smallIcon)
+            .setLargeIcon(data.largeIcon)
+            .setContentIntent(data.contentIntent)
+            .setAutoCancel(data.autoCancel)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+        when (data) {
             is Data.BasicData -> {
                 builder.setContentTitle(data.title)
                     .setContentText(data.text)
@@ -120,18 +127,22 @@ internal object AssignContent {
                     .setCategory(NotificationCompat.CATEGORY_MESSAGE)
             }
 
+            is Data.CallData -> {
+                val secondCaller = Data.CallData.defaultSecondCaller(context)
+                builder.setStyle(callTypeFilter(context, data))
+                    .setCategory(NotificationCompat.CATEGORY_CALL)
+                    .addPerson(secondCaller)
+                    .setVibrate(longArrayOf(0, 500, 1000, 500))
+                    .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE))
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+            }
+
             is Data.CustomDesignData -> {
                 if (data.hasStyle) builder.setStyle(NotificationCompat.DecoratedCustomViewStyle())
                 builder.setCustomContentView(data.smallRemoteViews.invoke())
                     .setCustomBigContentView(data.largeRemoteViews.invoke())
             }
         }
-        data.timeoutAfter?.let { builder.setTimeoutAfter(it) }
-        filteredBuilder.setSmallIcon(data.smallIcon)
-            .setLargeIcon(data.largeIcon)
-            .setContentIntent(data.contentIntent)
-            .setAutoCancel(data.autoCancel)
-            .setPriority(data.priority)
     }
 
     fun applyExtras(extras: ExtraData, builder: NotificationCompat.Builder) {
@@ -178,6 +189,35 @@ internal object AssignContent {
     fun applyProgress(progressData: ProgressData, builder: NotificationCompat.Builder) {
         if (progressData.hide) builder.setProgress(0, 0, false)
         else builder.setProgress(100, progressData.currentValue, progressData.indeterminate)
+    }
+
+    private fun callTypeFilter(
+        context: Context,
+        data: Data.CallData
+    ): NotificationCompat.CallStyle {
+        val caller = data.caller ?: Data.CallData.defaultCaller(context)
+        val declineOrHangup = data.declineOrHangup ?: Data.CallData.defaultDeclineOrHangup(context)
+        return when (data.type.lowercase()) {
+            "incoming" -> NotificationCompat.CallStyle.forIncomingCall(
+                caller,
+                declineOrHangup,
+                data.answer ?: Data.CallData.defaultAnswer(context)
+            )
+
+            "ongoing" -> NotificationCompat.CallStyle.forOngoingCall(caller, declineOrHangup)
+
+            "screening" -> NotificationCompat.CallStyle.forScreeningCall(
+                caller,
+                declineOrHangup,
+                data.answer ?: Data.CallData.defaultAnswer(context)
+            )
+
+            else -> NotificationCompat.CallStyle.forIncomingCall(
+                caller,
+                declineOrHangup,
+                data.answer ?: Data.CallData.defaultAnswer(context)
+            )
+        }
     }
 
 }
