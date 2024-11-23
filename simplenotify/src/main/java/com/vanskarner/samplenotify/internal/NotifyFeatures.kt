@@ -79,8 +79,8 @@ internal object NotifyFeatures {
         val isValid = notifications.size + 1 >= initialAmount
         return if (isValid) {
             val groupId = stackableData.id ?: Random.nextInt(
-                RANGE_GROUP_NOTIFICATIONS.first,
-                RANGE_GROUP_NOTIFICATIONS.second
+                RANGE_GROUP_NOTIFICATION.first,
+                RANGE_GROUP_NOTIFICATION.second
             )
             val groupNotification = NotificationCompat
                 .Builder(context, notifyChannel.applyDefaultChannel(context))

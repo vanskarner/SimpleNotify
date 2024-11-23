@@ -60,8 +60,13 @@ internal class NotifyGenerator(
     fun selectChannelId(): String {
         return when {
             data is Data.CallData -> notifyChannel.applyCallChannel(context)
-            hasNoProgress() && channelNotExists() -> notifyChannel.applyDefaultChannel(context)
-            hasProgress() && channelNotExists() -> notifyChannel.applyProgressChannel(context)
+
+            progressData == null && notifyChannel.checkChannelNotExists(context, channelId) ->
+                notifyChannel.applyDefaultChannel(context)
+
+            progressData != null && notifyChannel.checkChannelNotExists(context, channelId) ->
+                notifyChannel.applyProgressChannel(context)
+
             else -> channelId ?: notifyChannel.applyDefaultChannel(context)
         }
     }
@@ -76,20 +81,9 @@ internal class NotifyGenerator(
     }
 
     private fun generateNotificationId(): Int {
-        return if (hasProgress() && data.id == null) DEFAULT_PROGRESS_NOTIFICATION_ID
-        else data.id ?: Random.nextInt(RANGE_NOTIFICATIONS.first, RANGE_NOTIFICATIONS.second)
+        return if (progressData != null && data.id == null) DEFAULT_PROGRESS_NOTIFICATION_ID
+        else data.id ?: Random.nextInt(RANGE_NOTIFICATION.first, RANGE_NOTIFICATION.second)
     }
-
-    private fun channelNotExists(): Boolean {
-        if (channelId != null) {
-            return notifyChannel.checkChannelNotExists(context, channelId)
-        }
-        return true
-    }
-
-    private fun hasProgress() = progressData != null
-
-    private fun hasNoProgress() = progressData == null
 
     private fun applyActions(builder: NotificationCompat.Builder) {
         actions

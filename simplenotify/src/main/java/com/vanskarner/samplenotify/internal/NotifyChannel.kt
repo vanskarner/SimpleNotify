@@ -45,7 +45,8 @@ internal object NotifyChannel {
         return DEFAULT_CALL_CHANNEL_ID
     }
 
-    fun checkChannelNotExists(context: Context, channelId: String): Boolean {
+    fun checkChannelNotExists(context: Context, channelId: String?): Boolean {
+        if (channelId.isNullOrEmpty()) return true
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val manager = getManager(context)
             return manager.getNotificationChannel(channelId) == null
