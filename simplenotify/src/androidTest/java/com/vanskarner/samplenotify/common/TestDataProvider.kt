@@ -32,7 +32,6 @@ class TestDataProvider {
                 text = "Any text"
                 smallIcon = R.drawable.test_ic_notification_24
                 largeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
-                priority = NotificationCompat.PRIORITY_DEFAULT
                 contentIntent = pendingIntent
                 autoCancel = true
                 timeoutAfter = 5000
@@ -49,7 +48,6 @@ class TestDataProvider {
                 summaryText = "Any summary"
                 smallIcon = R.drawable.test_ic_notification_24
                 largeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
-                priority = NotificationCompat.PRIORITY_DEFAULT
                 contentIntent = pendingIntent
                 autoCancel = true
                 timeoutAfter = 5000
@@ -66,7 +64,6 @@ class TestDataProvider {
                 text = "Any summary"
                 smallIcon = R.drawable.test_ic_notification_24
                 largeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
-                priority = NotificationCompat.PRIORITY_HIGH
                 contentIntent = pendingIntent
                 autoCancel = true
                 timeoutAfter = 5000
@@ -83,7 +80,6 @@ class TestDataProvider {
                 image = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
                 smallIcon = R.drawable.test_ic_notification_24
                 largeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
-                priority = NotificationCompat.PRIORITY_HIGH
                 contentIntent = pendingIntent
                 autoCancel = true
                 timeoutAfter = 5000
@@ -131,7 +127,6 @@ class TestDataProvider {
                 addShortcutIfNotExists = false
                 smallIcon = R.drawable.test_ic_notification_24
                 largeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
-                priority = NotificationCompat.PRIORITY_HIGH
                 contentIntent = pendingIntent
                 autoCancel = true
                 timeoutAfter = 5000
@@ -181,7 +176,6 @@ class TestDataProvider {
                 addShortcutIfNotExists = false
                 smallIcon = R.drawable.test_ic_notification_24
                 largeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
-                priority = NotificationCompat.PRIORITY_HIGH
                 contentIntent = pendingIntent
                 autoCancel = true
                 timeoutAfter = 5000
@@ -198,7 +192,6 @@ class TestDataProvider {
                 declineOrHangup = pendingIntent()
                 smallIcon = R.drawable.test_ic_notification_24
                 largeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
-                priority = NotificationCompat.PRIORITY_DEFAULT
                 contentIntent = pendingIntent
                 autoCancel = true
                 timeoutAfter = 5000
@@ -223,7 +216,6 @@ class TestDataProvider {
                 smallIcon = R.drawable.test_ic_notification_24
                 contentIntent = pendingIntent()
                 autoCancel = true
-                priority = NotificationCompat.PRIORITY_HIGH
                 largeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
                 timeoutAfter = 5000
             }
@@ -231,6 +223,7 @@ class TestDataProvider {
         }
 
         fun extraData() = ExtraData(
+            priority = NotificationCompat.PRIORITY_HIGH,
             category = NotificationCompat.CATEGORY_MESSAGE,
             visibility = NotificationCompat.VISIBILITY_PRIVATE,
 //        vibrationPattern = longArrayOf(0, 500, 1000, 500),

@@ -58,7 +58,6 @@ class NotifyConfigTest {
             title = "Test Title"
             text = "Test Text"
             largeIcon = expectedLargeIcon
-            priority = NotificationCompat.PRIORITY_HIGH
             contentIntent = expectedPendingIntent
             autoCancel = false
         }
@@ -71,7 +70,6 @@ class NotifyConfigTest {
         assertEquals("Test Title", actualBasicData.title)
         assertEquals("Test Text", actualBasicData.text)
         assertTrue(actualBasicData.largeIcon?.sameAs(expectedLargeIcon)!!)
-        assertEquals(NotificationCompat.PRIORITY_HIGH, actualBasicData.priority)
         assertEquals(expectedPendingIntent, actualBasicData.contentIntent)
         assertEquals(false, actualBasicData.autoCancel)
     }
@@ -88,7 +86,6 @@ class NotifyConfigTest {
             text = "Contrary to popular belief"
             summaryText = "Lorem Ipsum is not simply random text"
             largeIcon = expectedLargeIcon
-            priority = NotificationCompat.PRIORITY_HIGH
             contentIntent = expectedPendingIntent
             autoCancel = false
         }
@@ -103,7 +100,6 @@ class NotifyConfigTest {
         assertEquals("Contrary to popular belief", actualBigTextData.text)
         assertEquals("Lorem Ipsum is not simply random text", actualBigTextData.summaryText)
         assertTrue(actualBigTextData.largeIcon?.sameAs(expectedLargeIcon)!!)
-        assertEquals(NotificationCompat.PRIORITY_HIGH, actualBigTextData.priority)
         assertEquals(expectedPendingIntent, actualBigTextData.contentIntent)
         assertEquals(false, actualBigTextData.autoCancel)
     }
@@ -120,7 +116,6 @@ class NotifyConfigTest {
             text = "Lorem Ipsum is not simply random text"
             lines = expectedLines
             largeIcon = expectedLargeIcon
-            priority = NotificationCompat.PRIORITY_HIGH
             contentIntent = expectedPendingIntent
             autoCancel = false
         }
@@ -134,7 +129,6 @@ class NotifyConfigTest {
         assertEquals("Lorem Ipsum is not simply random text", actualInboxData.text)
         assertEquals(expectedLines, actualInboxData.lines)
         assertTrue(actualInboxData.largeIcon?.sameAs(expectedLargeIcon)!!)
-        assertEquals(NotificationCompat.PRIORITY_HIGH, actualInboxData.priority)
         assertEquals(expectedPendingIntent, actualInboxData.contentIntent)
         assertEquals(false, actualInboxData.autoCancel)
     }
@@ -152,7 +146,6 @@ class NotifyConfigTest {
             summaryText = "Lorem Ipsum is not simply..."
             image = expectedImage
             largeIcon = expectedLargeIcon
-            priority = NotificationCompat.PRIORITY_HIGH
             contentIntent = expectedPendingIntent
             autoCancel = false
         }
@@ -167,7 +160,6 @@ class NotifyConfigTest {
         assertEquals("Lorem Ipsum is not simply...", actualBigPictureData.summaryText)
         assertTrue(actualBigPictureData.image?.sameAs(expectedImage)!!)
         assertTrue(actualBigPictureData.largeIcon?.sameAs(expectedLargeIcon)!!)
-        assertEquals(NotificationCompat.PRIORITY_HIGH, actualBigPictureData.priority)
         assertEquals(expectedPendingIntent, actualBigPictureData.contentIntent)
         assertEquals(false, actualBigPictureData.autoCancel)
     }
@@ -189,7 +181,6 @@ class NotifyConfigTest {
             contact = expectedContact
             messages = expectedMessage
             largeIcon = expectedLargeIcon
-            priority = NotificationCompat.PRIORITY_HIGH
             contentIntent = expectedPendingIntent
             autoCancel = false
         }
@@ -203,7 +194,6 @@ class NotifyConfigTest {
         assertEquals(expectedContact, actualDuoMessageData.contact)
         assertEquals(expectedMessage, actualDuoMessageData.messages)
         assertTrue(actualDuoMessageData.largeIcon?.sameAs(expectedLargeIcon)!!)
-        assertEquals(NotificationCompat.PRIORITY_HIGH, actualDuoMessageData.priority)
         assertEquals(expectedPendingIntent, actualDuoMessageData.contentIntent)
         assertEquals(false, actualDuoMessageData.autoCancel)
     }
@@ -236,7 +226,6 @@ class NotifyConfigTest {
             you = expectedUser
             messages = expectedMessage
             largeIcon = expectedLargeIcon
-            priority = NotificationCompat.PRIORITY_HIGH
             contentIntent = expectedPendingIntent
             autoCancel = false
         }
@@ -250,7 +239,6 @@ class NotifyConfigTest {
         assertEquals(expectedUser, actualDuoMessageData.you)
         assertEquals(expectedMessage.size, actualDuoMessageData.messages.size)
         assertTrue(actualDuoMessageData.largeIcon?.sameAs(expectedLargeIcon)!!)
-        assertEquals(NotificationCompat.PRIORITY_HIGH, actualDuoMessageData.priority)
         assertEquals(expectedPendingIntent, actualDuoMessageData.contentIntent)
         assertEquals(false, actualDuoMessageData.autoCancel)
     }

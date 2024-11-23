@@ -6,7 +6,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.widget.RemoteViews
-import androidx.core.app.NotificationCompat
+import androidx.annotation.DrawableRes
 import androidx.core.app.NotificationCompat.BubbleMetadata
 import androidx.core.app.Person
 import androidx.core.app.RemoteInput
@@ -16,11 +16,10 @@ import com.vanskarner.simplenotify.R
 
 sealed class Data {
     var id: Int? = null
-    var smallIcon: Int = R.drawable.baseline_notifications_24
+    @DrawableRes var smallIcon: Int = R.drawable.baseline_notifications_24
     var largeIcon: Bitmap? = null
     var contentIntent: PendingIntent? = null
     var autoCancel: Boolean = true
-    var priority: Int = NotificationCompat.PRIORITY_DEFAULT
     var timeoutAfter: Long? = null
 
     data class BasicData(
@@ -93,7 +92,7 @@ sealed class Data {
                 )
             }
 
-            fun defaultSecondCaller(context: Context): Person {
+            internal fun defaultSecondCaller(context: Context): Person {
                 return Person.Builder()
                     .setName("You")
                     .setIcon(IconCompat.createWithResource(context,R.drawable.notify_user_48))
@@ -101,7 +100,7 @@ sealed class Data {
                     .build()
             }
 
-            fun defaultCaller(context: Context): Person {
+            internal fun defaultCaller(context: Context): Person {
                 return Person.Builder()
                     .setName("Someone")
                     .setIcon(IconCompat.createWithResource(context,R.drawable.notify_user_48))
@@ -119,6 +118,7 @@ sealed class Data {
 
 @Suppress("ArrayInDataClass")
 data class ExtraData(
+    var priority: Int? = null,
     var category: String? = null,
     var visibility: Int? = null,
     var ongoing: Boolean? = null,
@@ -161,7 +161,7 @@ data class ProgressData(
 
 data class StackableData(
     var id: Int? = null,
-    var smallIcon: Int? = R.drawable.baseline_notifications_24,
+    @DrawableRes var smallIcon: Int? = R.drawable.baseline_notifications_24,
     var title: String? = null,
     var summaryText: String = "Summary Group",
     var initialAmount: Int = 3

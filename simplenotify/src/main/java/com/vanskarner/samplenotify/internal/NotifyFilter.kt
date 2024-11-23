@@ -85,6 +85,7 @@ object NotifyFilter {
                 builder.setStyle(style)
                     .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                     .addPerson(data.contact)
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
             }
 
             is Data.GroupMessageData -> {
@@ -122,6 +123,7 @@ object NotifyFilter {
                 }
                 builder.setStyle(style)
                     .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
             }
 
             is Data.CallData -> {

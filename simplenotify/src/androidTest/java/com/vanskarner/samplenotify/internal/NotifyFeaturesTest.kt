@@ -41,6 +41,7 @@ class NotifyFeaturesTest {
             actualExtras.getCharSequenceArray(NotificationCompat.EXTRA_REMOTE_INPUT_HISTORY)
         val actualGroupKey = notification.group
 
+        assertEquals(expectedExtraData.priority, notification.priority)
         assertEquals(expectedExtraData.category, notification.category)
         assertEquals(expectedExtraData.visibility, notification.visibility)
         assertEquals(expectedExtraData.ongoing, actualOngoing)

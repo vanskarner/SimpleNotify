@@ -14,6 +14,7 @@ import kotlin.random.Random
 internal object NotifyFeatures {
 
     fun applyExtras(extras: ExtraData, builder: NotificationCompat.Builder) {
+        extras.priority?.let { builder.setPriority(it) }
         extras.category?.let { builder.setCategory(it) }
         extras.subText?.let { builder.setSubText(it) }
         extras.deleteIntent?.let { builder.setDeleteIntent(it) }
