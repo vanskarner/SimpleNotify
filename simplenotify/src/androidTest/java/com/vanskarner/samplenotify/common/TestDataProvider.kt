@@ -192,16 +192,16 @@ class TestDataProvider {
         fun callData(): Data.CallData {
             val pendingIntent = pendingIntent()
             return Data.CallData().apply {
+                type = "incoming"
+                caller = Person.Builder().setName("Max").build()
+                answer = pendingIntent()
+                declineOrHangup = pendingIntent()
                 smallIcon = R.drawable.test_ic_notification_24
                 largeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
                 priority = NotificationCompat.PRIORITY_DEFAULT
                 contentIntent = pendingIntent
                 autoCancel = true
                 timeoutAfter = 5000
-                type = "incoming"
-                caller = Person.Builder().setName("Max").build()
-                answer = pendingIntent()
-                declineOrHangup = pendingIntent()
             }
         }
 
