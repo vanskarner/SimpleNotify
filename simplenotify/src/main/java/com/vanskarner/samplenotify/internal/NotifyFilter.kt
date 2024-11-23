@@ -6,13 +6,10 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.MessagingStyle.Message
 import androidx.core.app.Person
 import androidx.core.content.pm.ShortcutManagerCompat
-import com.vanskarner.samplenotify.ActionData
 import com.vanskarner.samplenotify.Data
-import com.vanskarner.samplenotify.ExtraData
 import com.vanskarner.samplenotify.NotifyMessaging
-import com.vanskarner.samplenotify.ProgressData
 
-internal object AssignContent {
+object NotifyFilter {
 
     fun applyData(context: Context, data: Data, builder: NotificationCompat.Builder) {
         data.timeoutAfter?.let { builder.setTimeoutAfter(it) }
@@ -143,52 +140,6 @@ internal object AssignContent {
                     .setCustomBigContentView(data.largeRemoteViews.invoke())
             }
         }
-    }
-
-    fun applyExtras(extras: ExtraData, builder: NotificationCompat.Builder) {
-        extras.category?.let { builder.setCategory(it) }
-        extras.subText?.let { builder.setSubText(it) }
-        extras.deleteIntent?.let { builder.setDeleteIntent(it) }
-        extras.visibility?.let { builder.setVisibility(it) }
-        extras.ongoing?.let { builder.setOngoing(it) }
-        extras.color?.let { builder.setColor(it) }
-        extras.timestampWhen?.let { builder.setWhen(it) }
-        extras.fullScreenIntent?.let { builder.setFullScreenIntent(it.first, it.second) }
-        extras.onlyAlertOnce?.let { builder.setOnlyAlertOnce(it) }
-        extras.showWhen?.let { builder.setShowWhen(it) }
-        extras.useChronometer?.let { builder.setUsesChronometer(it) }
-        extras.shortCutId?.let { builder.setShortcutId(it) }
-        extras.badgeNumber?.let { builder.setNumber(it) }
-        extras.badgeIconType?.let { builder.setBadgeIconType(it) }
-        extras.allowSystemGeneratedContextualActions?.let {
-            builder.setAllowSystemGeneratedContextualActions(it)
-        }
-        extras.remoteInputHistory?.let { builder.setRemoteInputHistory(it) }
-        extras.groupKey?.let { builder.setGroup(it) }
-    }
-
-    fun applyAction(actionData: ActionData, builder: NotificationCompat.Builder) {
-        when (actionData) {
-            is ActionData.BasicAction -> {
-                builder.addAction(actionData.icon, actionData.label, actionData.pending)
-            }
-
-            is ActionData.ReplyAction -> {
-                val builderAction = NotificationCompat.Action.Builder(
-                    actionData.icon,
-                    actionData.label,
-                    actionData.replyPending
-                )
-                    .addRemoteInput(actionData.remote)
-                    .setAllowGeneratedReplies(actionData.allowGeneratedReplies)
-                builder.addAction(builderAction.build())
-            }
-        }
-    }
-
-    fun applyProgress(progressData: ProgressData, builder: NotificationCompat.Builder) {
-        if (progressData.hide) builder.setProgress(0, 0, false)
-        else builder.setProgress(100, progressData.currentValue, progressData.indeterminate)
     }
 
     private fun callTypeFilter(
