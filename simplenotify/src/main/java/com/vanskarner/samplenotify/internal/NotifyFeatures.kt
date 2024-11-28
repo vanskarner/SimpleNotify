@@ -75,7 +75,7 @@ internal object NotifyFeatures {
             .filter { it.groupKey.contains(groupKey) }
             .sortedByDescending { it.postTime }
             .map { Pair(it.id, it.notification) }
-        val initialAmount = if (stackable.initialAmount > 1) 1 else stackable.initialAmount
+        val initialAmount = if (stackable.initialAmount < 1) 1 else stackable.initialAmount
         val isValid = notifications.size + 1 >= initialAmount
         return if (isValid) {
             val groupId = stackableData.id ?: Random.nextInt(

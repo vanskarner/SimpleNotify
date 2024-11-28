@@ -57,9 +57,10 @@ internal class NotifyGenerator(
         return Pair(notificationId, notification)
     }
 
-    fun selectChannelId(): String {
+    private fun selectChannelId(): String {
         return when {
-            data is Data.CallData -> notifyChannel.applyCallChannel(context)
+            data is Data.CallData && notifyChannel.checkChannelNotExists(context, channelId) ->
+                notifyChannel.applyCallChannel(context)
 
             progressData == null && notifyChannel.checkChannelNotExists(context, channelId) ->
                 notifyChannel.applyDefaultChannel(context)

@@ -86,16 +86,18 @@ class NotifyConfig(private val context: Context) {
         return this
     }
 
-    fun generateNotificationPair(): Pair<Int, NotificationCompat.Builder> {
-        return NotifyGenerator(
-            context = context,
-            data = data ?: Data.BasicData(),
-            extra = extras,
-            actions = actions,
-            stackableData = stackableData,
-            channelId = channelId,
-            progressData = progressData
-        ).generateNotificationWithId()
+    fun generateNotificationPair(): Pair<Int, NotificationCompat.Builder?> {
+        return data?.let {
+            NotifyGenerator(
+                context = context,
+                data = data ?: Data.BasicData(),
+                extra = extras,
+                actions = actions,
+                stackableData = stackableData,
+                channelId = channelId,
+                progressData = progressData
+            ).generateNotificationWithId()
+        } ?: Pair(INVALID_NOTIFICATION_ID, null)
     }
 
     fun show(): Pair<Int, Int> {

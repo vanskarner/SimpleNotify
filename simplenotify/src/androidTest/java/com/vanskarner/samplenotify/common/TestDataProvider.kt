@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.os.Build
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
@@ -20,16 +21,31 @@ import com.vanskarner.samplenotify.Data
 import com.vanskarner.samplenotify.ExtraData
 import com.vanskarner.samplenotify.NotifyMessaging
 import com.vanskarner.samplenotify.ProgressData
+import com.vanskarner.samplenotify.StackableData
 import com.vanskarner.simplenotify.test.R
 
 class TestDataProvider {
 
     companion object {
+        fun createChannel(manager: NotificationManager): String {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                //Channels available from API 26
+                val expectedChannel = NotificationChannel(
+                    "testId",
+                    "Test Channel",
+                    NotificationManager.IMPORTANCE_DEFAULT
+                )
+                manager.createNotificationChannel(expectedChannel)
+                return expectedChannel.id
+            }
+            return ""
+        }
+
         fun basicData(): Data.BasicData {
             val pendingIntent = pendingIntent()
             val basicData = Data.BasicData().apply {
-                title = "Any title"
-                text = "Any text"
+                title = "Basic Style"
+                text = "Text for Basic"
                 smallIcon = R.drawable.test_ic_notification_24
                 largeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
                 contentIntent = pendingIntent
@@ -42,10 +58,10 @@ class TestDataProvider {
         fun bigTextData(): Data.BigTextData {
             val pendingIntent = pendingIntent()
             val data = Data.BigTextData().apply {
-                title = "Any title"
-                bigText = "Any text"
-                text = "Any collapsedText"
-                summaryText = "Any summary"
+                title = "BigText Style"
+                bigText = "BigText"
+                text = "Text for BigText"
+                summaryText = "Summary for BigText"
                 smallIcon = R.drawable.test_ic_notification_24
                 largeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
                 contentIntent = pendingIntent
@@ -58,10 +74,9 @@ class TestDataProvider {
         fun inboxData(): Data.InboxData {
             val pendingIntent = pendingIntent()
             val data = Data.InboxData().apply {
-                title = "Any title"
-                text = "Any text"
+                title = "Inbox Style"
+                text = "Text for Inbox"
                 lines = arrayListOf("Any line 1", "Any line 2", "Any line 3")
-                text = "Any summary"
                 smallIcon = R.drawable.test_ic_notification_24
                 largeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
                 contentIntent = pendingIntent
@@ -74,9 +89,9 @@ class TestDataProvider {
         fun bigPictureData(): Data.BigPictureData {
             val pendingIntent = pendingIntent()
             val data = Data.BigPictureData().apply {
-                title = "Any title"
-                text = "Any collapsedText"
-                summaryText = "Any text"
+                title = "BigPicture Style"
+                text = "Text for BigPicture"
+                summaryText = "Summary for BigPicture"
                 image = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
                 smallIcon = R.drawable.test_ic_notification_24
                 largeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
@@ -171,7 +186,6 @@ class TestDataProvider {
                     .setIntent(Intent().setAction(Intent.ACTION_VIEW))
                     .setShortLabel(conversationTitle!!)
                     .setIcon(groupIcon)
-//                        .setPerson(contact)
                     .build()
                 addShortcutIfNotExists = false
                 smallIcon = R.drawable.test_ic_notification_24
@@ -226,12 +240,8 @@ class TestDataProvider {
             priority = NotificationCompat.PRIORITY_HIGH,
             category = NotificationCompat.CATEGORY_MESSAGE,
             visibility = NotificationCompat.VISIBILITY_PRIVATE,
-//        vibrationPattern = longArrayOf(0, 500, 1000, 500),
-//        lights = Triple(Color.GREEN, 1000, 1000),
             ongoing = true,
             color = Color.GRAY,
-//        timeoutAfter = 1000,
-//        badgeIconType = 12,
             timestampWhen = 1500,
             deleteIntent = pendingIntent(),
             fullScreenIntent = Pair(pendingIntent(), true),
@@ -249,8 +259,8 @@ class TestDataProvider {
 
         fun basicAction(): ActionData.BasicAction {
             return ActionData.BasicAction().apply {
-                icon = R.drawable.test_ic_mail_24
-                label = "Any Label"
+                icon = R.drawable.test_ic_archive_24
+                label = "Action1"
                 pending = pendingIntent()
             }
         }
@@ -258,9 +268,9 @@ class TestDataProvider {
         fun replyAction(): ActionData.ReplyAction {
             return ActionData.ReplyAction().apply {
                 icon = R.drawable.test_ic_mail_24
-                label = "Any Label"
+                label = "ReplyAction1"
                 replyPending = pendingIntent()
-                remote = RemoteInput.Builder("any_key").build()
+                remote = RemoteInput.Builder("ANY_KEY").build()
                 allowGeneratedReplies = true
             }
         }
@@ -282,20 +292,24 @@ class TestDataProvider {
             }
         }
 
+        fun stackableData(): StackableData {
+            return StackableData().apply {
+                smallIcon = R.drawable.test_ic_notification_24
+                title = "My Group Summary"
+                summaryText = "Any description"
+                initialAmount = 4
+            }
+        }
+
         fun pendingIntent(): PendingIntent {
+            val flags =
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_MUTABLE
+                else PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             return PendingIntent.getBroadcast(
                 ApplicationProvider.getApplicationContext(),
                 123,
                 Intent(),
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-            )
-        }
-
-        fun notificationChannel(): NotificationChannel {
-            return NotificationChannel(
-                "testId",
-                "Test Channel",
-                NotificationManager.IMPORTANCE_DEFAULT
+                flags
             )
         }
 
