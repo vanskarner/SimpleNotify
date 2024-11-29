@@ -30,7 +30,7 @@ internal class NotifyGenerator(
     fun show(): Pair<Int, Int> {
         val notificationPair = generateNotificationWithId()
         val currentNotification = Pair(notificationPair.first, notificationPair.second.build())
-        val notificationList = NotifyFeatures.getGroupStackable(
+        val notificationList = notifyFeatures.getGroupStackable(
             context,
             stackableData,
             extra,
@@ -63,25 +63,25 @@ internal class NotifyGenerator(
 
     private fun selectChannelId(): String {
         return when {
-            data is Data.CallData && NotifyChannel.checkChannelNotExists(context, channelId) ->
-                NotifyChannel.applyCallChannel(context)
+            data is Data.CallData && notifyChannel.checkChannelNotExists(context, channelId) ->
+                notifyChannel.applyCallChannel(context)
 
-            progressData == null && NotifyChannel.checkChannelNotExists(context, channelId) ->
-                NotifyChannel.applyDefaultChannel(context)
+            progressData == null && notifyChannel.checkChannelNotExists(context, channelId) ->
+                notifyChannel.applyDefaultChannel(context)
 
-            progressData != null && NotifyChannel.checkChannelNotExists(context, channelId) ->
-                NotifyChannel.applyProgressChannel(context)
+            progressData != null && notifyChannel.checkChannelNotExists(context, channelId) ->
+                notifyChannel.applyProgressChannel(context)
 
-            else -> channelId ?: NotifyChannel.applyDefaultChannel(context)
+            else -> channelId ?: notifyChannel.applyDefaultChannel(context)
         }
     }
 
     private fun createNotification(): NotificationCompat.Builder {
         return NotificationCompat.Builder(context, selectChannelId()).apply {
-            NotifyFilter.applyData(context, data, this)
-            NotifyFeatures.applyExtras(extra, this)
+            notifyFilter.applyData(context, data, this)
+            notifyFeatures.applyExtras(extra, this)
             applyActions(this)
-            progressData?.let { progress -> NotifyFeatures.applyProgress(progress, this) }
+            progressData?.let { progress -> notifyFeatures.applyProgress(progress, this) }
         }
     }
 
@@ -94,7 +94,7 @@ internal class NotifyGenerator(
         actions
             .takeLast(MAXIMUM_ACTIONS)
             .filterNotNull()
-            .forEach { NotifyFeatures.applyAction(it, builder) }
+            .forEach { notifyFeatures.applyAction(it, builder) }
     }
 
 }

@@ -12,7 +12,6 @@ import com.vanskarner.simplenotify.common.assertCommonData
 import com.vanskarner.simplenotify.common.assertNotificationMessages
 import com.vanskarner.simplenotify.common.assertNotificationPriority
 import com.vanskarner.simplenotify.common.getCustomParcelable
-import com.vanskarner.simplenotify.internal.NotifyFilter
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue

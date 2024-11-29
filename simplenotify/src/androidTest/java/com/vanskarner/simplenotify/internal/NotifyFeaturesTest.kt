@@ -13,8 +13,6 @@ import com.vanskarner.simplenotify.common.ConditionalPermissionRule
 import com.vanskarner.simplenotify.common.TestDataProvider
 import com.vanskarner.simplenotify.common.assertNotificationPriority
 import com.vanskarner.simplenotify.common.waitForAllNotificationsPresents
-import com.vanskarner.simplenotify.internal.NotifyChannel
-import com.vanskarner.simplenotify.internal.NotifyFeatures
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.*
 import org.junit.Before
@@ -25,7 +23,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class NotifyFeaturesTest {
     private lateinit var builder: NotificationCompat.Builder
-    private lateinit var assignContent: NotifyFeatures
+    private lateinit var notifyFeatures: NotifyFeatures
     private lateinit var appContext: Context
 
     @get:Rule
@@ -38,13 +36,13 @@ class NotifyFeaturesTest {
     fun setUp() {
         appContext = ApplicationProvider.getApplicationContext()
         builder = NotificationCompat.Builder(appContext, "test_channel")
-        assignContent = NotifyFeatures
+        notifyFeatures = NotifyFeatures
     }
 
     @Test
     fun applyExtras_apply() {
         val expectedExtraData = TestDataProvider.extraData()
-        assignContent.applyExtras(expectedExtraData, builder)
+        notifyFeatures.applyExtras(expectedExtraData, builder)
         val actualNotification = builder.build()
         val expectedPriority = expectedExtraData.priority ?: -666
         val actualExtras = actualNotification.extras
@@ -95,8 +93,8 @@ class NotifyFeaturesTest {
     fun applyAction_apply() {
         val expectedBasicAction = TestDataProvider.basicAction()
         val expectedReplyAction = TestDataProvider.replyAction()
-        assignContent.applyAction(expectedBasicAction, builder)
-        assignContent.applyAction(expectedReplyAction, builder)
+        notifyFeatures.applyAction(expectedBasicAction, builder)
+        notifyFeatures.applyAction(expectedReplyAction, builder)
         val actualNotification = builder.build()
         val actualActions = actualNotification.actions
 
@@ -117,7 +115,7 @@ class NotifyFeaturesTest {
     @Test
     fun applyProgress_whenIsNotHide_apply() {
         val progressData = TestDataProvider.progressData(false)
-        assignContent.applyProgress(progressData, builder)
+        notifyFeatures.applyProgress(progressData, builder)
         val notification = builder.build()
         val actualExtras = notification.extras
         val actualProgress = actualExtras.getInt(NotificationCompat.EXTRA_PROGRESS)
@@ -131,7 +129,7 @@ class NotifyFeaturesTest {
     @Test
     fun applyProgress_whenIsHide_apply() {
         val progressData = TestDataProvider.progressData(true)
-        assignContent.applyProgress(progressData, builder)
+        notifyFeatures.applyProgress(progressData, builder)
         val notification = builder.build()
         val actualExtras = notification.extras
         val actualProgress = actualExtras.getInt(NotificationCompat.EXTRA_PROGRESS)
@@ -147,7 +145,7 @@ class NotifyFeaturesTest {
         val stackableData = TestDataProvider.stackableData()
         val extraData = TestDataProvider.extraData()
         val notifyChannel = NotifyChannel
-        val groupStackable = assignContent
+        val groupStackable = notifyFeatures
             .getGroupStackable(appContext, stackableData, extraData, notifyChannel)
 
         assertTrue(groupStackable.isEmpty())
@@ -161,7 +159,7 @@ class NotifyFeaturesTest {
         stackableData.initialAmount = 3
         extraData.groupKey = "Test_Group_Key"
         waitForActiveNotificationsGroup(extraData.groupKey!!, stackableData.initialAmount)
-        val groupStackable = assignContent
+        val groupStackable = notifyFeatures
             .getGroupStackable(appContext, stackableData, extraData, notifyChannel)
         val groupNotification = groupStackable.last().second
         val actualGroupTitle = groupNotification.extras.getString(NotificationCompat.EXTRA_TITLE)

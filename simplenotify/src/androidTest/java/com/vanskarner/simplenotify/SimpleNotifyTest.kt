@@ -13,7 +13,6 @@ import com.vanskarner.simplenotify.common.assertNotificationChannelId
 import com.vanskarner.simplenotify.common.waitForNotification
 import com.vanskarner.simplenotify.common.waitNotificationDisappear
 import com.vanskarner.simplenotify.internal.DEFAULT_CHANNEL_ID
-import com.vanskarner.simplenotify.SimpleNotify
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals

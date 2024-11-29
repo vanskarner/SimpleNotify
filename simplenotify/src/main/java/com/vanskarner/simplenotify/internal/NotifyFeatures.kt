@@ -83,7 +83,7 @@ internal object NotifyFeatures {
                 RANGE_GROUP_NOTIFICATION.second
             )
             val groupNotification = NotificationCompat
-                .Builder(context, NotifyChannel.applyDefaultChannel(context))
+                .Builder(context, notifyChannel.applyDefaultChannel(context))
                 .setStyle(NotificationCompat.InboxStyle().setSummaryText(stackable.summaryText))
                 .setGroup(groupKey)
                 .setGroupSummary(true)

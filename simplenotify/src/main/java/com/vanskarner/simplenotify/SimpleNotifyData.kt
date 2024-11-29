@@ -12,7 +12,6 @@ import androidx.core.app.Person
 import androidx.core.app.RemoteInput
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.graphics.drawable.IconCompat
-import com.vanskarner.simplenotify.R
 
 sealed class Data {
     var id: Int? = null

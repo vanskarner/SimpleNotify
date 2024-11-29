@@ -14,11 +14,6 @@ import com.vanskarner.simplenotify.common.ConditionalPermissionRule
 import com.vanskarner.simplenotify.common.TestDataProvider
 import com.vanskarner.simplenotify.common.assertNotificationChannelId
 import com.vanskarner.simplenotify.common.waitForNotification
-import com.vanskarner.simplenotify.internal.DEFAULT_CALL_CHANNEL_ID
-import com.vanskarner.simplenotify.internal.DEFAULT_CHANNEL_ID
-import com.vanskarner.simplenotify.internal.DEFAULT_PROGRESS_CHANNEL_ID
-import com.vanskarner.simplenotify.internal.DEFAULT_PROGRESS_NOTIFICATION_ID
-import com.vanskarner.simplenotify.internal.NotifyGenerator
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals

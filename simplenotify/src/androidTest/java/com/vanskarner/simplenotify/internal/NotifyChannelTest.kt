@@ -12,10 +12,6 @@ import com.vanskarner.simplenotify.common.TestDataProvider
 import com.vanskarner.simplenotify.common.assertChannelIDValidity
 import com.vanskarner.simplenotify.common.waitForNotification
 import com.vanskarner.simplenotify.common.waitNotificationDisappear
-import com.vanskarner.simplenotify.internal.DEFAULT_CALL_CHANNEL_ID
-import com.vanskarner.simplenotify.internal.DEFAULT_CHANNEL_ID
-import com.vanskarner.simplenotify.internal.DEFAULT_PROGRESS_CHANNEL_ID
-import com.vanskarner.simplenotify.internal.NotifyChannel
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals

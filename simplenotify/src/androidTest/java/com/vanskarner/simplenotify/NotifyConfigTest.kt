@@ -13,7 +13,6 @@ import com.vanskarner.simplenotify.common.TestDataProvider
 import com.vanskarner.simplenotify.common.waitForAllNotificationsPresents
 import com.vanskarner.simplenotify.internal.RANGE_GROUP_NOTIFICATION
 import com.vanskarner.simplenotify.internal.RANGE_NOTIFICATION
-import com.vanskarner.simplenotify.NotifyConfig
 import com.vanskarner.simplenotify.test.R
 import kotlinx.coroutines.test.runTest
 import org.junit.After
