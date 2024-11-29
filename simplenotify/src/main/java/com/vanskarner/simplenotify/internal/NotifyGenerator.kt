@@ -1,9 +1,6 @@
 package com.vanskarner.simplenotify.internal
 
-import android.Manifest
 import android.content.Context
-import android.content.pm.PackageManager
-import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.vanskarner.simplenotify.ActionData
@@ -43,14 +40,8 @@ internal class NotifyGenerator(
             notificationList.add(index, currentNotification)
         } else notificationList.add(currentNotification)
         with(NotificationManagerCompat.from(context)) {
-            if (ActivityCompat.checkSelfPermission(
-                    context,
-                    Manifest.permission.POST_NOTIFICATIONS
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                return@with
-            }
-            notificationList.forEach { pair -> notify(pair.first, pair.second) }
+            if (areNotificationsEnabled())
+                notificationList.forEach { pair -> notify(pair.first, pair.second) }
         }
         return Pair(currentNotification.first, groupId)
     }
