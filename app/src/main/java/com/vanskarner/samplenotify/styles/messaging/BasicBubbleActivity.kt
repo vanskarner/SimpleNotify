@@ -6,7 +6,7 @@ import android.widget.ImageButton
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.vanskarner.samplenotify.BaseActivity
-import com.vanskarner.samplenotify.NotifyMessaging
+import com.vanskarner.simplenotify.NotifyMessaging
 import com.vanskarner.samplenotify.R
 
 //This is just a very simple example of the bubble content.

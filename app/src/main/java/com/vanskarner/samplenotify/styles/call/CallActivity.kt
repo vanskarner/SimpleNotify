@@ -11,7 +11,7 @@ import androidx.core.app.Person
 import com.vanskarner.samplenotify.BaseActivity
 import com.vanskarner.samplenotify.CallNotificationService
 import com.vanskarner.samplenotify.R
-import com.vanskarner.samplenotify.SimpleNotify
+import com.vanskarner.simplenotify.SimpleNotify
 
 class CallActivity : BaseActivity() {
     companion object {

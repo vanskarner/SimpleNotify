@@ -15,9 +15,9 @@ import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.net.toUri
 import com.vanskarner.samplenotify.BaseActivity
 import com.vanskarner.samplenotify.MainActivity
-import com.vanskarner.samplenotify.NotifyMessaging
+import com.vanskarner.simplenotify.NotifyMessaging
 import com.vanskarner.samplenotify.R
-import com.vanskarner.samplenotify.SimpleNotify
+import com.vanskarner.simplenotify.SimpleNotify
 
 class MessagingActivity : BaseActivity() {
     companion object {

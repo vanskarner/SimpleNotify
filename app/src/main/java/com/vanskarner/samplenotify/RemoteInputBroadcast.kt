@@ -8,6 +8,7 @@ import android.content.Intent
 import androidx.core.app.RemoteInput
 import com.vanskarner.samplenotify.styles.basic.BasicActivity
 import com.vanskarner.samplenotify.styles.messaging.MessagingActivity
+import com.vanskarner.simplenotify.SimpleNotify
 
 class RemoteInputBroadcast : BroadcastReceiver() {
 

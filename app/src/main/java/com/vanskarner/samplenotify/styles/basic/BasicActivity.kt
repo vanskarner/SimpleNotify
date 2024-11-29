@@ -11,7 +11,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.RemoteInput
 import com.vanskarner.samplenotify.BaseActivity
 import com.vanskarner.samplenotify.R
-import com.vanskarner.samplenotify.SimpleNotify
+import com.vanskarner.simplenotify.SimpleNotify
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
