@@ -72,6 +72,14 @@ class NotifyChannelTest {
     }
 
     @Test
+    fun applyMessagingChannel_accordingToVersionShouldBeCreated() {
+        val actualChannelId = notifyChannel.applyMessagingChannel(context)
+
+        assertChannelIDValidity(actualChannelId)
+        assertEquals(DEFAULT_MESSAGING_CHANNEL_ID, actualChannelId)
+    }
+
+    @Test
     fun checkChannelNotExists_whenNoExist_shouldBeTrue() {
         val channelResult = notifyChannel.checkChannelNotExists(context, "NotExist")
 

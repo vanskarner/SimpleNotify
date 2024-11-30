@@ -121,7 +121,7 @@ class NotifyGeneratorTest {
             actions = emptyArray(),
             stackableData = null
         )
-        notifyGenerator.show()
+        val actualNotificationId = notifyGenerator.show().first
         val actualStatusBarNotification =
             notificationManager.waitForNotification(data.id ?: 0)
         val actualNotification = actualStatusBarNotification.notification
@@ -130,7 +130,7 @@ class NotifyGeneratorTest {
         val actualIndeterminate =
             actualExtras.getBoolean(NotificationCompat.EXTRA_PROGRESS_INDETERMINATE)
 
-        assertEquals(data.id, actualStatusBarNotification.id)
+        assertEquals(data.id, actualNotificationId)
         assertNotificationChannelId(expectedChannelId, actualNotification)
         assertEquals(progressData.currentValue, actualProgress)
         assertEquals(progressData.indeterminate, actualIndeterminate)
@@ -150,7 +150,7 @@ class NotifyGeneratorTest {
             actions = emptyArray(),
             stackableData = null
         )
-        notifyGenerator.show()
+        val actualNotificationId = notifyGenerator.show().first
         val actualStatusBarNotification =
             notificationManager.waitForNotification(data.id ?: 0)
         val actualNotification = actualStatusBarNotification.notification
@@ -159,7 +159,7 @@ class NotifyGeneratorTest {
         val actualIndeterminate =
             actualExtras.getBoolean(NotificationCompat.EXTRA_PROGRESS_INDETERMINATE)
 
-        assertEquals(data.id, actualStatusBarNotification.id)
+        assertEquals(data.id, actualNotificationId)
         assertNotificationChannelId(expectedChannelId, actualNotification)
         assertEquals(0, actualProgress)
         assertEquals(false, actualIndeterminate)
@@ -222,6 +222,96 @@ class NotifyGeneratorTest {
 
         assertEquals(data.id, actualNotificationPair.first)
         assertNotificationChannelId(DEFAULT_CALL_CHANNEL_ID, actualNotificationPair.second)
+    }
+
+    @Test
+    fun show_whenIsDuoMessaging_setDefaultMessagingChannel() = runTest {
+        val data = TestDataProvider.duoMessageData(context, "contact_123")
+        data.id = 6
+        notifyGenerator = NotifyGenerator(
+            context = context,
+            data = data,
+            extra = ExtraData(),
+            progressData = null,
+            channelId = null,
+            actions = emptyArray(),
+            stackableData = null
+        )
+        val actualNotificationId = notifyGenerator.show().first
+        val actualStatusBarNotification =
+            notificationManager.waitForNotification(actualNotificationId)
+        val actualNotification = actualStatusBarNotification.notification
+
+        assertEquals(data.id, actualNotificationId)
+        assertNotificationChannelId(DEFAULT_MESSAGING_CHANNEL_ID, actualNotification)
+    }
+
+    @Test
+    fun show_whenIsDuoMessagingAndHasChannel_useSpecifiedChannel() = runTest {
+        val data = TestDataProvider.duoMessageData(context, "contact_124")
+        val expectedChannelId = TestDataProvider.createChannel(notificationManager)
+        data.id = 7
+        notifyGenerator = NotifyGenerator(
+            context = context,
+            data = data,
+            extra = ExtraData(),
+            progressData = null,
+            channelId = expectedChannelId,
+            actions = emptyArray(),
+            stackableData = null
+        )
+        val actualNotificationId = notifyGenerator.show().first
+        val actualStatusBarNotification =
+            notificationManager.waitForNotification(actualNotificationId)
+        val actualNotification = actualStatusBarNotification.notification
+
+        assertEquals(data.id, actualNotificationId)
+        assertNotificationChannelId(expectedChannelId, actualNotification)
+    }
+
+    @Test
+    fun show_whenIsGroupMessaging_setDefaultMessagingChannel() = runTest {
+        val data = TestDataProvider.groupMessageData(context, "contact_125")
+        data.id = 8
+        notifyGenerator = NotifyGenerator(
+            context = context,
+            data = data,
+            extra = ExtraData(),
+            progressData = null,
+            channelId = null,
+            actions = emptyArray(),
+            stackableData = null
+        )
+        val actualNotificationId = notifyGenerator.show().first
+        val actualStatusBarNotification =
+            notificationManager.waitForNotification(actualNotificationId)
+        val actualNotification = actualStatusBarNotification.notification
+
+        assertEquals(data.id, actualNotificationId)
+        assertNotificationChannelId(DEFAULT_MESSAGING_CHANNEL_ID, actualNotification)
+    }
+
+    @Test
+    fun show_whenIsGroupMessagingAndHasChannel_useSpecifiedChannel() = runTest {
+        val data = TestDataProvider.groupMessageData(context, "contact_126")
+        val expectedChannelId = TestDataProvider.createChannel(notificationManager)
+        data.id = 9
+        notifyGenerator = NotifyGenerator(
+            context = context,
+            data = data,
+            extra = ExtraData(),
+            progressData = null,
+            channelId = expectedChannelId,
+            actions = emptyArray(),
+            stackableData = null
+        )
+        val actualNotificationId = notifyGenerator.show().first
+        val actualStatusBarNotification =
+            notificationManager.waitForNotification(actualNotificationId)
+        val actualNotification = actualStatusBarNotification.notification
+
+        assertEquals(data.id, actualNotificationId)
+        assertNotificationChannelId(expectedChannelId, actualNotification)
     }
 
     @Test

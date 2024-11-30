@@ -16,8 +16,7 @@ import com.vanskarner.simplenotify.common.assertNotificationChannelId
 import com.vanskarner.simplenotify.common.assertNotificationMessages
 import com.vanskarner.simplenotify.common.assertNotificationPriority
 import com.vanskarner.simplenotify.common.waitForNotification
-import com.vanskarner.simplenotify.internal.DEFAULT_CHANNEL_ID
-import com.vanskarner.simplenotify.internal.DEFAULT_PROGRESS_CHANNEL_ID
+import com.vanskarner.simplenotify.internal.DEFAULT_MESSAGING_CHANNEL_ID
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -67,7 +66,7 @@ class DuoMessagingTest {
             notificationManager.waitForNotification(actualNotificationPair.first)
         val actualNotification = actualStatusBarNotification.notification
 
-        assertNotificationChannelId(DEFAULT_CHANNEL_ID, actualNotification)
+        assertNotificationChannelId(DEFAULT_MESSAGING_CHANNEL_ID, actualNotification)
         assertCommonData(expectedData, actualNotification)
     }
 
@@ -93,7 +92,7 @@ class DuoMessagingTest {
         val actualIndeterminate =
             actualExtras.getBoolean(NotificationCompat.EXTRA_PROGRESS_INDETERMINATE)
 
-        assertNotificationChannelId(DEFAULT_PROGRESS_CHANNEL_ID, actualNotification)
+        assertNotificationChannelId(DEFAULT_MESSAGING_CHANNEL_ID, actualNotification)
         assertEquals(expectedProgress, actualProgress)
         assertTrue(actualIndeterminate)
         assertCommonData(expectedData, actualNotification)
@@ -119,7 +118,7 @@ class DuoMessagingTest {
         val actualIndeterminate =
             actualExtras.getBoolean(NotificationCompat.EXTRA_PROGRESS_INDETERMINATE)
 
-        assertNotificationChannelId(DEFAULT_PROGRESS_CHANNEL_ID, actualNotification)
+        assertNotificationChannelId(DEFAULT_MESSAGING_CHANNEL_ID, actualNotification)
         assertEquals(0, actualProgress)
         assertFalse(actualIndeterminate)
         assertCommonData(expectedData, actualNotification)
@@ -173,7 +172,7 @@ class DuoMessagingTest {
             notificationManager.waitForNotification(actualNotificationPair.first)
         val actualNotification = actualStatusBarNotification.notification
 
-        assertNotificationChannelId(DEFAULT_CHANNEL_ID, actualNotification)
+        assertNotificationChannelId(DEFAULT_MESSAGING_CHANNEL_ID, actualNotification)
         assertCommonData(expectedData, actualNotification)
         assertEquals(2, actualNotification.actions.size)
     }
@@ -190,7 +189,7 @@ class DuoMessagingTest {
         }.generateNotificationPair()
         val actualNotification = actualNotificationPair.second!!.build()
 
-        assertNotificationChannelId(DEFAULT_CHANNEL_ID, actualNotification)
+        assertNotificationChannelId(DEFAULT_MESSAGING_CHANNEL_ID, actualNotification)
         assertCommonData(expectedData, actualNotification)
     }
 

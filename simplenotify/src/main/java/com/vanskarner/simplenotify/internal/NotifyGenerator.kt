@@ -63,6 +63,16 @@ internal class NotifyGenerator(
             data is Data.CallData && notifyChannel.checkChannelNotExists(context, channelId) ->
                 notifyChannel.applyCallChannel(context)
 
+            data is Data.DuoMessageData && notifyChannel.checkChannelNotExists(
+                context,
+                channelId
+            ) -> notifyChannel.applyMessagingChannel(context)
+
+            data is Data.GroupMessageData && notifyChannel.checkChannelNotExists(
+                context,
+                channelId
+            ) -> notifyChannel.applyMessagingChannel(context)
+
             progressData == null && notifyChannel.checkChannelNotExists(context, channelId) ->
                 notifyChannel.applyDefaultChannel(context)
 
