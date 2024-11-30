@@ -17,6 +17,9 @@ import com.vanskarner.simplenotify.common.waitForNotification
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -221,16 +224,72 @@ class NotifyGeneratorTest {
         assertNotificationChannelId(DEFAULT_CALL_CHANNEL_ID, actualNotificationPair.second)
     }
 
+    @Test
+    fun showOrGenerate_withValidData_shouldBeWithinRange() {
+        val expectedData = TestDataProvider.basicData()
+        notifyGenerator = NotifyGenerator(
+            context = context,
+            data = expectedData,
+            extra = ExtraData(),
+            progressData = null,
+            channelId = null,
+            actions = emptyArray(),
+            stackableData = null
+        )
+        val notificationUsingShow = notifyGenerator.show()
+        val notificationUsingGenerate = notifyGenerator.generateNotificationWithId()
+        val range = RANGE_NOTIFICATION.first..RANGE_NOTIFICATION.second
+
+        assertTrue(
+            "Number ${notificationUsingShow.first} should be in range $range",
+            notificationUsingShow.first in range
+        )
+        assertEquals(INVALID_NOTIFICATION_ID, notificationUsingShow.second)
+        assertTrue(
+            "Number ${notificationUsingGenerate.first} should be in range $range",
+            notificationUsingGenerate.first in range
+        )
+        assertNotNull(notificationUsingGenerate.second)
+    }
+
+    @Test
+    fun showOrGenerate_withNullData_shouldBeInvalidId() {
+        notifyGenerator = NotifyGenerator(
+            context = context,
+            data = null,
+            extra = ExtraData(),
+            progressData = null,
+            channelId = null,
+            actions = emptyArray(),
+            stackableData = null
+        )
+
+        val notificationUsingShow = notifyGenerator.show()
+        val notificationUsingGenerate = notifyGenerator.generateNotificationWithId()
+
+        assertEquals(INVALID_NOTIFICATION_ID, notificationUsingShow.first)
+        assertEquals(INVALID_NOTIFICATION_ID, notificationUsingShow.second)
+        assertEquals(INVALID_NOTIFICATION_ID, notificationUsingGenerate.first)
+        assertNull(notificationUsingGenerate.second)
+    }
+
     private suspend fun createNotificationForCall(data: Data.CallData): Pair<Int, Notification> {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            //From API 31, CallStyle notifications must either be for a foreground Service
-            val actualNotificationWithId = notifyGenerator.generateNotificationWithId()
-            Pair(actualNotificationWithId.first, actualNotificationWithId.second.build())
-        } else {
-            notifyGenerator.show()
-            val actualStatusBarNotification = notificationManager.waitForNotification(data.id ?: 0)
-            val actualNotification = actualStatusBarNotification.notification
-            Pair(actualStatusBarNotification.id, actualNotification)
+        return when {
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+                // From API 31, CallStyle notifications must either be for a foreground Service
+                val actualNotificationWithId = notifyGenerator.generateNotificationWithId()
+                val actualNotification = actualNotificationWithId.second
+                    ?: throw IllegalStateException("The notification generated is invalid")
+                Pair(actualNotificationWithId.first, actualNotification.build())
+            }
+
+            else -> {
+                notifyGenerator.show()
+                val actualStatusBarNotification =
+                    notificationManager.waitForNotification(data.id ?: 0)
+                val actualNotification = actualStatusBarNotification.notification
+                Pair(actualStatusBarNotification.id, actualNotification)
+            }
         }
     }
 

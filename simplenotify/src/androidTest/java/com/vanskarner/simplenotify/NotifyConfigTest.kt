@@ -4,7 +4,6 @@ import android.Manifest
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
-import androidx.core.app.NotificationCompat
 import androidx.core.app.RemoteInput
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -12,7 +11,6 @@ import com.vanskarner.simplenotify.common.ConditionalPermissionRule
 import com.vanskarner.simplenotify.common.TestDataProvider
 import com.vanskarner.simplenotify.common.waitForAllNotificationsPresents
 import com.vanskarner.simplenotify.internal.RANGE_GROUP_NOTIFICATION
-import com.vanskarner.simplenotify.internal.RANGE_NOTIFICATION
 import com.vanskarner.simplenotify.test.R
 import kotlinx.coroutines.test.runTest
 import org.junit.After
@@ -77,24 +75,6 @@ class NotifyConfigTest {
     }
 
     @Test
-    fun show_shouldBeWithinRange() = runTest {
-        val expectedData = TestDataProvider.basicData()
-        val notificationsIds = notifyConfig.asBasic {
-            title = expectedData.title
-            text = expectedData.text
-        }.show()
-        val actualNotificationId = notificationsIds.first
-        val actualGroupNotificationId = notificationsIds.second
-        val range = RANGE_NOTIFICATION.first..RANGE_NOTIFICATION.second
-
-        assertTrue(
-            "Number $actualNotificationId should be in range $range",
-            actualNotificationId in range
-        )
-        assertEquals(-1, actualGroupNotificationId)
-    }
-
-    @Test
     fun show_whenDataIsNull_shouldNotShow() = runTest {
         val actualNotification = notifyConfig.show()
         val actualNotificationId = actualNotification.first
@@ -144,6 +124,8 @@ class NotifyConfigTest {
             .size
         val groupNotificationRange = RANGE_GROUP_NOTIFICATION.first..RANGE_GROUP_NOTIFICATION.second
 
+        //group notification is also considered in verification
+        assertEquals(4, actualGroupedNotificationsSize)
         assertTrue(activeNotifications.any { it.id == notification1.first })
         assertTrue(activeNotifications.any { it.id == notification2.first })
         assertEquals(-1, notification1.second)
@@ -154,41 +136,6 @@ class NotifyConfigTest {
             "Number $actualGroupNotificationId should be in range $groupNotificationRange",
             actualGroupNotificationId in groupNotificationRange
         )
-        //group notification is also considered in verification
-        assertEquals(4, actualGroupedNotificationsSize)
-    }
-
-    @Test
-    fun generateNotificationPair_whenDataIsNull_shouldBeInvalidNotification() = runTest {
-        val actualNotificationPair = notifyConfig.generateNotificationPair()
-        val actualNotificationId = actualNotificationPair.first
-        val actualNotification = actualNotificationPair.second
-
-        assertEquals(-1, actualNotificationId)
-        assertNull(actualNotification)
-    }
-
-    @Test
-    fun generateNotificationPair_whenDataIsNotNull_shouldBeAValidNotification() = runTest {
-        val expectedData = TestDataProvider.basicData()
-        val actualNotificationPair = notifyConfig
-            .asBasic {
-                title = expectedData.title
-                text = expectedData.text
-            }
-            .generateNotificationPair()
-        val actualNotificationId = actualNotificationPair.first
-        val actualNotification = actualNotificationPair.second?.build()
-        val actualTitle = actualNotification?.extras?.getString(NotificationCompat.EXTRA_TITLE)
-        val actualText = actualNotification?.extras?.getString(NotificationCompat.EXTRA_TEXT)
-        val range = RANGE_NOTIFICATION.first..RANGE_NOTIFICATION.second
-
-        assertTrue(
-            "Number $actualNotificationId should be in range $range",
-            actualNotificationId in range
-        )
-        assertEquals(expectedData.title, actualTitle)
-        assertEquals(expectedData.text, actualText)
     }
 
 }

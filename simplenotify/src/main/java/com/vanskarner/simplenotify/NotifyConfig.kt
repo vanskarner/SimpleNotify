@@ -2,7 +2,6 @@ package com.vanskarner.simplenotify
 
 import android.content.Context
 import androidx.core.app.NotificationCompat
-import com.vanskarner.simplenotify.internal.INVALID_NOTIFICATION_ID
 import com.vanskarner.simplenotify.internal.MAXIMUM_ACTIONS
 import com.vanskarner.simplenotify.internal.NotifyGenerator
 
@@ -87,31 +86,27 @@ class NotifyConfig(private val context: Context) {
     }
 
     fun generateNotificationPair(): Pair<Int, NotificationCompat.Builder?> {
-        return data?.let {
-            NotifyGenerator(
-                context = context,
-                data = data ?: Data.BasicData(),
-                extra = extras,
-                actions = actions,
-                stackableData = stackableData,
-                channelId = channelId,
-                progressData = progressData
-            ).generateNotificationWithId()
-        } ?: Pair(INVALID_NOTIFICATION_ID, null)
+        return NotifyGenerator(
+            context = context,
+            data = data,
+            extra = extras,
+            actions = actions,
+            stackableData = stackableData,
+            channelId = channelId,
+            progressData = progressData
+        ).generateNotificationWithId()
     }
 
     fun show(): Pair<Int, Int> {
-        return data?.let {
-            NotifyGenerator(
-                context = context,
-                data = it,
-                extra = extras,
-                actions = actions,
-                stackableData = stackableData,
-                channelId = channelId,
-                progressData = progressData
-            ).show()
-        } ?: Pair(INVALID_NOTIFICATION_ID, INVALID_NOTIFICATION_ID)
+        return NotifyGenerator(
+            context = context,
+            data = data,
+            extra = extras,
+            actions = actions,
+            stackableData = stackableData,
+            channelId = channelId,
+            progressData = progressData
+        ).show()
     }
 
 }

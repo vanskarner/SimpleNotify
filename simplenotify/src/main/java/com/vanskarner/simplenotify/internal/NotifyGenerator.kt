@@ -12,7 +12,7 @@ import kotlin.random.Random
 
 internal class NotifyGenerator(
     private val context: Context,
-    private val data: Data,
+    private val data: Data?,
     private val extra: ExtraData,
     private val progressData: ProgressData?,
     private val stackableData: StackableData?,
@@ -26,30 +26,36 @@ internal class NotifyGenerator(
 
     fun show(): Pair<Int, Int> {
         val notificationPair = generateNotificationWithId()
-        val currentNotification = Pair(notificationPair.first, notificationPair.second.build())
-        val notificationList = notifyFeatures.getGroupStackable(
-            context,
-            stackableData,
-            extra,
-            notifyChannel
-        ).toMutableList()
-        var groupId = INVALID_NOTIFICATION_ID
-        if (notificationList.isNotEmpty()) {
-            groupId = notificationList.last().first
-            val index = if (notificationList.size == 1) 0 else notificationList.size - 1
-            notificationList.add(index, currentNotification)
-        } else notificationList.add(currentNotification)
-        with(NotificationManagerCompat.from(context)) {
-            if (areNotificationsEnabled())
-                notificationList.forEach { pair -> notify(pair.first, pair.second) }
-        }
-        return Pair(currentNotification.first, groupId)
+        return notificationPair.second?.let {
+            val currentNotification = Pair(notificationPair.first, it.build())
+            val notificationList = notifyFeatures.getGroupStackable(
+                context,
+                stackableData,
+                extra,
+                notifyChannel
+            ).toMutableList()
+            var groupId = INVALID_NOTIFICATION_ID
+            if (notificationList.isNotEmpty()) {
+                groupId = notificationList.last().first
+                val index = if (notificationList.size == 1) 0 else notificationList.size - 1
+                notificationList.add(index, currentNotification)
+            } else {
+                notificationList.add(currentNotification)
+            }
+            with(NotificationManagerCompat.from(context)) {
+                if (areNotificationsEnabled())
+                    notificationList.forEach { pair -> notify(pair.first, pair.second) }
+            }
+            return Pair(currentNotification.first, groupId)
+        } ?: Pair(INVALID_NOTIFICATION_ID, INVALID_NOTIFICATION_ID)
     }
 
-    fun generateNotificationWithId(): Pair<Int, NotificationCompat.Builder> {
-        val notificationId = generateNotificationId()
-        val notification = createNotification()
-        return Pair(notificationId, notification)
+    fun generateNotificationWithId(): Pair<Int, NotificationCompat.Builder?> {
+        return data?.let {
+            val notificationId = generateNotificationId(it)
+            val notification = createNotification(it)
+            Pair(notificationId, notification)
+        } ?: Pair(INVALID_NOTIFICATION_ID, null)
     }
 
     private fun selectChannelId(): String {
@@ -67,18 +73,18 @@ internal class NotifyGenerator(
         }
     }
 
-    private fun createNotification(): NotificationCompat.Builder {
+    private fun createNotification(dataType: Data): NotificationCompat.Builder {
         return NotificationCompat.Builder(context, selectChannelId()).apply {
-            notifyFilter.applyData(context, data, this)
+            notifyFilter.applyData(context, dataType, this)
             notifyFeatures.applyExtras(extra, this)
             applyActions(this)
             progressData?.let { progress -> notifyFeatures.applyProgress(progress, this) }
         }
     }
 
-    private fun generateNotificationId(): Int {
-        return if (progressData != null && data.id == null) DEFAULT_PROGRESS_NOTIFICATION_ID
-        else data.id ?: Random.nextInt(RANGE_NOTIFICATION.first, RANGE_NOTIFICATION.second)
+    private fun generateNotificationId(dataType: Data): Int {
+        return if (progressData != null && dataType.id == null) DEFAULT_PROGRESS_NOTIFICATION_ID
+        else dataType.id ?: Random.nextInt(RANGE_NOTIFICATION.first, RANGE_NOTIFICATION.second)
     }
 
     private fun applyActions(builder: NotificationCompat.Builder) {

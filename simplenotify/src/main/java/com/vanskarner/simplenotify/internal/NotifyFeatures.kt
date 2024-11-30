@@ -66,11 +66,11 @@ internal object NotifyFeatures {
         extra: ExtraData,
         notifyChannel: NotifyChannel
     ): List<Pair<Int, Notification>> {
-        val stackable = stackableData ?: return mutableListOf()
-        val groupKey = extra.groupKey ?: return mutableListOf()
+        val stackable = stackableData ?: return emptyList()
+        val groupKey = extra.groupKey ?: return emptyList()
         val manager =
             context.getSystemService(NOTIFICATION_SERVICE) as? NotificationManager
-                ?: return mutableListOf()
+                ?: return emptyList()
         val notifications = manager.activeNotifications
             .filter { it.groupKey.contains(groupKey) }
             .sortedByDescending { it.postTime }
@@ -92,7 +92,7 @@ internal object NotifyFeatures {
             return notifications.toMutableList().apply {
                 add(Pair(groupId, groupNotification.build()))
             }
-        } else mutableListOf()
+        } else emptyList()
     }
 
 }
