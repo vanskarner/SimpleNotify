@@ -15,7 +15,7 @@ import androidx.core.graphics.drawable.IconCompat
 
 sealed class Data {
     var id: Int? = null
-    @DrawableRes var smallIcon: Int = R.drawable.baseline_notifications_24
+    @DrawableRes var smallIcon: Int = R.drawable.notify_ic_notification_24
     var largeIcon: Bitmap? = null
     var contentIntent: PendingIntent? = null
     var autoCancel: Boolean = true
@@ -31,20 +31,32 @@ sealed class Data {
         var text: String? = null,
         var bigText: String? = null,
         var summaryText: String? = null,
-    ) : Data()
+    ) : Data(){
+        init {
+            smallIcon = R.drawable.notify_ic_text_24
+        }
+    }
 
     data class InboxData(
         var title: String? = null,
         var text: String? = null,
         var lines: ArrayList<String> = arrayListOf(),
-    ) : Data()
+    ) : Data(){
+        init {
+            smallIcon = R.drawable.notify_ic_message_24
+        }
+    }
 
     data class BigPictureData(
         var title: String? = null,
         var text: String? = null,
         var summaryText: String? = null,
         var image: Bitmap? = null
-    ) : Data()
+    ) : Data(){
+        init {
+            smallIcon = R.drawable.notify_ic_image_24
+        }
+    }
 
     data class DuoMessageData(
         var you: Person = Person.Builder().setName("You").build(),
@@ -54,7 +66,11 @@ sealed class Data {
         var bubble: BubbleMetadata? = null,
         var shortcut: ShortcutInfoCompat? = null,
         var addShortcutIfNotExists: Boolean = true
-    ) : Data()
+    ) : Data(){
+        init {
+            smallIcon = R.drawable.notify_ic_message_24
+        }
+    }
 
     data class GroupMessageData(
         var you: Person = Person.Builder().setName("You").build(),
@@ -64,7 +80,11 @@ sealed class Data {
         var bubble: BubbleMetadata? = null,
         var shortcut: ShortcutInfoCompat? = null,
         var addShortcutIfNotExists: Boolean = true
-    ) : Data()
+    ) : Data(){
+        init {
+            smallIcon = R.drawable.notify_ic_message_24
+        }
+    }
 
     data class CallData(
         var type: String = "incoming",
@@ -72,8 +92,11 @@ sealed class Data {
         var answer: PendingIntent? = null,
         var declineOrHangup: PendingIntent? = null
     ) : Data() {
+        init {
+            smallIcon = R.drawable.notify_ic_phone_24
+        }
         companion object {
-            fun defaultAnswer(context: Context): PendingIntent {
+            internal fun defaultAnswer(context: Context): PendingIntent {
                 return PendingIntent.getActivity(
                     context,
                     -333,
@@ -82,7 +105,7 @@ sealed class Data {
                 )
             }
 
-            fun defaultDeclineOrHangup(context: Context): PendingIntent {
+            internal fun defaultDeclineOrHangup(context: Context): PendingIntent {
                 return PendingIntent.getActivity(
                     context,
                     -333,
@@ -113,6 +136,7 @@ sealed class Data {
         var smallRemoteViews: () -> RemoteViews? = { null },
         var largeRemoteViews: () -> RemoteViews? = { null }
     ) : Data()
+
 }
 
 @Suppress("ArrayInDataClass")
@@ -160,7 +184,7 @@ data class ProgressData(
 
 data class StackableData(
     var id: Int? = null,
-    @DrawableRes var smallIcon: Int? = R.drawable.baseline_notifications_24,
+    @DrawableRes var smallIcon: Int = R.drawable.notify_ic_view_list_24,
     var title: String? = null,
     var summaryText: String = "Summary Group",
     var initialAmount: Int = 3

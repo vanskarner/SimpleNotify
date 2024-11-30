@@ -88,7 +88,7 @@ internal object NotifyFeatures {
                 .setGroup(groupKey)
                 .setGroupSummary(true)
             stackable.title?.let { title -> groupNotification.setContentTitle(title) }
-            stackable.smallIcon?.let { icon -> groupNotification.setSmallIcon(icon) }
+            groupNotification.setSmallIcon(stackable.smallIcon)
             return notifications.toMutableList().apply {
                 add(Pair(groupId, groupNotification.build()))
             }
