@@ -51,12 +51,13 @@ class NotifyGeneratorTest {
 
     @Test
     fun show_whenHasProgressAndHasNoChannel_setDefaultProgressChannel() = runTest {
-        val data = TestDataProvider.basicData()
-        data.id = null
+        val expectedData = TestDataProvider.basicData()
+        expectedData.id = null
+        expectedData.tag = "test_my_tag"
         val progressData = TestDataProvider.progressData(false)
         notifyGenerator = NotifyGenerator(
             context = context,
-            data = data,
+            data = expectedData,
             extra = ExtraData(),
             progressData = progressData,
             channelId = null,
@@ -73,6 +74,7 @@ class NotifyGeneratorTest {
             actualExtras.getBoolean(NotificationCompat.EXTRA_PROGRESS_INDETERMINATE)
 
         assertEquals(DEFAULT_PROGRESS_NOTIFICATION_ID, actualStatusBarNotification.id)
+        assertEquals(expectedData.tag, actualStatusBarNotification.tag)
         assertNotificationChannelId(DEFAULT_PROGRESS_CHANNEL_ID, actualNotification)
         assertEquals(progressData.currentValue, actualProgress)
         assertEquals(progressData.indeterminate, actualIndeterminate)
@@ -101,6 +103,7 @@ class NotifyGeneratorTest {
             actualExtras.getBoolean(NotificationCompat.EXTRA_PROGRESS_INDETERMINATE)
 
         assertEquals(expectedNotificationId, actualStatusBarNotification.id)
+        assertNull(actualStatusBarNotification.tag)
         assertNotificationChannelId(DEFAULT_CHANNEL_ID, actualNotification)
         assertEquals(0, actualProgress)
         assertEquals(false, actualIndeterminate)
@@ -109,12 +112,13 @@ class NotifyGeneratorTest {
     @Test
     fun show_whenHasIdAndHasProgressAndHasChannel_useSpecifiedChannel() = runTest {
         val expectedChannelId = TestDataProvider.createChannel(notificationManager)
-        val data = TestDataProvider.basicData()
-        data.id = 1
+        val expectedData = TestDataProvider.basicData()
+        expectedData.id = 1
+        expectedData.tag = "test_my_tag"
         val progressData = TestDataProvider.progressData(false)
         notifyGenerator = NotifyGenerator(
             context = context,
-            data = data,
+            data = expectedData,
             extra = ExtraData(),
             progressData = progressData,
             channelId = expectedChannelId,
@@ -123,14 +127,15 @@ class NotifyGeneratorTest {
         )
         val actualNotificationId = notifyGenerator.show().first
         val actualStatusBarNotification =
-            notificationManager.waitForNotification(data.id ?: 0)
+            notificationManager.waitForNotification(expectedData.id ?: 0)
         val actualNotification = actualStatusBarNotification.notification
         val actualExtras = actualStatusBarNotification.notification.extras
         val actualProgress = actualExtras.getInt(NotificationCompat.EXTRA_PROGRESS)
         val actualIndeterminate =
             actualExtras.getBoolean(NotificationCompat.EXTRA_PROGRESS_INDETERMINATE)
 
-        assertEquals(data.id, actualNotificationId)
+        assertEquals(expectedData.id, actualNotificationId)
+        assertEquals(expectedData.tag, actualStatusBarNotification.tag)
         assertNotificationChannelId(expectedChannelId, actualNotification)
         assertEquals(progressData.currentValue, actualProgress)
         assertEquals(progressData.indeterminate, actualIndeterminate)

@@ -15,7 +15,9 @@ import androidx.core.graphics.drawable.IconCompat
 
 sealed class Data {
     var id: Int? = null
-    @DrawableRes var smallIcon: Int = R.drawable.notify_ic_notification_24
+    var tag: String? = null
+    @DrawableRes
+    var smallIcon: Int = R.drawable.notify_ic_notification_24
     var largeIcon: Bitmap? = null
     var contentIntent: PendingIntent? = null
     var autoCancel: Boolean = true
@@ -31,7 +33,7 @@ sealed class Data {
         var text: CharSequence? = null,
         var bigText: CharSequence? = null,
         var summaryText: CharSequence? = null,
-    ) : Data(){
+    ) : Data() {
         init {
             smallIcon = R.drawable.notify_ic_text_24
         }
@@ -41,7 +43,7 @@ sealed class Data {
         var title: CharSequence? = null,
         var text: CharSequence? = null,
         var lines: ArrayList<String> = arrayListOf(),
-    ) : Data(){
+    ) : Data() {
         init {
             smallIcon = R.drawable.notify_ic_message_24
         }
@@ -52,7 +54,7 @@ sealed class Data {
         var text: CharSequence? = null,
         var summaryText: CharSequence? = null,
         var image: Bitmap? = null
-    ) : Data(){
+    ) : Data() {
         init {
             smallIcon = R.drawable.notify_ic_image_24
         }
@@ -66,7 +68,7 @@ sealed class Data {
         var bubble: BubbleMetadata? = null,
         var shortcut: ShortcutInfoCompat? = null,
         var addShortcutIfNotExists: Boolean = true
-    ) : Data(){
+    ) : Data() {
         init {
             smallIcon = R.drawable.notify_ic_message_24
         }
@@ -80,7 +82,7 @@ sealed class Data {
         var bubble: BubbleMetadata? = null,
         var shortcut: ShortcutInfoCompat? = null,
         var addShortcutIfNotExists: Boolean = true
-    ) : Data(){
+    ) : Data() {
         init {
             smallIcon = R.drawable.notify_ic_message_24
         }
@@ -95,6 +97,7 @@ sealed class Data {
         init {
             smallIcon = R.drawable.notify_ic_phone_24
         }
+
         companion object {
             internal fun defaultAnswer(context: Context): PendingIntent {
                 return PendingIntent.getActivity(
@@ -117,7 +120,7 @@ sealed class Data {
             internal fun defaultSecondCaller(context: Context): Person {
                 return Person.Builder()
                     .setName("You")
-                    .setIcon(IconCompat.createWithResource(context,R.drawable.notify_user_48))
+                    .setIcon(IconCompat.createWithResource(context, R.drawable.notify_user_48))
                     .setImportant(true)
                     .build()
             }
@@ -125,7 +128,7 @@ sealed class Data {
             internal fun defaultCaller(context: Context): Person {
                 return Person.Builder()
                     .setName("Someone")
-                    .setIcon(IconCompat.createWithResource(context,R.drawable.notify_user_48))
+                    .setIcon(IconCompat.createWithResource(context, R.drawable.notify_user_48))
                     .build()
             }
         }

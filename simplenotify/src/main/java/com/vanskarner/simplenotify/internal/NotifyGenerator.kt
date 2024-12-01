@@ -37,13 +37,13 @@ internal class NotifyGenerator(
             val stackable = stackableData
             if (groupStackable.isNotEmpty() && groupKey != null && stackable != null) {
                 groupStackable.forEach { notificationManager.notify(it.first, it.second) }
-                notificationManager.notify(currentNotificationId, currentNotification)
+                notificationManager.notify(data?.tag, currentNotificationId, currentNotification)
                 val groupNotification = createGroupNotification(groupKey, stackable)
                 val groupNotificationId = generateGroupNotificationId()
                 notificationManager.notify(groupNotificationId, groupNotification.build())
                 return Pair(currentNotificationId, groupNotificationId)
             } else {
-                notificationManager.notify(currentNotificationId, currentNotification)
+                notificationManager.notify(data?.tag, currentNotificationId, currentNotification)
                 return Pair(currentNotificationId, INVALID_NOTIFICATION_ID)
             }
         }
