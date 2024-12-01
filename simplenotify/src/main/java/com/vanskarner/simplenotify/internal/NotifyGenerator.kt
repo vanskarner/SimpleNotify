@@ -25,29 +25,29 @@ internal class NotifyGenerator(
     private val notifyChannel = NotifyChannel
 
     fun show(): Pair<Int, Int> {
+        val invalidResponse = Pair(INVALID_NOTIFICATION_ID, INVALID_NOTIFICATION_ID)
         val notificationPair = generateNotificationWithId()
-        return notificationPair.second?.let {
-            val currentNotification = Pair(notificationPair.first, it.build())
-            val notificationList = notifyFeatures.getGroupStackable(
-                context,
-                stackableData,
-                extra,
-                notifyChannel
-            ).toMutableList()
-            var groupId = INVALID_NOTIFICATION_ID
-            if (notificationList.isNotEmpty()) {
-                groupId = notificationList.last().first
-                val index = if (notificationList.size == 1) 0 else notificationList.size - 1
-                notificationList.add(index, currentNotification)
+        val currentNotificationBuilder = notificationPair.second ?: return invalidResponse
+        val notificationManager = NotificationManagerCompat.from(context)
+        if (notificationManager.areNotificationsEnabled()) {
+            val currentNotificationId = notificationPair.first
+            val currentNotification = currentNotificationBuilder.build()
+            val groupStackable = notifyFeatures.getGroupStackable(context, stackableData, extra)
+            val groupKey = extra.groupKey
+            val stackable = stackableData
+            if (groupStackable.isNotEmpty() && groupKey != null && stackable != null) {
+                groupStackable.forEach { notificationManager.notify(it.first, it.second) }
+                notificationManager.notify(currentNotificationId, currentNotification)
+                val groupNotification = createGroupNotification(groupKey, stackable)
+                val groupNotificationId = generateGroupNotificationId()
+                notificationManager.notify(groupNotificationId, groupNotification.build())
+                return Pair(currentNotificationId, groupNotificationId)
             } else {
-                notificationList.add(currentNotification)
+                notificationManager.notify(currentNotificationId, currentNotification)
+                return Pair(currentNotificationId, INVALID_NOTIFICATION_ID)
             }
-            with(NotificationManagerCompat.from(context)) {
-                if (areNotificationsEnabled())
-                    notificationList.forEach { pair -> notify(pair.first, pair.second) }
-            }
-            return Pair(currentNotification.first, groupId)
-        } ?: Pair(INVALID_NOTIFICATION_ID, INVALID_NOTIFICATION_ID)
+        }
+        return invalidResponse
     }
 
     fun generateNotificationWithId(): Pair<Int, NotificationCompat.Builder?> {
@@ -97,11 +97,36 @@ internal class NotifyGenerator(
         else dataType.id ?: Random.nextInt(RANGE_NOTIFICATION.first, RANGE_NOTIFICATION.second)
     }
 
+    private fun generateGroupNotificationId(): Int {
+        return when {
+            stackableData != null -> stackableData.id ?: Random.nextInt(
+                RANGE_GROUP_NOTIFICATION.first,
+                RANGE_GROUP_NOTIFICATION.second
+            )
+
+            else -> INVALID_NOTIFICATION_ID
+        }
+    }
+
     private fun applyActions(builder: NotificationCompat.Builder) {
         actions
             .takeLast(MAXIMUM_ACTIONS)
             .filterNotNull()
             .forEach { notifyFeatures.applyAction(it, builder) }
+    }
+
+    private fun createGroupNotification(
+        groupKey: String,
+        stackable: StackableData
+    ): NotificationCompat.Builder {
+        val style = NotificationCompat.InboxStyle().setSummaryText(stackableData?.summaryText)
+        return NotificationCompat
+            .Builder(context, notifyChannel.applyDefaultChannel(context))
+            .setSmallIcon(stackable.smallIcon)
+            .setStyle(style)
+            .setGroup(groupKey)
+            .setGroupSummary(true)
+            .setContentTitle(stackable.title)
     }
 
 }

@@ -141,36 +141,44 @@ class NotifyFeaturesTest {
     }
 
     @Test
-    fun getGroupStackable_whenNoGroupNotificationsAreActive_shouldBeAnEmptyList() {
+    fun getGroupStackable_whenNoGroupNotificationsAreActive_shouldBeAnEmptyList() = runTest {
         val stackableData = TestDataProvider.stackableData()
         val extraData = TestDataProvider.extraData()
-        val notifyChannel = NotifyChannel
         val groupStackable = notifyFeatures
-            .getGroupStackable(appContext, stackableData, extraData, notifyChannel)
+            .getGroupStackable(appContext, stackableData, extraData)
 
         assertTrue(groupStackable.isEmpty())
     }
 
     @Test
-    fun getGroupStackable_whenGroupNotificationsExist_shouldContainItems() = runTest {
-        val stackableData = TestDataProvider.stackableData()
+    fun getGroupStackable_whenGroupNotificationsIsLess_shouldBeAnEmptyList() = runTest {
+        val expectedStackableData = TestDataProvider.stackableData()
         val extraData = TestDataProvider.extraData()
-        val notifyChannel = NotifyChannel
-        stackableData.initialAmount = 3
-        extraData.groupKey = "Test_Group_Key"
-        waitForActiveNotificationsGroup(extraData.groupKey!!, stackableData.initialAmount)
+        val expectedGroupNotifications = 1
+        expectedStackableData.initialAmount = 3
+        extraData.groupKey = "Test_Group_Key_1"
+        waitForActiveNotificationsGroup(extraData.groupKey!!, expectedGroupNotifications)
+        //getGroupStackable adds +1 referring to the notification that will be built
         val groupStackable = notifyFeatures
-            .getGroupStackable(appContext, stackableData, extraData, notifyChannel)
-        val groupNotification = groupStackable.last().second
-        val actualGroupTitle = groupNotification.extras.getString(NotificationCompat.EXTRA_TITLE)
-        val actualSummaryText =
-            groupNotification.extras.getString(NotificationCompat.EXTRA_SUMMARY_TEXT)
+            .getGroupStackable(appContext, expectedStackableData, extraData)
+
+        assertTrue(groupStackable.isEmpty())
+    }
+
+    @Test
+    fun getGroupStackable_whenGroupNotificationsIsLarger_shouldContainItems() = runTest {
+        val expectedStackableData = TestDataProvider.stackableData()
+        val extraData = TestDataProvider.extraData()
+        val expectedGroupNotifications = 2
+        expectedStackableData.initialAmount = 2
+        extraData.groupKey = "Test_Group_Key_2"
+        waitForActiveNotificationsGroup(extraData.groupKey!!, expectedGroupNotifications)
+        //getGroupStackable adds +1 referring to the notification that will be built
+        val groupStackable = notifyFeatures
+            .getGroupStackable(appContext, expectedStackableData, extraData)
 
         assertFalse(groupStackable.isEmpty())
-        //Normal notifications + group notifications
-        assertEquals(stackableData.initialAmount + 1, groupStackable.size)
-        assertEquals(stackableData.title, actualGroupTitle)
-        assertEquals(stackableData.summaryText, actualSummaryText)
+        assertEquals(expectedGroupNotifications, groupStackable.size)
     }
 
     private suspend fun waitForActiveNotificationsGroup(

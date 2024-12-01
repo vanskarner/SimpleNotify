@@ -9,7 +9,6 @@ import com.vanskarner.simplenotify.ActionData
 import com.vanskarner.simplenotify.ExtraData
 import com.vanskarner.simplenotify.ProgressData
 import com.vanskarner.simplenotify.StackableData
-import kotlin.random.Random
 
 internal object NotifyFeatures {
 
@@ -63,8 +62,7 @@ internal object NotifyFeatures {
     fun getGroupStackable(
         context: Context,
         stackableData: StackableData?,
-        extra: ExtraData,
-        notifyChannel: NotifyChannel
+        extra: ExtraData
     ): List<Pair<Int, Notification>> {
         val stackable = stackableData ?: return emptyList()
         val groupKey = extra.groupKey ?: return emptyList()
@@ -77,22 +75,8 @@ internal object NotifyFeatures {
             .map { Pair(it.id, it.notification) }
         val initialAmount = if (stackable.initialAmount < 1) 1 else stackable.initialAmount
         val isValid = notifications.size + 1 >= initialAmount
-        return if (isValid) {
-            val groupId = stackableData.id ?: Random.nextInt(
-                RANGE_GROUP_NOTIFICATION.first,
-                RANGE_GROUP_NOTIFICATION.second
-            )
-            val groupNotification = NotificationCompat
-                .Builder(context, notifyChannel.applyDefaultChannel(context))
-                .setStyle(NotificationCompat.InboxStyle().setSummaryText(stackable.summaryText))
-                .setGroup(groupKey)
-                .setGroupSummary(true)
-            stackable.title?.let { title -> groupNotification.setContentTitle(title) }
-            groupNotification.setSmallIcon(stackable.smallIcon)
-            return notifications.toMutableList().apply {
-                add(Pair(groupId, groupNotification.build()))
-            }
-        } else emptyList()
+        return if(isValid) notifications
+        else emptyList()
     }
 
 }
