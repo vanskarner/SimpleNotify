@@ -100,10 +100,10 @@ class NotifyFeaturesTest {
 
         assertEquals(2, actualActions.size)
         assertEquals(expectedBasicAction.icon, actualActions[0].getIcon().resId)
-        assertEquals(expectedBasicAction.label, actualActions[0].title)
+        assertEquals(expectedBasicAction.title, actualActions[0].title)
         assertEquals(expectedBasicAction.pending, actualActions[0].actionIntent)
         assertEquals(expectedReplyAction.icon, actualActions[1].getIcon().resId)
-        assertEquals(expectedReplyAction.label, actualActions[1].title)
+        assertEquals(expectedReplyAction.title, actualActions[1].title)
         assertEquals(expectedReplyAction.replyPending, actualActions[1].actionIntent)
         assertEquals(
             expectedReplyAction.allowGeneratedReplies,

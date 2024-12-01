@@ -260,7 +260,7 @@ class TestDataProvider {
         fun basicAction(): ActionData.BasicAction {
             return ActionData.BasicAction().apply {
                 icon = R.drawable.test_ic_archive_24
-                label = "Action1"
+                title = "Action1"
                 pending = pendingIntent()
             }
         }
@@ -268,7 +268,7 @@ class TestDataProvider {
         fun replyAction(): ActionData.ReplyAction {
             return ActionData.ReplyAction().apply {
                 icon = R.drawable.test_ic_mail_24
-                label = "ReplyAction1"
+                title = "ReplyAction1"
                 replyPending = pendingIntent()
                 remote = RemoteInput.Builder("ANY_KEY").build()
                 allowGeneratedReplies = true

@@ -50,23 +50,23 @@ class NotifyConfigTest {
         val expectedRemote = RemoteInput.Builder("anyKey").build()
         notifyConfig.addAction {
             icon = R.drawable.test_ic_message_24
-            label = "Action 1"
+            title = "Action 1"
             pending = expectedPendingIntent
         }
             .addReplyAction {
                 icon = R.drawable.test_ic_message_24
-                label = "Action 1"
+                title = "Action 1"
                 replyPending = expectedPendingIntent
                 remote = expectedRemote
             }
             .addAction {
                 icon = R.drawable.test_ic_archive_24
-                label = "Action 3"
+                title = "Action 3"
                 pending = expectedPendingIntent
             }
             .addReplyAction {
                 icon = R.drawable.test_ic_notification_24
-                label = "Action 3"
+                title = "Action 3"
                 replyPending = expectedPendingIntent
                 remote = expectedRemote
             }

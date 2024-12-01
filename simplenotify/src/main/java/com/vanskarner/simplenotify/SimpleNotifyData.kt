@@ -22,15 +22,15 @@ sealed class Data {
     var timeoutAfter: Long? = null
 
     data class BasicData(
-        var title: String? = null,
-        var text: String? = null,
+        var title: CharSequence? = null,
+        var text: CharSequence? = null,
     ) : Data()
 
     data class BigTextData(
-        var title: String? = null,
-        var text: String? = null,
-        var bigText: String? = null,
-        var summaryText: String? = null,
+        var title: CharSequence? = null,
+        var text: CharSequence? = null,
+        var bigText: CharSequence? = null,
+        var summaryText: CharSequence? = null,
     ) : Data(){
         init {
             smallIcon = R.drawable.notify_ic_text_24
@@ -38,8 +38,8 @@ sealed class Data {
     }
 
     data class InboxData(
-        var title: String? = null,
-        var text: String? = null,
+        var title: CharSequence? = null,
+        var text: CharSequence? = null,
         var lines: ArrayList<String> = arrayListOf(),
     ) : Data(){
         init {
@@ -48,9 +48,9 @@ sealed class Data {
     }
 
     data class BigPictureData(
-        var title: String? = null,
-        var text: String? = null,
-        var summaryText: String? = null,
+        var title: CharSequence? = null,
+        var text: CharSequence? = null,
+        var summaryText: CharSequence? = null,
         var image: Bitmap? = null
     ) : Data(){
         init {
@@ -74,7 +74,7 @@ sealed class Data {
 
     data class GroupMessageData(
         var you: Person = Person.Builder().setName("You").build(),
-        var conversationTitle: String? = null,
+        var conversationTitle: CharSequence? = null,
         var messages: ArrayList<NotifyMessaging> = arrayListOf(),
         var useHistoricMessage: Boolean = false,
         var bubble: BubbleMetadata? = null,
@@ -150,7 +150,7 @@ data class ExtraData(
     var deleteIntent: PendingIntent? = null,
     var fullScreenIntent: Pair<PendingIntent, Boolean>? = null,
     var onlyAlertOnce: Boolean? = null,
-    var subText: String? = null,
+    var subText: CharSequence? = null,
     var showWhen: Boolean? = null,
     var useChronometer: Boolean? = null,
     var badgeNumber: Int? = null,//from API 26
@@ -163,7 +163,7 @@ data class ExtraData(
 
 sealed class ActionData {
     var icon: Int = 0
-    var label: String? = null
+    var title: CharSequence? = null
 
     data class BasicAction(
         var pending: PendingIntent? = null
@@ -185,8 +185,8 @@ data class ProgressData(
 data class StackableData(
     var id: Int? = null,
     @DrawableRes var smallIcon: Int = R.drawable.notify_ic_view_list_24,
-    var title: String? = null,
-    var summaryText: String = "Summary Group",
+    var title: CharSequence? = null,
+    var summaryText: CharSequence = "Summary Group",
     var initialAmount: Int = 3
 )
 
@@ -194,12 +194,12 @@ sealed class NotifyMessaging {
     internal var mimeData: Pair<String, Uri>? = null
 
     data class YourMsg(
-        val msg: String,
+        val msg: CharSequence,
         val timestamp: Long
     ) : NotifyMessaging()
 
     data class ContactMsg(
-        val msg: String,
+        val msg: CharSequence,
         val timestamp: Long,
         val person: Person = Person.Builder().setName("Someone").build()
     ) : NotifyMessaging()

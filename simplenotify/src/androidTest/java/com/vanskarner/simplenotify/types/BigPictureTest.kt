@@ -159,12 +159,12 @@ class BigPictureTest {
         }
             .addAction {
                 icon = expectedAction.icon
-                label = expectedAction.label
+                title = expectedAction.title
                 pending = expectedAction.pending
             }
             .addReplyAction {
                 icon = expectedReplyAction.icon
-                label = expectedReplyAction.label
+                title = expectedReplyAction.title
                 replyPending = expectedReplyAction.replyPending
                 remote = expectedReplyAction.remote
             }

@@ -39,13 +39,13 @@ internal object NotifyFeatures {
     fun applyAction(actionData: ActionData, builder: NotificationCompat.Builder) {
         when (actionData) {
             is ActionData.BasicAction -> {
-                builder.addAction(actionData.icon, actionData.label, actionData.pending)
+                builder.addAction(actionData.icon, actionData.title, actionData.pending)
             }
 
             is ActionData.ReplyAction -> {
                 val builderAction = NotificationCompat.Action.Builder(
                     actionData.icon,
-                    actionData.label,
+                    actionData.title,
                     actionData.replyPending
                 )
                     .addRemoteInput(actionData.remote)

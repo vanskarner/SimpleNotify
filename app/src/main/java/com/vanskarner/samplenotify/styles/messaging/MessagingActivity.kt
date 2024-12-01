@@ -123,12 +123,12 @@ class MessagingActivity : BaseActivity() {
                 )
             }
             .addReplyAction {
-                label = "Respond"
+                title = "Respond"
                 replyPending = getReplyPendingIntent(notifyId, TYPE)
                 remote = RemoteInput.Builder(REMOTE_INPUT_KEY).setLabel("Response").build()
             }
             .addAction {
-                label = "Mute"
+                title = "Mute"
                 pending = getSimplePendingIntent(MessagingActivity::class.java)
             }
             .show()
@@ -162,12 +162,12 @@ class MessagingActivity : BaseActivity() {
                 )
             }
             .addReplyAction {
-                label = "Respond"
+                title = "Respond"
                 replyPending = getReplyPendingIntent(notifyId, TYPE)
                 remote = RemoteInput.Builder(REMOTE_INPUT_KEY).setLabel("response").build()
             }
             .addAction {
-                label = "Mute"
+                title = "Mute"
                 pending = getSimplePendingIntent(MessagingActivity::class.java)
             }
             .show()
@@ -200,12 +200,12 @@ class MessagingActivity : BaseActivity() {
                 )
             }
             .addReplyAction {
-                label = "Respond"
+                title = "Respond"
                 replyPending = getReplyPendingIntent(notifyId, TYPE)
                 remote = RemoteInput.Builder(REMOTE_INPUT_KEY).setLabel("response").build()
             }
             .addAction {
-                label = "Mute"
+                title = "Mute"
                 pending = getSimplePendingIntent(MessagingActivity::class.java)
             }
             .show()

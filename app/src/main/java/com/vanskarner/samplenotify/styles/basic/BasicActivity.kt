@@ -93,16 +93,16 @@ class BasicActivity : BaseActivity() {
                 text = "An alleged criminal network dedicated to influence peddling"
             }
             .addReplyAction {
-                label = "Respond"
+                title = "Respond"
                 replyPending = getReplyPendingIntent(notifyId, TYPE)
                 remote = RemoteInput.Builder(REMOTE_INPUT_KEY).setLabel("response").build()
             }
             .addAction {
-                label = "Impeachment"
+                title = "Impeachment"
                 pending = getSimplePendingIntent(BasicActivity::class.java)
             }
             .addAction {
-                label = "Report"
+                title = "Report"
                 pending = getSimplePendingIntent(BasicActivity::class.java)
             }
             .show()

@@ -151,7 +151,7 @@ class CallTest {
             declineOrHangup = expectedData.declineOrHangup
         }.addAction {
             icon = expectedAction.icon
-            label = expectedAction.label
+            title = expectedAction.title
             pending = expectedAction.pending
         }
         val actualNotificationPair = showOrGenerateNotificationAccordingAPI(notifyConfig)
