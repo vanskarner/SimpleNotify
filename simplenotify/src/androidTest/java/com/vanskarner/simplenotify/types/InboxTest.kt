@@ -172,15 +172,14 @@ class InboxTest {
     }
 
     @Test
-    fun generateNotificationPair_shouldBeGenerated() = runTest {
+    fun generateBuilder_shouldBeGenerated() = runTest {
         val expectedData = TestDataProvider.inboxData()
-        val actualNotificationPair = notifyConfig.asInbox {
+        val actualNotification = notifyConfig.asInbox {
             smallIcon = expectedData.smallIcon
             title = expectedData.title
             text = expectedData.text
             lines = expectedData.lines
-        }.generateNotificationPair()
-        val actualNotification = actualNotificationPair.second!!.build()
+        }.generateBuilder().build()
 
         assertNotificationChannelId(DEFAULT_CHANNEL_ID, actualNotification)
         assertCommonData(expectedData, actualNotification)

@@ -26,36 +26,32 @@ internal class NotifyGenerator(
 
     fun show(): Pair<Int, Int> {
         val invalidResponse = Pair(INVALID_NOTIFICATION_ID, INVALID_NOTIFICATION_ID)
-        val notificationPair = generateNotificationWithId()
-        val currentNotificationBuilder = notificationPair.second ?: return invalidResponse
+        val myData = data ?: return invalidResponse
         val notificationManager = NotificationManagerCompat.from(context)
         if (notificationManager.areNotificationsEnabled()) {
-            val currentNotificationId = notificationPair.first
-            val currentNotification = currentNotificationBuilder.build()
+            val currentNotificationId = generateNotificationId(myData)
+            val currentNotification = createNotification(myData).build()
             val groupStackable = notifyFeatures.getGroupStackable(context, stackableData, extra)
             val groupKey = extra.groupKey
             val stackable = stackableData
             if (groupStackable.isNotEmpty() && groupKey != null && stackable != null) {
                 groupStackable.forEach { notificationManager.notify(it.first, it.second) }
-                notificationManager.notify(data?.tag, currentNotificationId, currentNotification)
-                val groupNotification = createGroupNotification(groupKey, stackable)
+                notificationManager.notify(myData.tag, currentNotificationId, currentNotification)
                 val groupNotificationId = generateGroupNotificationId()
+                val groupNotification = createGroupNotification(groupKey, stackable)
                 notificationManager.notify(groupNotificationId, groupNotification.build())
                 return Pair(currentNotificationId, groupNotificationId)
             } else {
-                notificationManager.notify(data?.tag, currentNotificationId, currentNotification)
+                notificationManager.notify(myData.tag, currentNotificationId, currentNotification)
                 return Pair(currentNotificationId, INVALID_NOTIFICATION_ID)
             }
         }
         return invalidResponse
     }
 
-    fun generateNotificationWithId(): Pair<Int, NotificationCompat.Builder?> {
-        return data?.let {
-            val notificationId = generateNotificationId(it)
-            val notification = createNotification(it)
-            Pair(notificationId, notification)
-        } ?: Pair(INVALID_NOTIFICATION_ID, null)
+    fun generateBuilder(): NotificationCompat.Builder {
+        val myData = data ?: Data.BasicData()
+        return createNotification(myData)
     }
 
     private fun selectChannelId(): String {

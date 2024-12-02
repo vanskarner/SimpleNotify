@@ -62,8 +62,7 @@ class CallTest {
             answer = expectedData.answer
             declineOrHangup = expectedData.declineOrHangup
         }
-        val actualNotificationPair = showOrGenerateNotificationAccordingAPI(notifyConfig)
-        val actualNotification = actualNotificationPair.second!!
+        val actualNotification = showOrGenerateNotificationAccordingAPI()
 
         assertNotificationChannelId(DEFAULT_CALL_CHANNEL_ID, actualNotification)
         assertCommonData(expectedData, actualNotification)
@@ -83,8 +82,7 @@ class CallTest {
             currentValue = expectedProgress
             indeterminate = true
         }
-        val actualNotificationPair = showOrGenerateNotificationAccordingAPI(notifyConfig)
-        val actualNotification = actualNotificationPair.second!!
+        val actualNotification = showOrGenerateNotificationAccordingAPI()
         val actualExtras = actualNotification.extras
         val actualProgress = actualExtras.getInt(NotificationCompat.EXTRA_PROGRESS)
         val actualIndeterminate =
@@ -108,8 +106,7 @@ class CallTest {
         }.progress {
             hide = true
         }
-        val actualNotificationPair = showOrGenerateNotificationAccordingAPI(notifyConfig)
-        val actualNotification = actualNotificationPair.second!!
+        val actualNotification = showOrGenerateNotificationAccordingAPI()
         val actualExtras = actualNotification.extras
         val actualProgress = actualExtras.getInt(NotificationCompat.EXTRA_PROGRESS)
         val actualIndeterminate =
@@ -132,8 +129,7 @@ class CallTest {
             answer = expectedData.answer
             declineOrHangup = expectedData.declineOrHangup
         }.useChannel(channelId)
-        val actualNotificationPair = showOrGenerateNotificationAccordingAPI(notifyConfig)
-        val actualNotification = actualNotificationPair.second!!
+        val actualNotification = showOrGenerateNotificationAccordingAPI()
 
         assertNotificationChannelId(channelId, actualNotification)
         assertCommonData(expectedData, actualNotification)
@@ -154,8 +150,7 @@ class CallTest {
             title = expectedAction.title
             pending = expectedAction.pending
         }
-        val actualNotificationPair = showOrGenerateNotificationAccordingAPI(notifyConfig)
-        val actualNotification = actualNotificationPair.second!!
+        val actualNotification = showOrGenerateNotificationAccordingAPI()
 
         assertNotificationChannelId(DEFAULT_CALL_CHANNEL_ID, actualNotification)
         //type “incoming” already includes 2 actions: “decline” and “answer”, now + 1 action are 3
@@ -163,18 +158,15 @@ class CallTest {
         assertCommonData(expectedData, actualNotification)
     }
 
-    private suspend fun showOrGenerateNotificationAccordingAPI(notifyConfig: NotifyConfig)
-            : Pair<Int, Notification?> {
+    private suspend fun showOrGenerateNotificationAccordingAPI(): Notification {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             //From API 31, CallStyle notifications must either be for a foreground Service
-            val actualNotificationWithId = notifyConfig.generateNotificationPair()
-            Pair(actualNotificationWithId.first, actualNotificationWithId.second?.build())
+            notifyConfig.generateBuilder().build()
         } else {
             val notificationPair = notifyConfig.show()
             val actualStatusBarNotification =
                 notificationManager.waitForNotification(notificationPair.first)
-            val actualNotification = actualStatusBarNotification.notification
-            Pair(actualStatusBarNotification.id, actualNotification)
+            actualStatusBarNotification.notification
         }
     }
 

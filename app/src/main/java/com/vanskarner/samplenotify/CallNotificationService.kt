@@ -11,7 +11,7 @@ class CallNotificationService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Thread.sleep(5000)
-        val notificationPair = SimpleNotify.with(this)
+        val notificationBuilder = SimpleNotify.with(this)
             .asCall {
                 type = "incoming"
 //                type = "screening"
@@ -20,8 +20,8 @@ class CallNotificationService : Service() {
 //                answer = null
 //                declineOrHangup = null
             }
-            .generateNotificationPair()
-        startForeground(notificationPair.first, notificationPair.second.build())
+            .generateBuilder()
+        startForeground(156, notificationBuilder.build())
         return START_STICKY
     }
 

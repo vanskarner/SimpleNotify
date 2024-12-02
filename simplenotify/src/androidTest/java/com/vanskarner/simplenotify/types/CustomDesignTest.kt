@@ -168,14 +168,13 @@ class CustomDesignTest {
     }
 
     @Test
-    fun generateNotificationPair_shouldBeGenerated() = runTest {
+    fun generateBuilder_shouldBeGenerated() = runTest {
         val expectedData = TestDataProvider.customDesignData(context)
-        val actualNotificationPair = notifyConfig.asCustomDesign {
+        val actualNotification = notifyConfig.asCustomDesign {
             smallIcon = expectedData.smallIcon
             smallRemoteViews = expectedData.smallRemoteViews
             largeRemoteViews = expectedData.largeRemoteViews
-        }.generateNotificationPair()
-        val actualNotification = actualNotificationPair.second!!.build()
+        }.generateBuilder().build()
 
         assertNotificationChannelId(DEFAULT_CHANNEL_ID, actualNotification)
         assertCommonData(expectedData, actualNotification)

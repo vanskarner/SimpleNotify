@@ -85,7 +85,7 @@ class NotifyConfig(private val context: Context) {
         return this
     }
 
-    fun generateNotificationPair(): Pair<Int, NotificationCompat.Builder?> {
+    fun generateBuilder(): NotificationCompat.Builder {
         return NotifyGenerator(
             context = context,
             data = data,
@@ -94,7 +94,7 @@ class NotifyConfig(private val context: Context) {
             stackableData = stackableData,
             channelId = channelId,
             progressData = progressData
-        ).generateNotificationWithId()
+        ).generateBuilder()
     }
 
     fun show(): Pair<Int, Int> {

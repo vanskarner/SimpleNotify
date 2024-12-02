@@ -179,16 +179,16 @@ class BigPictureTest {
     }
 
     @Test
-    fun generateNotificationPair_shouldBeGenerated() = runTest {
+    fun generateBuilder_shouldBeGenerated() = runTest {
         val expectedData = TestDataProvider.bigPictureData()
-        val actualNotificationPair = notifyConfig.asBigPicture {
+        val actualBuilder = notifyConfig.asBigPicture {
             smallIcon = expectedData.smallIcon
             title = expectedData.title
             text = expectedData.text
             summaryText = expectedData.summaryText
             image = expectedData.image
-        }.generateNotificationPair()
-        val actualNotification = actualNotificationPair.second!!.build()
+        }.generateBuilder()
+        val actualNotification = actualBuilder.build()
 
         assertNotificationChannelId(DEFAULT_CHANNEL_ID, actualNotification)
         assertCommonData(expectedData, actualNotification)

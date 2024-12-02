@@ -177,16 +177,15 @@ class GroupMessagingTest {
     }
 
     @Test
-    fun generateNotificationPair_shouldBeGenerated() = runTest {
+    fun generateBuilder_shouldBeGenerated() = runTest {
         val expectedData = TestDataProvider.groupMessageData(context,"contact_015")
-        val actualNotificationPair = notifyConfig.asGroupMessaging {
+        val actualNotification = notifyConfig.asGroupMessaging {
             smallIcon = expectedData.smallIcon
             you = expectedData.you
             conversationTitle = expectedData.conversationTitle
             messages = expectedData.messages
             useHistoricMessage = false
-        }.generateNotificationPair()
-        val actualNotification = actualNotificationPair.second!!.build()
+        }.generateBuilder().build()
 
         assertNotificationChannelId(DEFAULT_MESSAGING_CHANNEL_ID, actualNotification)
         assertCommonData(expectedData, actualNotification)

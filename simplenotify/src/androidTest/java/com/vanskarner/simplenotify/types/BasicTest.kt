@@ -167,14 +167,14 @@ class BasicTest {
     }
 
     @Test
-    fun generateNotificationPair_shouldBeGenerated() = runTest {
+    fun generateBuilder_shouldBeGenerated() = runTest {
         val expectedData = TestDataProvider.basicData()
-        val actualNotificationPair = notifyConfig.asBasic {
+        val actualBuilder = notifyConfig.asBasic {
             smallIcon = expectedData.smallIcon
             title = expectedData.title
             text = expectedData.text
-        }.generateNotificationPair()
-        val actualNotification = actualNotificationPair.second!!.build()
+        }.generateBuilder()
+        val actualNotification = actualBuilder.build()
 
         assertNotificationChannelId(DEFAULT_CHANNEL_ID, actualNotification)
         assertCommonData(expectedData, actualNotification)

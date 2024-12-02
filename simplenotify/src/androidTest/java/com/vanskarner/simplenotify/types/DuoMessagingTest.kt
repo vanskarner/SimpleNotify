@@ -178,16 +178,15 @@ class DuoMessagingTest {
     }
 
     @Test
-    fun generateNotificationPair_shouldBeGenerated() = runTest {
+    fun generateBuilder_shouldBeGenerated() = runTest {
         val expectedData = TestDataProvider.duoMessageData(context,"contact_015")
-        val actualNotificationPair = notifyConfig.asDuoMessaging {
+        val actualNotification = notifyConfig.asDuoMessaging {
             smallIcon = expectedData.smallIcon
             you = expectedData.you
             contact = expectedData.contact
             messages = expectedData.messages
             useHistoricMessage = false
-        }.generateNotificationPair()
-        val actualNotification = actualNotificationPair.second!!.build()
+        }.generateBuilder().build()
 
         assertNotificationChannelId(DEFAULT_MESSAGING_CHANNEL_ID, actualNotification)
         assertCommonData(expectedData, actualNotification)
