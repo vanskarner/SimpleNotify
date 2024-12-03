@@ -3,6 +3,9 @@ plugins {
     alias(libs.plugins.kotlin.android)
 }
 
+group = "com.vanskarner"
+version = "1.0.0"
+
 android {
     namespace = "com.vanskarner.simplenotify"
     compileSdk = 34
