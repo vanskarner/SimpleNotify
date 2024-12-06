@@ -7,7 +7,6 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_PHONE_CALL" />
     <uses-permission android:name="android.permission.MANAGE_OWN_CALLS" />
 
-
     <application
         android:name=".MyApp"
         android:allowBackup="true"
@@ -19,8 +18,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SimpleNotify"
         tools:targetApi="31">
-        <receiver android:name=".RemoteInputBroadcast" />
-
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -30,20 +27,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".styles.basic.BasicActivity"
-            android:exported="true" />
-        <activity
-            android:name=".styles.messaging.MessagingActivity"
-            android:exported="true" />
-        <activity
             android:name=".styles.messaging.BasicBubbleActivity"
             android:allowEmbedded="true"
             android:documentLaunchMode="always"
             android:exported="true"
             android:resizeableActivity="true" />
-        <activity
-            android:name=".styles.call.CallActivity"
-            android:exported="true" />
         <provider
             android:name=".AssetFileProvider"
             android:authorities="com.vanskarner.samplenotify"
@@ -52,8 +40,10 @@
         <service
             android:name=".CallNotificationService"
             android:enabled="true"
-            android:foregroundServiceType="phoneCall"
-            android:exported="false" />
+            android:exported="false"
+            android:foregroundServiceType="phoneCall" />
+        <receiver android:name=".RemoteInputBroadcast" />
+        <receiver android:name=".NotificationDismissReceiver" />
     </application>
 
 </manifest>

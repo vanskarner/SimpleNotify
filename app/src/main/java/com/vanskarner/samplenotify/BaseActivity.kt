@@ -21,7 +21,7 @@ abstract class BaseActivity : AppCompatActivity() {
         const val INTENT_EXTRA_ACTIVITY = "ACTIVITY_TYPE"
     }
 
-    fun openSettings() {
+    private fun openSettings() {
         val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
             data = Uri.fromParts("package", packageName, null)
         }
@@ -36,7 +36,19 @@ abstract class BaseActivity : AppCompatActivity() {
             .getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
     }
 
+    fun pendingIntentToCloseNotification(notificationId: Int): PendingIntent {
+        return PendingIntent.getBroadcast(
+            this,
+            notificationId,
+            Intent(this, NotificationDismissReceiver::class.java).apply {
+                putExtra("notification_id", notificationId)
+            },
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+    }
+
     fun getReplyPendingIntent(extraNotifyId: Int, extraTypeActivity: String): PendingIntent {
+        println("notificationId2 -> $extraNotifyId | activityType2-> $extraTypeActivity")
         val replyIntent = Intent(this, RemoteInputBroadcast::class.java).apply {
             putExtra(INTENT_EXTRA_NOTIFY_ID, extraNotifyId)
             putExtra(INTENT_EXTRA_ACTIVITY, extraTypeActivity)
@@ -50,11 +62,6 @@ abstract class BaseActivity : AppCompatActivity() {
         )
     }
 
-    fun goToActivity(clazz: Class<*>) {
-        val intent = Intent(this, clazz)
-        startActivity(intent)
-    }
-
     fun showPermissionDeniedDialog() {
         AlertDialog.Builder(this)
             .setTitle("Notifications permission not granted")
@@ -63,9 +70,6 @@ abstract class BaseActivity : AppCompatActivity() {
             .setNegativeButton("Cancel", null)
             .show()
     }
-
-    fun getPermissionMsg(hasPermission: Boolean): String =
-        if (hasPermission) "Granted" else "Not Granted"
 
     fun iconFromAssets(fileName: String): IconCompat =
         IconCompat.createWithAdaptiveBitmap(BitmapFactory.decodeStream(assets.open(fileName)))

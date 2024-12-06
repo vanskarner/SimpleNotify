@@ -10,4 +10,10 @@
 
     <color name="incoming">#FBE9E7</color>
     <color name="outgoing">#EEEEEE</color>
+
+    <color name="notification_background">#F5F5F5</color>
+    <color name="notification_text_color">#212121</color>
+    <color name="notification_text_secondary">#707070</color>
+    <color name="notification_button_color">#6200EE</color>
+    <color name="notification_button_text_color">#FFFFFF</color>
 </resources>

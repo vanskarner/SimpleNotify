@@ -6,8 +6,8 @@ import android.content.Context
 import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
 import androidx.core.app.RemoteInput
-import com.vanskarner.samplenotify.styles.basic.BasicActivity
-import com.vanskarner.samplenotify.styles.messaging.MessagingActivity
+import com.vanskarner.samplenotify.styles.basic.BASIC_TYPE
+import com.vanskarner.samplenotify.styles.duomessaging.DUO_MESSAGING_TYPE
 import com.vanskarner.simplenotify.SimpleNotify
 
 class RemoteInputBroadcast : BroadcastReceiver() {
@@ -17,19 +17,19 @@ class RemoteInputBroadcast : BroadcastReceiver() {
         val notificationId = intent.getIntExtra(BaseActivity.INTENT_EXTRA_NOTIFY_ID, -1)
         val activityType = intent.getStringExtra(BaseActivity.INTENT_EXTRA_ACTIVITY)
         when (activityType) {
-            BasicActivity.TYPE -> {
+            BASIC_TYPE -> {
                 SimpleNotify
                     .with(context)
                     .asBasic {
                         id = notificationId
                         title = "Message sent"
                         text = "Your message has been sent: $msg"
-                        timeoutAfter = 2500
+                        timeoutAfter = 1000L
                     }
                     .show()
             }
 
-            MessagingActivity.TYPE -> {
+            DUO_MESSAGING_TYPE -> {
                 val manager = context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
                 manager.cancelAll()
             }

@@ -18,7 +18,7 @@
         android:paddingBottom="@dimen/spacing_small"
         app:layout_constraintVertical_bias="0.0"
         tools:itemCount="12"
-        tools:listitem="@layout/message_item" />
+        tools:listitem="@layout/item_msg" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/input_bar"

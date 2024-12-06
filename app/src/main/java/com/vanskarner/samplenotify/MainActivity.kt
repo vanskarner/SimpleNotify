@@ -1,22 +1,64 @@
 package com.vanskarner.samplenotify
 
+import android.Manifest
+import android.os.Build
 import android.os.Bundle
-import android.widget.Button
-import com.vanskarner.samplenotify.styles.basic.BasicActivity
-import com.vanskarner.samplenotify.styles.call.CallActivity
-import com.vanskarner.samplenotify.styles.messaging.MessagingActivity
+import android.view.View
+import android.widget.ArrayAdapter
+import androidx.activity.result.contract.ActivityResultContracts
+import com.vanskarner.samplenotify.databinding.MainActivityBinding
+import com.vanskarner.samplenotify.styles.basic.showBasicTypes
+import com.vanskarner.samplenotify.styles.bigpicture.showBigPictureTypes
+import com.vanskarner.samplenotify.styles.bigtext.showBigTextTypes
+import com.vanskarner.samplenotify.styles.call.showCallTypes
+import com.vanskarner.samplenotify.styles.customdesign.showCustomDesignTypes
+import com.vanskarner.samplenotify.styles.duomessaging.showDuoMessagingTypes
+import com.vanskarner.samplenotify.styles.groupmessaging.showGroupMessagingTypes
+import com.vanskarner.samplenotify.styles.inbox.showInboxTypes
 
 class MainActivity : BaseActivity() {
 
+    private lateinit var binding: MainActivityBinding
+    private val requestPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            binding.card.visibility = if (isGranted) View.GONE else View.VISIBLE
+            if (!isGranted) showPermissionDeniedDialog()
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.main_activity)
-        findViewById<Button>(R.id.btnBasic).setOnClickListener { goToActivity(BasicActivity::class.java) }
-        findViewById<Button>(R.id.btnBigText).setOnClickListener { }
-        findViewById<Button>(R.id.btnBigPicture).setOnClickListener { }
-        findViewById<Button>(R.id.btnInbox).setOnClickListener { }
-        findViewById<Button>(R.id.btnMessaging).setOnClickListener { goToActivity(MessagingActivity::class.java) }
-        findViewById<Button>(R.id.btnCall).setOnClickListener { goToActivity(CallActivity::class.java) }
+        binding = MainActivityBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        binding.btnReset.setOnClickListener { showNotificationTypes() }
+        binding.card.visibility = when {
+            Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU -> View.GONE
+            hasNotificationPermission() -> View.GONE
+            else -> {
+                binding.btnGrant.setOnClickListener {
+                    requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                }
+                View.VISIBLE
+            }
+        }
+        binding.btnReset.performClick()
+    }
+
+    private fun showNotificationTypes() {
+        val actions = mapOf(
+            "Basic" to ::showBasicTypes,
+            "BigText" to ::showBigTextTypes,
+            "Inbox" to ::showInboxTypes,
+            "BigPicture" to ::showBigPictureTypes,
+            "DuoMessaging" to ::showDuoMessagingTypes,
+            "GroupMessaging" to ::showGroupMessagingTypes,
+            "Call" to ::showCallTypes,
+            "CustomDesign" to ::showCustomDesignTypes
+        )
+        binding.gridView.adapter =
+            ArrayAdapter(this, android.R.layout.simple_list_item_1, actions.keys.toList())
+        binding.gridView.setOnItemClickListener { _, _, position, _ ->
+            actions.values.elementAt(position).invoke(this, binding)
+        }
     }
 
 }

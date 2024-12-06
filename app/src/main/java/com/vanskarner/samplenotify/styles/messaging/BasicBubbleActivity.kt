@@ -38,10 +38,10 @@ class BasicBubbleActivity : BaseActivity() {
         bubbleMessageSamples().mapIndexed { index, notifyMessaging ->
             when (notifyMessaging) {
                 is NotifyMessaging.ContactMsg ->
-                    Messages(index.toLong(), notifyMessaging.msg, true)
+                    Messages(index.toLong(), notifyMessaging.msg.toString(), true)
 
                 is NotifyMessaging.YourMsg ->
-                    Messages(index.toLong(), notifyMessaging.msg, false)
+                    Messages(index.toLong(), notifyMessaging.msg.toString(), false)
             }
         }.toMutableList()
     }
