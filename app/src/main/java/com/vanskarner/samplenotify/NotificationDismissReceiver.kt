@@ -9,7 +9,7 @@ class NotificationDismissReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent?) {
         val notificationId = intent?.getIntExtra("notification_id", -1) ?: return
-        SimpleNotify.cancel(context,notificationId)
+        SimpleNotify.cancel(context, notificationId)
     }
 
 }

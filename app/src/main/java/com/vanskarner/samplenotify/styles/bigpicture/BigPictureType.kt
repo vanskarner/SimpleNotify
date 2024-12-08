@@ -35,7 +35,8 @@ private fun basic(activity: MainActivity) {
         .asBigPicture {
             title = "Dina Basurearte: With her phrase “Your mom!"
             text = "A never-before-seen response from a female president to the people"
-            summaryText = "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+            summaryText =
+                "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
             image = BitmapFactory.decodeStream(activity.assets.open("dina2.jpg"))
         }
         .show()
@@ -48,12 +49,12 @@ private fun withDetails(activity: MainActivity) {
             tag = "BIG_PICTURE_TAG"
             smallIcon = R.drawable.baseline_handshake_24
             largeIcon = BitmapFactory.decodeStream(activity.assets.open("dina2.jpg"))
-            contentIntent = activity.pendingIntentToCloseNotification(id?:0)
-            timeoutAfter = 2500L
-            autoCancel = true
+            contentIntent = activity.pendingIntentToCloseNotification(id ?: 0)
+            timeoutAfter = 5000L
             title = "Dina Balearte: Order with bullets and promotions"
             text = "Promotions after repression, a touch of presidential irony."
-            summaryText = "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+            summaryText =
+                "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
             image = BitmapFactory.decodeStream(activity.assets.open("dina2.jpg"))
         }
         .show()
@@ -66,7 +67,8 @@ private fun withActions(activity: MainActivity) {
             id = notifyId
             title = "Dina Corruptuarte: Waykis case in the shadows"
             text = "An alleged criminal network dedicated to influence peddling"
-            summaryText = "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+            summaryText =
+                "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
             image = BitmapFactory.decodeStream(activity.assets.open("dina2.jpg"))
         }
         .addReplyAction {

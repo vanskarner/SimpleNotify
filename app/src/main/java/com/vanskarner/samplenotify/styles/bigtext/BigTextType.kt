@@ -50,8 +50,7 @@ private fun withDetails(activity: MainActivity) {
             smallIcon = R.drawable.baseline_handshake_24
             largeIcon = BitmapFactory.decodeStream(activity.assets.open("dina2.jpg"))
             contentIntent = activity.pendingIntentToCloseNotification(id ?: 0)
-            timeoutAfter = 2500L
-            autoCancel = true
+            timeoutAfter = 5000L
             title = "Dina Balearte: Order with bullets and promotions"
             text = "Promotions after repression, a touch of presidential irony."
             bigText =
@@ -96,8 +95,9 @@ private fun withProgress(activity: MainActivity) {
                 .asBigText {
                     title = "Dina Basurearte: With her phrase “Your mom!"
                     text = "A never-before-seen response from a female president to the people"
-                    bigText = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
-                    summaryText =if (progress < 100) "Downloading($progress%)..."
+                    bigText =
+                        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
+                    summaryText = if (progress < 100) "Downloading($progress%)..."
                     else "Download finished"
                 }
                 .progress {
@@ -117,8 +117,9 @@ private fun withIndeterminateProgress(activity: MainActivity) {
                 .asBigText {
                     title = "Dina Basurearte: With her phrase “Your mom!"
                     text = "A never-before-seen response from a female president to the people"
-                    bigText = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
-                    summaryText =if (progress < 100) "Downloading($progress%)..."
+                    bigText =
+                        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
+                    summaryText = if (progress < 100) "Downloading($progress%)..."
                     else "Download finished"
                 }
                 .progress {

@@ -48,8 +48,7 @@ private fun withDetails(activity: MainActivity) {
             smallIcon = R.drawable.baseline_handshake_24
             largeIcon = BitmapFactory.decodeStream(activity.assets.open("dina2.jpg"))
             contentIntent = activity.pendingIntentToCloseNotification(id ?: 0)
-            timeoutAfter = 2500L
-            autoCancel = true
+            timeoutAfter = 5000L
             title = "Dina Balearte: Order with bullets and promotions"
             text = "Promotions after repression, a touch of presidential irony."
             lines = arrayListOf("My item One", "My item Second", "My item Third", "My item Four")

@@ -50,8 +50,7 @@ private fun withDetails(activity: MainActivity) {
             smallIcon = R.drawable.baseline_handshake_24
             largeIcon = BitmapFactory.decodeStream(activity.assets.open("dina2.jpg"))
             contentIntent = activity.pendingIntentToCloseNotification(id ?: 0)
-            timeoutAfter = 2500L
-            autoCancel = true
+            timeoutAfter = 5000L
             smallRemoteViews = {
                 RemoteViews(activity.packageName, R.layout.small_notification_1)
             }
