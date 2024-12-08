@@ -21,6 +21,7 @@ object NotifyFilter {
         when (data) {
             is Data.BasicData -> {
                 builder.setContentTitle(data.title)
+                    .setSubText(data.subText)
                     .setContentText(data.text)
             }
 

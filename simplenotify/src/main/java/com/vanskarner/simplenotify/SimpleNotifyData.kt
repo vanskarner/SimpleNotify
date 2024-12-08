@@ -66,6 +66,10 @@ sealed class Data {
          * Set the text (second row) of the notification, in a standard notification.
          */
         var text: CharSequence? = null,
+        /**
+         * Additional information displayed in the notification header area.
+         */
+        var subText: CharSequence? = null,
     ) : Data()
 
     /**

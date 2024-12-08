@@ -35,6 +35,7 @@ private fun basic(activity: MainActivity) {
         .asBasic {
             title = "Dina Basurearte: With her phrase “Your mom!"
             text = "A never-before-seen response from a female president to the people"
+            subText = "Any SubText"
         }
         .show()
 }
@@ -51,6 +52,7 @@ private fun withDetails(activity: MainActivity) {
             autoCancel = true
             title = "Dina Balearte: Order with bullets and promotions"
             text = "Promotions after repression, a touch of presidential irony."
+            subText = "Any SubText"
         }
         .show()
 }
@@ -85,9 +87,10 @@ private fun withProgress(activity: MainActivity) {
             delay(1000)
             SimpleNotify.with(activity)
                 .asBasic {
+                    smallIcon = R.drawable.baseline_file_download_24
                     title = "Downloading Dina's Prosecutor File"
-                    text = if (progress < 100) "${progress}%"
-                    else "Be careful their government and most of the police work together."
+                    text = if (progress <100) "${100 - progress} seconds left" else "Processed application"
+                    subText = if (progress < 100) "${progress}%" else "Download completed"
                 }
                 .progress {
                     currentValue = progress
@@ -104,9 +107,10 @@ private fun withIndeterminateProgress(activity: MainActivity) {
             delay(1000)
             SimpleNotify.with(activity)
                 .asBasic {
+                    smallIcon = R.drawable.baseline_file_download_24
                     title = "Downloading Dina's Prosecutor File"
-                    text = if (progress < 100) "Downloading..."
-                    else "Be careful their government and most of the police work together."
+                    text = if (progress <100) "${100 - progress} seconds left" else "Processed application"
+                    subText = if (progress < 100) "Downloading..." else "Download completed"
                 }
                 .progress {
                     indeterminate = true

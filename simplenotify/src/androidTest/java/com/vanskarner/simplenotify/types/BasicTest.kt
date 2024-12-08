@@ -58,6 +58,7 @@ class BasicTest {
             smallIcon = expectedData.smallIcon
             title = expectedData.title
             text = expectedData.text
+            subText = expectedData.subText
         }.show()
         val actualStatusBarNotification =
             notificationManager.waitForNotification(actualNotificationPair.first)
@@ -75,6 +76,7 @@ class BasicTest {
             smallIcon = expectedData.smallIcon
             title = expectedData.title
             text = expectedData.text
+            subText = expectedData.subText
         }.progress {
             currentValue = expectedProgress
             indeterminate = true
@@ -100,6 +102,7 @@ class BasicTest {
             smallIcon = expectedData.smallIcon
             title = expectedData.title
             text = expectedData.text
+            subText = expectedData.subText
         }.progress {
             hide = true
         }.show()
@@ -125,6 +128,7 @@ class BasicTest {
             smallIcon = expectedData.smallIcon
             title = expectedData.title
             text = expectedData.text
+            subText = expectedData.subText
         }
             .useChannel(channelId).show()
         val actualStatusBarNotification =
@@ -144,6 +148,7 @@ class BasicTest {
             smallIcon = expectedData.smallIcon
             title = expectedData.title
             text = expectedData.text
+            subText = expectedData.subText
         }
             .addAction {
                 icon = expectedAction.icon
@@ -173,6 +178,7 @@ class BasicTest {
             smallIcon = expectedData.smallIcon
             title = expectedData.title
             text = expectedData.text
+            subText = expectedData.subText
         }.generateBuilder()
         val actualNotification = actualBuilder.build()
 
@@ -186,6 +192,7 @@ class BasicTest {
         assertNotificationPriority(NotificationCompat.PRIORITY_DEFAULT, actualNotification)
         assertEquals(expectedData.title, actualExtras?.getString(NotificationCompat.EXTRA_TITLE))
         assertEquals(expectedData.text, actualExtras?.getString(NotificationCompat.EXTRA_TEXT))
+        assertEquals(expectedData.subText, actualExtras?.getString(NotificationCompat.EXTRA_SUB_TEXT))
     }
 
 }
