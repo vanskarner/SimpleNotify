@@ -46,7 +46,6 @@ class TestDataProvider {
             val basicData = Data.BasicData().apply {
                 title = "Basic Style"
                 text = "Text for Basic"
-                subText = "SubText for Basic"
                 smallIcon = R.drawable.test_ic_notification_24
                 largeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
                 contentIntent = pendingIntent

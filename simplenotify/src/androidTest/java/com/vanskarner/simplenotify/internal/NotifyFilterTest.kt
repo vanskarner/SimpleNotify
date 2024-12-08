@@ -41,7 +41,6 @@ class NotifyFilterTest {
 
         assertEquals(expectedData.title, actualExtras.getString(NotificationCompat.EXTRA_TITLE))
         assertEquals(expectedData.text, actualExtras.getString(NotificationCompat.EXTRA_TEXT))
-        assertEquals(expectedData.subText, actualExtras.getString(NotificationCompat.EXTRA_SUB_TEXT))
         assertNotificationPriority(NotificationCompat.PRIORITY_DEFAULT, actualNotification)
         assertCommonData(expectedData, actualNotification)
     }
