@@ -15,6 +15,7 @@ internal object NotifyFeatures {
     fun applyExtras(extras: ExtraData, builder: NotificationCompat.Builder) {
         extras.priority?.let { builder.setPriority(it) }
         extras.category?.let { builder.setCategory(it) }
+        extras.sounds?.let { builder.setSound(it) }
         extras.subText?.let { builder.setSubText(it) }
         extras.deleteIntent?.let { builder.setDeleteIntent(it) }
         extras.visibility?.let { builder.setVisibility(it) }
@@ -55,8 +56,11 @@ internal object NotifyFeatures {
     }
 
     fun applyProgress(progressData: ProgressData, builder: NotificationCompat.Builder) {
-        if (progressData.hide) builder.setProgress(0, 0, false)
-        else builder.setProgress(100, progressData.currentValue, progressData.indeterminate)
+        builder.apply {
+            setSound(null)
+            if (progressData.hide) setProgress(0, 0, false)
+            else setProgress(100, progressData.currentValue, progressData.indeterminate)
+        }
     }
 
     fun getGroupStackable(
@@ -75,7 +79,7 @@ internal object NotifyFeatures {
             .map { Pair(it.id, it.notification) }
         val initialAmount = if (stackable.initialAmount < 1) 1 else stackable.initialAmount
         val isValid = notifications.size + 1 >= initialAmount
-        return if(isValid) notifications
+        return if (isValid) notifications
         else emptyList()
     }
 

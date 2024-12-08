@@ -7,6 +7,7 @@ import org.junit.Assert.assertNotNull
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Icon
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.service.notification.StatusBarNotification
@@ -117,6 +118,13 @@ internal fun assertCommonData(expectedData: Data, actualNotification: Notificati
     assertEquals(expectedData.autoCancel, actualAutoCancel)
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         assertEquals(expectedData.timeoutAfter, actualNotification.timeoutAfter)
+    }
+}
+
+internal fun assertNotificationSound(expectedUri: Uri, actualNotification: Notification) {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+        @Suppress("DEPRECATION")
+        assertEquals(expectedUri, actualNotification.sound)
     }
 }
 

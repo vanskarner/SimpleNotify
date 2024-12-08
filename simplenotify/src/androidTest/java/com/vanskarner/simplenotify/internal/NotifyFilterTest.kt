@@ -3,6 +3,7 @@ package com.vanskarner.simplenotify.internal
 import android.app.PendingIntent
 import android.content.Context
 import android.graphics.Bitmap
+import android.media.RingtoneManager
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.test.core.app.ApplicationProvider
@@ -11,6 +12,7 @@ import com.vanskarner.simplenotify.common.TestDataProvider
 import com.vanskarner.simplenotify.common.assertCommonData
 import com.vanskarner.simplenotify.common.assertNotificationMessages
 import com.vanskarner.simplenotify.common.assertNotificationPriority
+import com.vanskarner.simplenotify.common.assertNotificationSound
 import com.vanskarner.simplenotify.common.getCustomParcelable
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -38,10 +40,12 @@ class NotifyFilterTest {
         notifyFilter.applyData(appContext, expectedData, builder)
         val actualNotification = builder.build()
         val actualExtras = actualNotification.extras
+        val actualSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
 
         assertEquals(expectedData.title, actualExtras.getString(NotificationCompat.EXTRA_TITLE))
         assertEquals(expectedData.text, actualExtras.getString(NotificationCompat.EXTRA_TEXT))
         assertNotificationPriority(NotificationCompat.PRIORITY_DEFAULT, actualNotification)
+        assertNotificationSound(actualSound, actualNotification)
         assertCommonData(expectedData, actualNotification)
     }
 
@@ -53,12 +57,14 @@ class NotifyFilterTest {
         val actualExtras = actualNotification.extras
         val actualBigText = actualExtras.getString(NotificationCompat.EXTRA_BIG_TEXT)
         val actualSummaryText = actualExtras.getString(NotificationCompat.EXTRA_SUMMARY_TEXT)
+        val actualSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
 
         assertEquals(expectedData.title, actualExtras.getString(NotificationCompat.EXTRA_TITLE))
         assertEquals(expectedData.text, actualExtras.getString(NotificationCompat.EXTRA_TEXT))
         assertEquals(expectedData.bigText, actualBigText)
         assertEquals(expectedData.summaryText, actualSummaryText)
         assertNotificationPriority(NotificationCompat.PRIORITY_DEFAULT, actualNotification)
+        assertNotificationSound(actualSound, actualNotification)
         assertCommonData(expectedData, actualNotification)
     }
 
@@ -69,11 +75,13 @@ class NotifyFilterTest {
         val actualNotification = builder.build()
         val actualExtras = actualNotification.extras
         val actualTextLines = actualExtras.getCharSequenceArray(NotificationCompat.EXTRA_TEXT_LINES)
+        val actualSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
 
         assertEquals(expectedData.title, actualExtras.getString(NotificationCompat.EXTRA_TITLE))
         assertEquals(expectedData.text, actualExtras.getString(NotificationCompat.EXTRA_TEXT))
         assertEquals(expectedData.lines.size, actualTextLines?.size ?: 0)
         assertNotificationPriority(NotificationCompat.PRIORITY_DEFAULT, actualNotification)
+        assertNotificationSound(actualSound, actualNotification)
         assertCommonData(expectedData, actualNotification)
     }
 
@@ -86,12 +94,14 @@ class NotifyFilterTest {
         val actualPicture =
             actualExtras.getCustomParcelable(NotificationCompat.EXTRA_PICTURE, Bitmap::class.java)
         val actualSummaryText = actualExtras.getString(NotificationCompat.EXTRA_SUMMARY_TEXT)
+        val actualSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
 
         assertEquals(expectedData.title, actualExtras.getString(NotificationCompat.EXTRA_TITLE))
         assertEquals(expectedData.text, actualExtras.getString(NotificationCompat.EXTRA_TEXT))
         assertEquals(expectedData.summaryText, actualSummaryText)
         assertTrue(expectedData.image?.sameAs(actualPicture) ?: false)
         assertNotificationPriority(NotificationCompat.PRIORITY_DEFAULT, actualNotification)
+        assertNotificationSound(actualSound, actualNotification)
         assertCommonData(expectedData, actualNotification)
     }
 
@@ -105,7 +115,6 @@ class NotifyFilterTest {
         notifyFilter.applyData(appContext, expectedData, builder)
         val actualNotification = builder.build()
         val actualExtras = actualNotification.extras
-
         val actualUserName = actualExtras.getString(NotificationCompat.EXTRA_SELF_DISPLAY_NAME)
         val actualIsGroupConversation =
             actualExtras.getBoolean(NotificationCompat.EXTRA_IS_GROUP_CONVERSATION)
@@ -115,6 +124,7 @@ class NotifyFilterTest {
                 actualNotification
             )
         val actualLastMsg = actualStyle?.messages?.last()
+        val actualSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
 
         assertEquals(expectedData.you.name, actualUserName)
         assertEquals(expectedData.contact.name, actualNamePersonAdded)
@@ -124,6 +134,7 @@ class NotifyFilterTest {
         assertTrue(expectedData.messages.last().mimeData?.second == actualLastMsg?.dataUri)
         assertEquals(NotificationCompat.CATEGORY_MESSAGE, actualNotification.category)
         assertNotificationPriority(NotificationCompat.PRIORITY_HIGH, actualNotification)
+        assertNotificationSound(actualSound, actualNotification)
         assertCommonData(expectedData, actualNotification)
         //Notification bubbles are available from API 29
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -152,7 +163,6 @@ class NotifyFilterTest {
         notifyFilter.applyData(appContext, expectedData, builder)
         val actualNotification = builder.build()
         val actualExtras = actualNotification.extras
-
         val actualUserName = actualExtras.getString(NotificationCompat.EXTRA_SELF_DISPLAY_NAME)
         val actualIsGroupConversation =
             actualExtras.getBoolean(NotificationCompat.EXTRA_IS_GROUP_CONVERSATION)
@@ -163,6 +173,7 @@ class NotifyFilterTest {
                 actualNotification
             )
         val actualLastMsg = actualStyle!!.messages.last()
+        val actualSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
 
         assertEquals(expectedData.you.name, actualUserName)
         assertTrue(actualIsGroupConversation)
@@ -172,6 +183,7 @@ class NotifyFilterTest {
         assertTrue(expectedData.messages.last().mimeData!!.second == actualLastMsg.dataUri)
         assertEquals(NotificationCompat.CATEGORY_MESSAGE, actualNotification.category)
         assertNotificationPriority(NotificationCompat.PRIORITY_HIGH, actualNotification)
+        assertNotificationSound(actualSound, actualNotification)
         assertCommonData(expectedData, actualNotification)
         //Notification bubbles are available from API 29
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -204,6 +216,7 @@ class NotifyFilterTest {
         val actualNamePersonAdded = actualExtras.getString("android.title")
         val actualStyle = actualExtras.getString(NotificationCompat.EXTRA_COMPAT_TEMPLATE)
         val actualCallType = actualExtras.getInt(NotificationCompat.EXTRA_CALL_TYPE)
+        val actualSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
         val actualAnswer = if (expectedData.type in listOf("incoming", "screening"))
             actualExtras.getCustomParcelable(
                 NotificationCompat.EXTRA_ANSWER_INTENT,
@@ -230,6 +243,7 @@ class NotifyFilterTest {
         assertEquals(expectedData.answer, actualAnswer)
         assertEquals(expectedData.declineOrHangup, actualDeclineHangup)
         assertNotificationPriority(NotificationCompat.PRIORITY_HIGH, actualNotification)
+        assertNotificationSound(actualSound, actualNotification)
         assertCommonData(expectedData, actualNotification)
     }
 
@@ -247,10 +261,12 @@ class NotifyFilterTest {
 
         @Suppress("DEPRECATION") //Deprecated in API level 24, no exchange option
         val actualLargeRemoteView = actualNotification.bigContentView
+        val actualSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
 
         assertEquals(expectedSmallRemoteView.invoke()!!.layoutId, actualSmallRemoteView.layoutId)
         assertEquals(expectedLargeRemoteView.invoke()!!.layoutId, actualLargeRemoteView.layoutId)
         assertNotificationPriority(NotificationCompat.PRIORITY_DEFAULT, actualNotification)
+        assertNotificationSound(actualSound, actualNotification)
         assertCommonData(expectedData, actualNotification)
     }
 

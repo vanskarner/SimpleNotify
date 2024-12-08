@@ -344,6 +344,10 @@ data class ExtraData(
      */
     var category: String? = null,
     /**
+     * Set the sound to play. Valid only for the previous to [android.os.Build.VERSION_CODES.O]
+     */
+    var sounds: Uri? = null,
+    /**
      * This provides some additional information that is displayed in the notification.
      * No guarantees are given where exactly it is displayed.
      */

@@ -18,6 +18,7 @@ object NotifyFilter {
             .setContentIntent(data.contentIntent)
             .setAutoCancel(data.autoCancel)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
         when (data) {
             is Data.BasicData -> {
                 builder.setContentTitle(data.title)
