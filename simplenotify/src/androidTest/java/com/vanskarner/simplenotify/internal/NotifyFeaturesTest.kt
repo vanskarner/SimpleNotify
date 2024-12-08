@@ -49,7 +49,6 @@ class NotifyFeaturesTest {
         val actualOngoing = actualNotification.flags and NotificationCompat.FLAG_ONGOING_EVENT != 0
         val actualOnlyAlertOnce =
             actualNotification.flags and Notification.FLAG_ONLY_ALERT_ONCE != 0
-        val actualSubText = actualExtras.getString(NotificationCompat.EXTRA_SUB_TEXT)
         val actualShowWhen = actualExtras.getBoolean(NotificationCompat.EXTRA_SHOW_WHEN)
         val actualUsesChronometer = NotificationCompat.getUsesChronometer(actualNotification)
         val actualBadgeNumber = actualNotification.number
@@ -66,7 +65,6 @@ class NotifyFeaturesTest {
         assertEquals(expectedExtraData.deleteIntent, actualNotification.deleteIntent)
         assertEquals(expectedExtraData.fullScreenIntent?.first, actualNotification.fullScreenIntent)
         assertEquals(expectedExtraData.onlyAlertOnce, actualOnlyAlertOnce)
-        assertEquals(expectedExtraData.subText, actualSubText)
         assertEquals(expectedExtraData.showWhen, actualShowWhen)
         assertEquals(expectedExtraData.useChronometer, actualUsesChronometer)
         assertEquals(expectedExtraData.badgeNumber, actualBadgeNumber)

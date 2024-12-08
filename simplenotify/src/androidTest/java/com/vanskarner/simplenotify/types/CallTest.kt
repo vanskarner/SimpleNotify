@@ -72,7 +72,9 @@ class CallTest {
     fun showOrGenerate_usingProgress_shouldBeProduced() = runTest {
         val expectedData = TestDataProvider.callData()
         val expectedProgress = 50
+        val notificationId = 40
         notifyConfig.asCall {
+            id = notificationId
             smallIcon = expectedData.smallIcon
             type = expectedData.type
             caller = expectedData.caller
@@ -97,7 +99,9 @@ class CallTest {
     @Test
     fun showOrGenerate_whenProgressIsHide_shouldBeProduced() = runTest {
         val expectedData = TestDataProvider.callData()
+        val notificationId = 41
         notifyConfig.asCall {
+            id = notificationId
             smallIcon = expectedData.smallIcon
             type = expectedData.type
             caller = expectedData.caller

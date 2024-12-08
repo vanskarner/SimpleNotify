@@ -74,7 +74,9 @@ class DuoMessagingTest {
     fun show_usingProgress_shouldBeShown() = runTest {
         val expectedData = TestDataProvider.duoMessageData(context, "contact_015")
         val expectedProgress = 50
-        val actualNotificationPair = notifyConfig.asDuoMessaging {
+        val notificationId = 60
+        notifyConfig.asDuoMessaging {
+            id = notificationId
             smallIcon = expectedData.smallIcon
             you = expectedData.you
             contact = expectedData.contact
@@ -85,7 +87,7 @@ class DuoMessagingTest {
             indeterminate = true
         }.show()
         val actualStatusBarNotification =
-            notificationManager.waitForNotification(actualNotificationPair.first)
+            notificationManager.waitForNotification(notificationId)
         val actualNotification = actualStatusBarNotification.notification
         val actualExtras = actualNotification.extras
         val actualProgress = actualExtras.getInt(NotificationCompat.EXTRA_PROGRESS)
@@ -101,7 +103,9 @@ class DuoMessagingTest {
     @Test
     fun show_whenProgressIsHide_shouldBeShown() = runTest {
         val expectedData = TestDataProvider.duoMessageData(context, "contact_015")
-        val actualNotificationPair = notifyConfig.asDuoMessaging {
+        val notificationId = 61
+        notifyConfig.asDuoMessaging {
+            id = notificationId
             smallIcon = expectedData.smallIcon
             you = expectedData.you
             contact = expectedData.contact
@@ -111,7 +115,7 @@ class DuoMessagingTest {
             hide = true
         }.show()
         val actualStatusBarNotification =
-            notificationManager.waitForNotification(actualNotificationPair.first)
+            notificationManager.waitForNotification(notificationId)
         val actualNotification = actualStatusBarNotification.notification
         val actualExtras = actualNotification.extras
         val actualProgress = actualExtras.getInt(NotificationCompat.EXTRA_PROGRESS)

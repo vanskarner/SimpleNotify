@@ -16,7 +16,6 @@ internal object NotifyFeatures {
         extras.priority?.let { builder.setPriority(it) }
         extras.category?.let { builder.setCategory(it) }
         extras.sounds?.let { builder.setSound(it) }
-        extras.subText?.let { builder.setSubText(it) }
         extras.deleteIntent?.let { builder.setDeleteIntent(it) }
         extras.visibility?.let { builder.setVisibility(it) }
         extras.ongoing?.let { builder.setOngoing(it) }

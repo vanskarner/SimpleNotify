@@ -55,6 +55,11 @@ sealed class Data {
     var timeoutAfter: Long? = null
 
     /**
+     * Provides additional information displayed in the header area of the notification.
+     */
+    var subText: CharSequence? = null
+
+    /**
      * Data structure used by the type of notification: [NotifyConfig.asBasic]
      */
     data class BasicData(

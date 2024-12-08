@@ -46,6 +46,7 @@ class TestDataProvider {
             val basicData = Data.BasicData().apply {
                 title = "Basic Style"
                 text = "Text for Basic"
+                subText = "SubText for Basic"
                 smallIcon = R.drawable.test_ic_notification_24
                 largeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
                 contentIntent = pendingIntent
@@ -61,6 +62,7 @@ class TestDataProvider {
                 title = "BigText Style"
                 bigText = "BigText"
                 text = "Text for BigText"
+                subText = "SubText for BigTextData"
                 summaryText = "Summary for BigText"
                 smallIcon = R.drawable.test_ic_notification_24
                 largeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
@@ -76,6 +78,7 @@ class TestDataProvider {
             val data = Data.InboxData().apply {
                 title = "Inbox Style"
                 text = "Text for Inbox"
+                subText = "SubText for InboxData"
                 lines = arrayListOf("Any line 1", "Any line 2", "Any line 3")
                 smallIcon = R.drawable.test_ic_notification_24
                 largeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
@@ -91,6 +94,7 @@ class TestDataProvider {
             val data = Data.BigPictureData().apply {
                 title = "BigPicture Style"
                 text = "Text for BigPicture"
+                subText = "SubText for BigPictureData"
                 summaryText = "Summary for BigPicture"
                 image = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
                 smallIcon = R.drawable.test_ic_notification_24
@@ -108,6 +112,7 @@ class TestDataProvider {
         ): Data.DuoMessageData {
             val pendingIntent = pendingIntent()
             val data = Data.DuoMessageData().apply {
+                subText = "SubText for DuoMessageData"
                 you = Person.Builder().setName("Albert").build()
                 contact = Person.Builder().setName("Chris").setIcon(
                     IconCompat.createWithAdaptiveBitmap(
@@ -152,6 +157,7 @@ class TestDataProvider {
         fun groupMessageData(context: Context, shortcutId: String): Data.GroupMessageData {
             val pendingIntent = pendingIntent()
             val data = Data.GroupMessageData().apply {
+                subText = "SubText for GroupMessageData"
                 conversationTitle = "Any conversationTitle"
                 you = Person.Builder().setName("You").build()
                 messages = arrayListOf(
@@ -200,6 +206,7 @@ class TestDataProvider {
         fun callData(): Data.CallData {
             val pendingIntent = pendingIntent()
             return Data.CallData().apply {
+                subText = "SubText for CallData"
                 type = "incoming"
                 caller = Person.Builder().setName("Max").build()
                 answer = pendingIntent()
@@ -214,6 +221,7 @@ class TestDataProvider {
 
         fun customDesignData(context: Context): Data.CustomDesignData {
             val data = Data.CustomDesignData().apply {
+                subText = "SubText for CustomDesignData"
                 hasStyle = false
                 smallRemoteViews = {
                     val remoteViews =

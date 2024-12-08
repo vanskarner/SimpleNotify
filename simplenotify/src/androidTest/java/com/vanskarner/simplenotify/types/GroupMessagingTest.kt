@@ -74,7 +74,9 @@ class GroupMessagingTest {
     fun show_usingProgress_shouldBeShown() = runTest {
         val expectedData = TestDataProvider.groupMessageData(context, "contact_015")
         val expectedProgress = 50
-        val actualNotificationPair = notifyConfig.asGroupMessaging {
+        val notificationId = 70
+        notifyConfig.asGroupMessaging {
+            id = notificationId
             smallIcon = expectedData.smallIcon
             you = expectedData.you
             conversationTitle = expectedData.conversationTitle
@@ -85,7 +87,7 @@ class GroupMessagingTest {
             indeterminate = true
         }.show()
         val actualStatusBarNotification =
-            notificationManager.waitForNotification(actualNotificationPair.first)
+            notificationManager.waitForNotification(notificationId)
         val actualNotification = actualStatusBarNotification.notification
         val actualExtras = actualNotification.extras
         val actualProgress = actualExtras.getInt(NotificationCompat.EXTRA_PROGRESS)
@@ -101,7 +103,9 @@ class GroupMessagingTest {
     @Test
     fun show_whenProgressIsHide_shouldBeShown() = runTest {
         val expectedData = TestDataProvider.groupMessageData(context, "contact_015")
-        val actualNotificationPair = notifyConfig.asGroupMessaging {
+        val notificationId = 71
+        notifyConfig.asGroupMessaging {
+            id = notificationId
             smallIcon = expectedData.smallIcon
             you = expectedData.you
             conversationTitle = expectedData.conversationTitle
@@ -111,7 +115,7 @@ class GroupMessagingTest {
             hide = true
         }.show()
         val actualStatusBarNotification =
-            notificationManager.waitForNotification(actualNotificationPair.first)
+            notificationManager.waitForNotification(notificationId)
         val actualNotification = actualStatusBarNotification.notification
         val actualExtras = actualNotification.extras
         val actualProgress = actualExtras.getInt(NotificationCompat.EXTRA_PROGRESS)

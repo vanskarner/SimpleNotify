@@ -75,7 +75,9 @@ class BigPictureTest {
     fun show_usingProgress_shouldBeShown() = runTest {
         val expectedData = TestDataProvider.bigPictureData()
         val expectedProgress = 50
-        val actualNotificationPair = notifyConfig.asBigPicture {
+        val notificationId = 20
+        notifyConfig.asBigPicture {
+            id = notificationId
             smallIcon = expectedData.smallIcon
             title = expectedData.title
             text = expectedData.text
@@ -86,7 +88,7 @@ class BigPictureTest {
             indeterminate = true
         }.show()
         val actualStatusBarNotification =
-            notificationManager.waitForNotification(actualNotificationPair.first)
+            notificationManager.waitForNotification(notificationId)
         val actualNotification = actualStatusBarNotification.notification
         val actualExtras = actualNotification.extras
         val actualProgress = actualExtras.getInt(NotificationCompat.EXTRA_PROGRESS)
@@ -102,7 +104,9 @@ class BigPictureTest {
     @Test
     fun show_whenProgressIsHide_shouldBeShown() = runTest {
         val expectedData = TestDataProvider.bigPictureData()
-        val actualNotificationPair = notifyConfig.asBigPicture {
+        val notificationId = 21
+        notifyConfig.asBigPicture {
+            id = notificationId
             smallIcon = expectedData.smallIcon
             title = expectedData.title
             text = expectedData.text
@@ -112,7 +116,7 @@ class BigPictureTest {
             hide = true
         }.show()
         val actualStatusBarNotification =
-            notificationManager.waitForNotification(actualNotificationPair.first)
+            notificationManager.waitForNotification(notificationId)
         val actualNotification = actualStatusBarNotification.notification
         val actualExtras = actualNotification.extras
         val actualProgress = actualExtras.getInt(NotificationCompat.EXTRA_PROGRESS)

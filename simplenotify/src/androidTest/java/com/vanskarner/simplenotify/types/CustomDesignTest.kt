@@ -72,7 +72,9 @@ class CustomDesignTest {
     fun show_usingProgress_shouldBeShown() = runTest {
         val expectedData = TestDataProvider.customDesignData(context)
         val expectedProgress = 50
-        val actualNotificationPair = notifyConfig.asCustomDesign {
+        val notificationId = 50
+        notifyConfig.asCustomDesign {
+            id = notificationId
             smallIcon = expectedData.smallIcon
             smallRemoteViews = expectedData.smallRemoteViews
             largeRemoteViews = expectedData.largeRemoteViews
@@ -81,7 +83,7 @@ class CustomDesignTest {
             indeterminate = true
         }.show()
         val actualStatusBarNotification =
-            notificationManager.waitForNotification(actualNotificationPair.first)
+            notificationManager.waitForNotification(notificationId)
         val actualNotification = actualStatusBarNotification.notification
         val actualExtras = actualNotification.extras
         val actualProgress = actualExtras.getInt(NotificationCompat.EXTRA_PROGRESS)
@@ -97,7 +99,9 @@ class CustomDesignTest {
     @Test
     fun show_whenProgressIsHide_shouldBeShown() = runTest {
         val expectedData = TestDataProvider.customDesignData(context)
-        val actualNotificationPair = notifyConfig.asCustomDesign {
+        val notificationId = 51
+        notifyConfig.asCustomDesign {
+            id = notificationId
             smallIcon = expectedData.smallIcon
             smallRemoteViews = expectedData.smallRemoteViews
             largeRemoteViews = expectedData.largeRemoteViews
@@ -105,7 +109,7 @@ class CustomDesignTest {
             hide = true
         }.show()
         val actualStatusBarNotification =
-            notificationManager.waitForNotification(actualNotificationPair.first)
+            notificationManager.waitForNotification(notificationId)
         val actualNotification = actualStatusBarNotification.notification
         val actualExtras = actualNotification.extras
         val actualProgress = actualExtras.getInt(NotificationCompat.EXTRA_PROGRESS)

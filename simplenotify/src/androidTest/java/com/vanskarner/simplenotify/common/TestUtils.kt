@@ -107,15 +107,17 @@ internal fun assertNotificationChannelId(expectedId: String, actualNotification:
 }
 
 internal fun assertCommonData(expectedData: Data, actualNotification: Notification) {
-    val extras = actualNotification.extras
+    val actualExtras = actualNotification.extras
     val actualLargeIcon =
-        extras.getCustomParcelable(NotificationCompat.EXTRA_LARGE_ICON, Icon::class.java)
+        actualExtras.getCustomParcelable(NotificationCompat.EXTRA_LARGE_ICON, Icon::class.java)
     val actualAutoCancel = actualNotification.flags and NotificationCompat.FLAG_AUTO_CANCEL != 0
+    val actualSubText = actualExtras.getString(NotificationCompat.EXTRA_SUB_TEXT)
 
     assertEquals(expectedData.smallIcon, actualNotification.smallIcon.resId)
     assertTrue(expectedData.largeIcon?.sameAs(actualLargeIcon?.toBitmap()) ?: false)
     assertEquals(expectedData.contentIntent, actualNotification.contentIntent)
     assertEquals(expectedData.autoCancel, actualAutoCancel)
+    assertEquals(expectedData.subText, actualSubText)
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         assertEquals(expectedData.timeoutAfter, actualNotification.timeoutAfter)
     }
