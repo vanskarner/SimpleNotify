@@ -63,7 +63,6 @@ class TestDataProvider {
                 bigText = "BigText"
                 text = "Text for BigText"
                 subText = "SubText for BigTextData"
-                summaryText = "Summary for BigText"
                 smallIcon = R.drawable.test_ic_notification_24
                 largeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
                 contentIntent = pendingIntent
@@ -254,7 +253,6 @@ class TestDataProvider {
             deleteIntent = pendingIntent(),
             fullScreenIntent = Pair(pendingIntent(), true),
             onlyAlertOnce = true,
-            subText = "Any SubText",
             showWhen = true,
             useChronometer = true,
             badgeNumber = 15,

@@ -29,7 +29,6 @@ object NotifyFilter {
             is Data.BigTextData -> {
                 val style = NotificationCompat.BigTextStyle()
                     .bigText(data.bigText)
-                    .setSummaryText(data.summaryText)
                 builder.setContentTitle(data.title)
                     .setContentText(data.text)
                     .setStyle(style)

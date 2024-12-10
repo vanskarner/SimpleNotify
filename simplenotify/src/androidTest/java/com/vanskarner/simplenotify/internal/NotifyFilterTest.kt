@@ -56,13 +56,13 @@ class NotifyFilterTest {
         val actualNotification = builder.build()
         val actualExtras = actualNotification.extras
         val actualBigText = actualExtras.getString(NotificationCompat.EXTRA_BIG_TEXT)
-        val actualSummaryText = actualExtras.getString(NotificationCompat.EXTRA_SUMMARY_TEXT)
+        val actualSubText = actualExtras.getString(NotificationCompat.EXTRA_SUB_TEXT)
         val actualSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
 
         assertEquals(expectedData.title, actualExtras.getString(NotificationCompat.EXTRA_TITLE))
         assertEquals(expectedData.text, actualExtras.getString(NotificationCompat.EXTRA_TEXT))
         assertEquals(expectedData.bigText, actualBigText)
-        assertEquals(expectedData.summaryText, actualSummaryText)
+        assertEquals(expectedData.subText, actualSubText)
         assertNotificationPriority(NotificationCompat.PRIORITY_DEFAULT, actualNotification)
         assertNotificationSound(actualSound, actualNotification)
         assertCommonData(expectedData, actualNotification)

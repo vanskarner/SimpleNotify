@@ -59,7 +59,7 @@ class BigTextTest {
             title = expectedData.title
             text = expectedData.text
             bigText = expectedData.bigText
-            summaryText = expectedData.summaryText
+            subText = expectedData.subText
         }.show()
         val actualStatusBarNotification =
             notificationManager.waitForNotification(actualNotificationPair.first)
@@ -80,7 +80,7 @@ class BigTextTest {
             title = expectedData.title
             text = expectedData.text
             bigText = expectedData.bigText
-            summaryText = expectedData.summaryText
+            subText = expectedData.subText
         }.progress {
             currentValue = expectedProgress
             indeterminate = true
@@ -109,7 +109,7 @@ class BigTextTest {
             title = expectedData.title
             text = expectedData.text
             bigText = expectedData.bigText
-            summaryText = expectedData.summaryText
+            subText = expectedData.subText
         }.progress {
             hide = true
         }.show()
@@ -136,7 +136,7 @@ class BigTextTest {
             title = expectedData.title
             text = expectedData.text
             bigText = expectedData.bigText
-            summaryText = expectedData.summaryText
+            subText = expectedData.subText
         }
             .useChannel(channelId).show()
         val actualStatusBarNotification =
@@ -157,7 +157,7 @@ class BigTextTest {
             title = expectedData.title
             text = expectedData.text
             bigText = expectedData.bigText
-            summaryText = expectedData.summaryText
+            subText = expectedData.subText
         }
             .addAction {
                 icon = expectedAction.icon
@@ -188,7 +188,7 @@ class BigTextTest {
             title = expectedData.title
             text = expectedData.text
             bigText = expectedData.bigText
-            summaryText = expectedData.summaryText
+            subText = expectedData.subText
         }.generateBuilder()
         val actualNotification = actualBuilder.build()
 
@@ -199,14 +199,14 @@ class BigTextTest {
     private fun assertCommonData(expectedData: Data.BigTextData, actualNotification: Notification) {
         val actualExtras = actualNotification.extras
         val actualBigText = actualExtras.getString(NotificationCompat.EXTRA_BIG_TEXT)
-        val actualSummaryText = actualExtras.getString(NotificationCompat.EXTRA_SUMMARY_TEXT)
+        val actualSubText = actualExtras.getString(NotificationCompat.EXTRA_SUB_TEXT)
 
         assertEquals(expectedData.smallIcon, actualNotification.smallIcon.resId)
         assertNotificationPriority(NotificationCompat.PRIORITY_DEFAULT, actualNotification)
         assertEquals(expectedData.title, actualExtras?.getString(NotificationCompat.EXTRA_TITLE))
         assertEquals(expectedData.text, actualExtras?.getString(NotificationCompat.EXTRA_TEXT))
         assertEquals(expectedData.bigText, actualBigText)
-        assertEquals(expectedData.summaryText, actualSummaryText)
+        assertEquals(expectedData.subText, actualSubText)
     }
 
 }

@@ -56,6 +56,9 @@ sealed class Data {
 
     /**
      * Provides additional information displayed in the header area of the notification.
+     * For the [NotifyConfig.asCall] notification applies up to version [android.os.Build.VERSION_CODES.R].
+     * For [NotifyConfig.asDuoMessaging] and [NotifyConfig.asGroupMessaging] notification applies
+     * up to version [android.os.Build.VERSION_CODES.P].
      */
     var subText: CharSequence? = null
 
@@ -90,10 +93,6 @@ sealed class Data {
          * in place of the content text.
          */
         var bigText: CharSequence? = null,
-        /**
-         * Set the first line of text after the detail section in the big form of the template.
-         */
-        var summaryText: CharSequence? = null,
     ) : Data() {
         init {
             smallIcon = R.drawable.notify_ic_text_24
@@ -352,11 +351,6 @@ data class ExtraData(
      * Set the sound to play. Valid only for the previous to [android.os.Build.VERSION_CODES.O]
      */
     var sounds: Uri? = null,
-    /**
-     * This provides some additional information that is displayed in the notification.
-     * No guarantees are given where exactly it is displayed.
-     */
-    var subText: CharSequence? = null,
     /**
      * Supply a [PendingIntent] to send when the notification is cleared by the user directly from
      * the notification panel. For example, this intent is sent when the user clicks the
