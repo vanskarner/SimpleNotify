@@ -171,7 +171,7 @@ class NotifyGeneratorTest {
 
     @Test
     fun show_whenIsCallData_setDefaultCallChannel() = runTest {
-        val data = TestDataProvider.callData()
+        val data = TestDataProvider.callData(context)
         data.id = 3
         notifyGenerator = NotifyGenerator(
             context = context,
@@ -190,7 +190,7 @@ class NotifyGeneratorTest {
     @Test
     fun show_whenIsCallDataAndHasChannel_useSpecifiedChannel() = runTest {
         val expectedChannelId = TestDataProvider.createChannel(notificationManager)
-        val data = TestDataProvider.callData()
+        val data = TestDataProvider.callData(context)
         data.id = 4
         notifyGenerator = NotifyGenerator(
             context = context,
@@ -208,7 +208,7 @@ class NotifyGeneratorTest {
 
     @Test
     fun show_whenIsCallAndHasProgress_setDefaultCallChannel() = runTest {
-        val data = TestDataProvider.callData()
+        val data = TestDataProvider.callData(context)
         val progressData = TestDataProvider.progressData(false)
         data.id = 5
         notifyGenerator = NotifyGenerator(

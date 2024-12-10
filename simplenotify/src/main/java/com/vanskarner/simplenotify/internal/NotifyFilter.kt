@@ -129,7 +129,10 @@ object NotifyFilter {
 
             is Data.CallData -> {
                 val secondCaller = Data.CallData.defaultSecondCaller(context)
-                builder.setStyle(callTypeFilter(context, data))
+                val style = callTypeFilter(context, data)
+                style.setVerificationText(data.verificationText)
+                style.setVerificationIcon(data.verificationIcon)
+                builder.setStyle(style)
                     .setCategory(NotificationCompat.CATEGORY_CALL)
                     .addPerson(secondCaller)
                     .setVibrate(longArrayOf(0, 500, 1000, 500))

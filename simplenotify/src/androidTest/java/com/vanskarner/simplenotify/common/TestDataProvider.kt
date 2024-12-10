@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.drawable.Icon
 import android.os.Build
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
@@ -202,11 +203,13 @@ class TestDataProvider {
             return data
         }
 
-        fun callData(): Data.CallData {
+        fun callData(context: Context): Data.CallData {
             val pendingIntent = pendingIntent()
             return Data.CallData().apply {
                 subText = "SubText for CallData"
                 type = "incoming"
+                verificationText = "Verification Text"
+                verificationIcon = Icon.createWithResource(context, R.drawable.test_ic_archive_24)
                 caller = Person.Builder().setName("Max").build()
                 answer = pendingIntent()
                 declineOrHangup = pendingIntent()

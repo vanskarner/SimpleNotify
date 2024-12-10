@@ -4,6 +4,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.drawable.Icon
 import android.net.Uri
 import android.widget.RemoteViews
 import androidx.annotation.ColorInt
@@ -254,6 +255,16 @@ sealed class Data {
          * Specifies the type of call. There are 3 types: `incoming`,`ongoing` and `screening`.
          */
         var type: String = "incoming",
+        /**
+         * Optional text to be displayed with the [verificationIcon] as caller verification status.
+         * Shown starting with versions [android.os.Build.VERSION_CODES.S]
+         */
+        var verificationText: CharSequence? = null,
+        /**
+         * optional icon to be displayed with the [verificationText] as caller verification status.
+         * Shown starting with versions [android.os.Build.VERSION_CODES.S]
+         */
+        var verificationIcon: Icon? = null,
         /**
          * [Person] representing who we are communicating with. If not specified, its default
          * name is `Someone`

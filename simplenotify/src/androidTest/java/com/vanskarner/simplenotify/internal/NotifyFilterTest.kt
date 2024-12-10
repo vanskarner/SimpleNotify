@@ -204,7 +204,7 @@ class NotifyFilterTest {
 
     @Test
     fun applyData_asCallData_apply() {
-        val expectedData = TestDataProvider.callData()
+        val expectedData = TestDataProvider.callData(appContext)
         val expectedCallType = mapOf(
             "incoming" to NotificationCompat.CallStyle.CALL_TYPE_INCOMING,
             "ongoing" to NotificationCompat.CallStyle.CALL_TYPE_ONGOING,

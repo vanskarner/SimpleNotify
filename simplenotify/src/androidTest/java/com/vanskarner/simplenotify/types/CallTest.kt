@@ -5,6 +5,7 @@ import android.app.Notification
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
+import android.graphics.drawable.Icon
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.test.core.app.ApplicationProvider
@@ -22,6 +23,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
@@ -32,6 +34,7 @@ import org.junit.runner.RunWith
 class CallTest {
     private lateinit var notifyConfig: NotifyConfig
     private lateinit var notificationManager: NotificationManager
+    private lateinit var context: Context
 
     @get:Rule
     val permissionRule = ConditionalPermissionRule(
@@ -41,7 +44,7 @@ class CallTest {
 
     @Before
     fun setUp() {
-        val context: Context = ApplicationProvider.getApplicationContext()
+        context = ApplicationProvider.getApplicationContext()
         notifyConfig = NotifyConfig(context)
         notificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -54,10 +57,12 @@ class CallTest {
 
     @Test
     fun showOrGenerate_shouldBeProduced() = runTest {
-        val expectedData = TestDataProvider.callData()
+        val expectedData = TestDataProvider.callData(context)
         notifyConfig.asCall {
             smallIcon = expectedData.smallIcon
             type = expectedData.type
+            verificationText = expectedData.verificationText
+            verificationIcon = expectedData.verificationIcon
             caller = expectedData.caller
             answer = expectedData.answer
             declineOrHangup = expectedData.declineOrHangup
@@ -70,13 +75,15 @@ class CallTest {
 
     @Test
     fun showOrGenerate_usingProgress_shouldBeProduced() = runTest {
-        val expectedData = TestDataProvider.callData()
+        val expectedData = TestDataProvider.callData(context)
         val expectedProgress = 50
         val notificationId = 40
         notifyConfig.asCall {
             id = notificationId
             smallIcon = expectedData.smallIcon
             type = expectedData.type
+            verificationText = expectedData.verificationText
+            verificationIcon = expectedData.verificationIcon
             caller = expectedData.caller
             answer = expectedData.answer
             declineOrHangup = expectedData.declineOrHangup
@@ -98,12 +105,14 @@ class CallTest {
 
     @Test
     fun showOrGenerate_whenProgressIsHide_shouldBeProduced() = runTest {
-        val expectedData = TestDataProvider.callData()
+        val expectedData = TestDataProvider.callData(context)
         val notificationId = 41
         notifyConfig.asCall {
             id = notificationId
             smallIcon = expectedData.smallIcon
             type = expectedData.type
+            verificationText = expectedData.verificationText
+            verificationIcon = expectedData.verificationIcon
             caller = expectedData.caller
             answer = expectedData.answer
             declineOrHangup = expectedData.declineOrHangup
@@ -125,10 +134,12 @@ class CallTest {
     @Test
     fun showOrGenerate_usingSpecificChannel_shouldBeProduced() = runTest {
         val channelId = TestDataProvider.createChannel(notificationManager)
-        val expectedData = TestDataProvider.callData()
+        val expectedData = TestDataProvider.callData(context)
         notifyConfig.asCall {
             smallIcon = expectedData.smallIcon
             type = expectedData.type
+            verificationText = expectedData.verificationText
+            verificationIcon = expectedData.verificationIcon
             caller = expectedData.caller
             answer = expectedData.answer
             declineOrHangup = expectedData.declineOrHangup
@@ -141,11 +152,13 @@ class CallTest {
 
     @Test
     fun showOrGenerate_usingAction_shouldBeProduced() = runTest {
-        val expectedData = TestDataProvider.callData()
+        val expectedData = TestDataProvider.callData(context)
         val expectedAction = TestDataProvider.basicAction()
         notifyConfig.asCall {
             smallIcon = expectedData.smallIcon
             type = "incoming"
+            verificationText = expectedData.verificationText
+            verificationIcon = expectedData.verificationIcon
             caller = expectedData.caller
             answer = expectedData.answer
             declineOrHangup = expectedData.declineOrHangup
@@ -202,6 +215,12 @@ class CallTest {
 
             else -> null
         }
+        val actualVerificationText =
+            actualExtras.getCharSequence(NotificationCompat.EXTRA_VERIFICATION_TEXT)
+        val actualVerificationIcon = actualExtras.getCustomParcelable(
+            NotificationCompat.EXTRA_VERIFICATION_ICON,
+            Icon::class.java
+        )
 
         assertNotificationPriority(NotificationCompat.PRIORITY_HIGH, actualNotification)
         assertEquals(expectedData.smallIcon, actualNotification.smallIcon.resId)
@@ -209,6 +228,8 @@ class CallTest {
         assertEquals(expectedData.caller?.name, actualNamePersonAdded)
         assertEquals(expectedData.answer, actualAnswer)
         assertEquals(expectedData.declineOrHangup, actualDeclineHangup)
+        assertEquals(expectedData.verificationText, actualVerificationText)
+        assertNotNull(actualVerificationIcon)
     }
 
 }
