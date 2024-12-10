@@ -43,7 +43,7 @@ abstract class BaseActivity : AppCompatActivity() {
             Intent(this, NotificationDismissReceiver::class.java).apply {
                 putExtra("notification_id", notificationId)
             },
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
         )
     }
 
