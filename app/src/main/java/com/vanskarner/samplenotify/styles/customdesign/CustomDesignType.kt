@@ -1,6 +1,10 @@
 package com.vanskarner.samplenotify.styles.customdesign
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context.NOTIFICATION_SERVICE
 import android.graphics.BitmapFactory
+import android.os.Build
 import android.os.CountDownTimer
 import android.widget.ArrayAdapter
 import android.widget.RemoteViews
@@ -11,8 +15,6 @@ import com.vanskarner.samplenotify.R
 import com.vanskarner.samplenotify.databinding.MainActivityBinding
 import com.vanskarner.simplenotify.SimpleNotify
 import java.util.Locale
-
-const val CUSTOM_DESIGN_TYPE = "CUSTOM_DESIGN_TYPE"
 
 fun showCustomDesignTypes(activity: MainActivity, binding: MainActivityBinding) {
     val options = mapOf(
@@ -51,6 +53,7 @@ private fun withDetails(activity: MainActivity) {
             largeIcon = BitmapFactory.decodeStream(activity.assets.open("dina2.jpg"))
             contentIntent = activity.pendingIntentToCloseNotification(id ?: 0)
             timeoutAfter = 5000L
+            subText = "Any SubText"
             smallRemoteViews = {
                 RemoteViews(activity.packageName, R.layout.small_notification_1)
             }
@@ -149,8 +152,26 @@ private fun counterTypeNotification(
                 largeView
             }
         }
+        .useChannel(channelWithoutSound(activity))
         .extras {
             sounds = null
         }
         .show()
+}
+
+private fun channelWithoutSound(activity: MainActivity): String {
+    val channelId = "channel_without_sound"
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        val channel = NotificationChannel(
+            channelId,
+            "Custom Design",
+            NotificationManager.IMPORTANCE_DEFAULT
+        ).apply {
+            description = "Channel for CustomDesign without sound"
+            setSound(null, null)
+        }
+        val manager = activity.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        manager.createNotificationChannel(channel)
+    }
+    return channelId
 }
