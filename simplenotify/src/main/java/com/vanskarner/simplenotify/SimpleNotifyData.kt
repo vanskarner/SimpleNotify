@@ -109,11 +109,11 @@ sealed class Data {
          */
         var title: CharSequence? = null,
         /**
-         * Set the text (second row) of the notification, in a standard notification.
+         * Set the text (second row) of the notification. Shown when the notification is collapsed.
          */
         var text: CharSequence? = null,
         /**
-         * Add lines to the Inbox notification summary section.
+         * Add lines to the Inbox notification summary section. Shown when the notification is expanded.
          */
         var lines: ArrayList<String> = arrayListOf(),
     ) : Data() {
