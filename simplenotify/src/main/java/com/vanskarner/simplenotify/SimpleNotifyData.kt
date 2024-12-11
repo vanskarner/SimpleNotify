@@ -174,18 +174,15 @@ sealed class Data {
          */
         var useHistoricMessage: Boolean = false,
         /**
-         * Sets the [BubbleMetadata] that will be used to display app content
-         * in a floating window over the existing foreground activity.
+         * Sets the [BubbleMetadata] that will be used to display app content in a floating window
+         * over the existing foreground activity. Applies as of version [android.os.Build.VERSION_CODES.Q]
          *
-         * This data will be ignored unless the notification is posted to a channel that allows bubbles.
-         *
-         * Notifications allowed to bubble that have valid bubble metadata will display in collapsed
-         * state outside of the notification shade on unlocked devices. When a user interacts with
-         * the collapsed state, the bubble intent will be invoked and displayed.
+         * @see androidx.core.app.NotificationCompat.Builder.setBubbleMetadata
          */
         var bubble: BubbleMetadata? = null,
         /**
-         * Populates this notification with given [ShortcutInfoCompat].
+         * Populates this notification with given [ShortcutInfoCompat]. The shortcuts are applied
+         * from version [android.os.Build.VERSION_CODES.N]
          */
         var shortcut: ShortcutInfoCompat? = null,
         /**
@@ -224,17 +221,15 @@ sealed class Data {
         var useHistoricMessage: Boolean = false,
         /**
          * Sets the [BubbleMetadata] that will be used to display app content
-         * in a floating window over the existing foreground activity.
+         * in a floating window over the existing foreground activity. Applies as of version
+         * [android.os.Build.VERSION_CODES.Q]
          *
-         * This data will be ignored unless the notification is posted to a channel that allows bubbles.
-         *
-         * Notifications allowed to bubble that have valid bubble metadata will display in collapsed
-         * state outside of the notification shade on unlocked devices. When a user interacts with
-         * the collapsed state, the bubble intent will be invoked and displayed.
+         * @see androidx.core.app.NotificationCompat.Builder.setBubbleMetadata
          */
         var bubble: BubbleMetadata? = null,
         /**
-         * Populates this notification with given [ShortcutInfoCompat].
+         * Populates this notification with given [ShortcutInfoCompat]. The shortcuts are applied
+         * from version [android.os.Build.VERSION_CODES.N]
          */
         var shortcut: ShortcutInfoCompat? = null,
         /**
@@ -589,7 +584,8 @@ sealed class NotifyMessaging {
 
     /**
      * Sets a binary blob of data and an associated MIME type for a message.
-     * Fulfills the same function as method: [androidx.core.app.NotificationCompat.MessagingStyle.Message.setData]
+     * Fulfills the same function as method:
+     * [androidx.core.app.NotificationCompat.MessagingStyle.Message.setData].
      *
      * @param dataMimeType The MIME type of the content.
      * @param dataUri The uri containing the content whose type is given by the MIME type.
