@@ -52,6 +52,7 @@ object NotifyFilter {
             }
 
             is Data.DuoMessageData -> {
+                builder.setPriority(NotificationCompat.PRIORITY_HIGH)
                 val style = NotificationCompat.MessagingStyle(data.you)
                     .setGroupConversation(false)
                 data.messages.forEachIndexed { index, item ->
@@ -86,10 +87,10 @@ object NotifyFilter {
                 builder.setStyle(style)
                     .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                     .addPerson(data.contact)
-                    .setPriority(NotificationCompat.PRIORITY_HIGH)
             }
 
             is Data.GroupMessageData -> {
+                builder.setPriority(NotificationCompat.PRIORITY_HIGH)
                 val style = NotificationCompat.MessagingStyle(data.you)
                     .setConversationTitle(data.conversationTitle)
                     .setGroupConversation(true)
@@ -124,10 +125,10 @@ object NotifyFilter {
                 }
                 builder.setStyle(style)
                     .setCategory(NotificationCompat.CATEGORY_MESSAGE)
-                    .setPriority(NotificationCompat.PRIORITY_HIGH)
             }
 
             is Data.CallData -> {
+                builder.setPriority(NotificationCompat.PRIORITY_HIGH)
                 val secondCaller = Data.CallData.defaultSecondCaller(context)
                 val style = callTypeFilter(context, data)
                 style.setVerificationText(data.verificationText)
@@ -137,7 +138,6 @@ object NotifyFilter {
                     .addPerson(secondCaller)
                     .setVibrate(longArrayOf(0, 500, 1000, 500))
                     .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE))
-                    .setPriority(NotificationCompat.PRIORITY_HIGH)
             }
 
             is Data.CustomDesignData -> {
