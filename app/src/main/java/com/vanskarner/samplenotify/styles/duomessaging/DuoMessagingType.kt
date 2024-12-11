@@ -16,8 +16,6 @@ import com.vanskarner.samplenotify.styles.messaging.BasicBubbleActivity
 import com.vanskarner.simplenotify.NotifyMessaging
 import com.vanskarner.simplenotify.SimpleNotify
 
-const val DUO_MESSAGING_TYPE = "DUO_MESSAGING_TYPE"
-
 fun showDuoMessagingTypes(activity: MainActivity, binding: MainActivityBinding) {
     val options = mapOf(
         "Duo Messaging" to ::basic,

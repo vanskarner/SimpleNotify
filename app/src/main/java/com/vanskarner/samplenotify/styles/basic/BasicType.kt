@@ -13,8 +13,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-const val BASIC_TYPE = "BASIC_TYPE"
-
 fun showBasicTypes(activity: MainActivity, binding: MainActivityBinding) {
     val options = mapOf(
         "Basic" to ::basic,

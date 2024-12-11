@@ -13,8 +13,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-const val BIG_TEXT_TYPE = "BIG_TEXT_TYPE"
-
 fun showBigTextTypes(activity: MainActivity, binding: MainActivityBinding) {
     val options = mapOf(
         "Big Text" to ::basic,
@@ -37,7 +35,6 @@ private fun basic(activity: MainActivity) {
             text = "A never-before-seen response from a female president to the people"
             bigText =
                 "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
-            subText = "Summary Text"
         }
         .show()
 }
@@ -55,7 +52,7 @@ private fun withDetails(activity: MainActivity) {
             text = "Promotions after repression, a touch of presidential irony."
             bigText =
                 "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
-            subText = "Summary Text"
+            subText = "Any SubText"
         }
         .show()
 }
@@ -95,10 +92,9 @@ private fun withProgress(activity: MainActivity) {
                 .asBigText {
                     title = "Dina Basurearte: With her phrase “Your mom!"
                     text = "A never-before-seen response from a female president to the people"
-                    bigText =
-                        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
-                    subText = if (progress < 100) "Downloading($progress%)..."
-                    else "Download finished"
+                    bigText = if (progress < 100) "${100-progress} seconds left, please wait..."
+                    else "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
+                    subText = if (progress < 100) "${progress}%" else "Complete download"
                 }
                 .progress {
                     currentValue = progress
@@ -117,10 +113,9 @@ private fun withIndeterminateProgress(activity: MainActivity) {
                 .asBigText {
                     title = "Dina Basurearte: With her phrase “Your mom!"
                     text = "A never-before-seen response from a female president to the people"
-                    bigText =
-                        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
-                    subText = if (progress < 100) "Downloading($progress%)..."
-                    else "Download finished"
+                    bigText = if (progress < 100) "Please wait while your request is being processed..."
+                        else "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
+                    subText = if (progress < 100) "Downloading..." else "Complete download"
                 }
                 .progress {
                     indeterminate = true

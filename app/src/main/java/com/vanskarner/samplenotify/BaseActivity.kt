@@ -1,6 +1,5 @@
 package com.vanskarner.samplenotify
 
-import android.app.Activity
 import android.app.PendingIntent
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -17,23 +16,6 @@ import androidx.core.graphics.drawable.IconCompat
 abstract class BaseActivity : AppCompatActivity() {
     companion object {
         const val REMOTE_INPUT_KEY = "some_key"
-        const val INTENT_EXTRA_NOTIFY_ID = "notificationId"
-        const val INTENT_EXTRA_ACTIVITY = "ACTIVITY_TYPE"
-    }
-
-    private fun openSettings() {
-        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-            data = Uri.fromParts("package", packageName, null)
-        }
-        startActivity(intent)
-    }
-
-    fun getSimplePendingIntent(clazz: Class<out Activity>): PendingIntent {
-        val intent = Intent(this, clazz).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        }
-        return PendingIntent
-            .getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
     }
 
     fun pendingIntentToCloseNotification(notificationId: Int): PendingIntent {
@@ -44,21 +26,6 @@ abstract class BaseActivity : AppCompatActivity() {
                 putExtra("notification_id", notificationId)
             },
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
-        )
-    }
-
-    fun getReplyPendingIntent(extraNotifyId: Int, extraTypeActivity: String): PendingIntent {
-        println("notificationId2 -> $extraNotifyId | activityType2-> $extraTypeActivity")
-        val replyIntent = Intent(this, RemoteInputBroadcast::class.java).apply {
-            putExtra(INTENT_EXTRA_NOTIFY_ID, extraNotifyId)
-            putExtra(INTENT_EXTRA_ACTIVITY, extraTypeActivity)
-
-        }
-        return PendingIntent.getBroadcast(
-            this,
-            123,
-            replyIntent,
-            PendingIntent.FLAG_MUTABLE
         )
     }
 
@@ -91,6 +58,13 @@ abstract class BaseActivity : AppCompatActivity() {
 
             else -> PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         }
+    }
+
+    private fun openSettings() {
+        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+            data = Uri.fromParts("package", packageName, null)
+        }
+        startActivity(intent)
     }
 
 }

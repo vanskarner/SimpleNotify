@@ -13,8 +13,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-const val INBOX_TYPE = "INBOX_TYPE"
-
 fun showInboxTypes(activity: MainActivity, binding: MainActivityBinding) {
     val options = mapOf(
         "Inbox" to ::basic,

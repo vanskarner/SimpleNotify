@@ -16,8 +16,6 @@ import com.vanskarner.samplenotify.styles.messaging.BasicBubbleActivity
 import com.vanskarner.simplenotify.NotifyMessaging
 import com.vanskarner.simplenotify.SimpleNotify
 
-const val GROUP_MESSAGING_TYPE = "GROUP_MESSAGING_TYPE"
-
 fun showGroupMessagingTypes(activity: MainActivity, binding: MainActivityBinding) {
     val options = mapOf(
         "Group messaging" to ::basic,

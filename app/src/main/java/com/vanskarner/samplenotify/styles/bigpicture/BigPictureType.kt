@@ -13,8 +13,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-const val BIG_PICTURE_TYPE = "BIG_PICTURE_TYPE"
-
 fun showBigPictureTypes(activity: MainActivity, binding: MainActivityBinding) {
     val options = mapOf(
         "Big Picture" to ::basic,
@@ -56,6 +54,7 @@ private fun withDetails(activity: MainActivity) {
             summaryText =
                 "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
             image = BitmapFactory.decodeStream(activity.assets.open("dina2.jpg"))
+            subText = "Any SubText"
         }
         .show()
 }
@@ -95,9 +94,10 @@ private fun withProgress(activity: MainActivity) {
                 .asBigPicture {
                     title = "Dina Basurearte: With her phrase “Your mom!"
                     text = "A never-before-seen response from a female president to the people"
-                    summaryText = if (progress < 100) "Downloading($progress%)..."
+                    summaryText = if (progress < 100) "${100-progress} seconds left"
                     else "Your request has been processed successfully"
                     image = BitmapFactory.decodeStream(activity.assets.open("dina2.jpg"))
+                    subText = if (progress < 100) "${progress}%" else "Complete download"
                 }
                 .progress {
                     currentValue = progress
@@ -116,9 +116,10 @@ private fun withIndeterminateProgress(activity: MainActivity) {
                 .asBigPicture {
                     title = "Dina Basurearte: With her phrase “Your mom!"
                     text = "A never-before-seen response from a female president to the people"
-                    summaryText = if (progress < 100) "Processing your request..."
+                    summaryText = if (progress < 100) "Please wait..."
                     else "Your request has been processed successfully"
                     image = BitmapFactory.decodeStream(activity.assets.open("dina2.jpg"))
+                    subText = if (progress < 100) "Downloading..." else "Complete download"
                 }
                 .progress {
                     indeterminate = true
