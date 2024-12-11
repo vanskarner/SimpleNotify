@@ -50,6 +50,7 @@ private fun withDetails(activity: MainActivity) {
             timeoutAfter = 5000L
             title = "Dina Balearte: Order with bullets and promotions"
             text = "Promotions after repression, a touch of presidential irony."
+            subText = "Any SubText"
         }
         .show()
 }
@@ -85,7 +86,8 @@ private fun withProgress(activity: MainActivity) {
             SimpleNotify.with(activity)
                 .asBasic {
                     title = "Downloading Dina's Prosecutor File"
-                    text = if (progress < 100) "${progress}%"
+                    subText = if (progress < 100) "${progress}%" else "Complete download"
+                    text = if (progress < 100) "${100-progress} seconds left"
                     else "Be careful their government and most of the police work together."
                 }
                 .progress {
@@ -104,8 +106,9 @@ private fun withIndeterminateProgress(activity: MainActivity) {
             SimpleNotify.with(activity)
                 .asBasic {
                     title = "Downloading Dina's Prosecutor File"
-                    text = if (progress < 100) "Downloading..."
-                    else "Be careful their government and most of the police work together."
+                    subText = if (progress < 100) "Downloading..." else "Complete download"
+                    text = if (progress < 100) "Please wait..."
+                    else "Request processed"
                 }
                 .progress {
                     indeterminate = true
