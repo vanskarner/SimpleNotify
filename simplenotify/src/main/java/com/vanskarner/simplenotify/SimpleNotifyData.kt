@@ -552,6 +552,10 @@ data class StackableData(
 sealed class NotifyMessaging {
     internal var mimeData: Pair<String, Uri>? = null
 
+    /**
+     * Contains the messages of the `you` attribute in the types of [NotifyConfig.asDuoMessaging] and
+     * [NotifyConfig.asGroupMessaging]
+     */
     data class YourMsg(
         /**
          * Represent your message in the conversation.
@@ -563,6 +567,10 @@ sealed class NotifyMessaging {
         val timestamp: Long
     ) : NotifyMessaging()
 
+    /**
+     * Contains the messages of `contact` when type [NotifyConfig.asDuoMessaging] is used. When
+     * the type [NotifyConfig.asGroupMessaging] is being used should [person] be specified
+     */
     data class ContactMsg(
         /**
          * Represents the message with whom you are conversing
