@@ -5,6 +5,7 @@ import android.app.Notification
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Context.NOTIFICATION_SERVICE
+import android.net.Uri
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.test.core.app.ApplicationProvider
@@ -12,6 +13,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.vanskarner.simplenotify.common.ConditionalPermissionRule
 import com.vanskarner.simplenotify.common.TestDataProvider
 import com.vanskarner.simplenotify.common.assertNotificationPriority
+import com.vanskarner.simplenotify.common.assertNotificationSound
 import com.vanskarner.simplenotify.common.waitForAllNotificationsPresents
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.*
@@ -42,6 +44,7 @@ class NotifyFeaturesTest {
     @Test
     fun applyExtras_apply() {
         val expectedExtraData = TestDataProvider.extraData()
+        val expectedSound = expectedExtraData.sounds ?: Uri.EMPTY
         notifyFeatures.applyExtras(expectedExtraData, builder)
         val actualNotification = builder.build()
         val expectedPriority = expectedExtraData.priority ?: -666
@@ -68,6 +71,7 @@ class NotifyFeaturesTest {
         assertEquals(expectedExtraData.showWhen, actualShowWhen)
         assertEquals(expectedExtraData.useChronometer, actualUsesChronometer)
         assertEquals(expectedExtraData.badgeNumber, actualBadgeNumber)
+        assertNotificationSound(expectedSound, actualNotification)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val actualBadgeIconType = actualNotification.badgeIconType
             val actualShortcutId = actualNotification.shortcutId

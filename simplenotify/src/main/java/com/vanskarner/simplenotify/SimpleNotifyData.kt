@@ -361,7 +361,7 @@ data class ExtraData(
     /**
      * Set the sound to play. Valid only for the previous to [android.os.Build.VERSION_CODES.O]
      */
-    var sounds: Uri? = null,
+    var sounds: Uri? = Uri.EMPTY,
     /**
      * Supply a [PendingIntent] to send when the notification is cleared by the user directly from
      * the notification panel. For example, this intent is sent when the user clicks the

@@ -4,6 +4,7 @@ import android.app.Notification
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Context.NOTIFICATION_SERVICE
+import android.net.Uri
 import androidx.core.app.NotificationCompat
 import com.vanskarner.simplenotify.ActionData
 import com.vanskarner.simplenotify.ExtraData
@@ -13,9 +14,9 @@ import com.vanskarner.simplenotify.StackableData
 internal object NotifyFeatures {
 
     fun applyExtras(extras: ExtraData, builder: NotificationCompat.Builder) {
+        if (extras.sounds == null || extras.sounds != Uri.EMPTY) builder.setSound(extras.sounds)
         extras.priority?.let { builder.setPriority(it) }
         extras.category?.let { builder.setCategory(it) }
-        extras.sounds?.let { builder.setSound(it) }
         extras.deleteIntent?.let { builder.setDeleteIntent(it) }
         extras.visibility?.let { builder.setVisibility(it) }
         extras.ongoing?.let { builder.setOngoing(it) }

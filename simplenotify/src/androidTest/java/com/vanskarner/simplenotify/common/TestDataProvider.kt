@@ -8,6 +8,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.Icon
+import android.media.RingtoneManager
 import android.os.Build
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
@@ -248,6 +249,7 @@ class TestDataProvider {
 
         fun extraData() = ExtraData(
             priority = NotificationCompat.PRIORITY_HIGH,
+            sounds = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION),
             category = NotificationCompat.CATEGORY_MESSAGE,
             visibility = NotificationCompat.VISIBILITY_PRIVATE,
             ongoing = true,

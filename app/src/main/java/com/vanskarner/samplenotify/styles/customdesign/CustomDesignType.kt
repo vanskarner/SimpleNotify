@@ -149,5 +149,8 @@ private fun counterTypeNotification(
                 largeView
             }
         }
+        .extras {
+            sounds = null
+        }
         .show()
 }
