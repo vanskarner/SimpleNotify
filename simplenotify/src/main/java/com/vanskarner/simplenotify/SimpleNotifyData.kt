@@ -118,7 +118,7 @@ sealed class Data {
         var lines: ArrayList<String> = arrayListOf(),
     ) : Data() {
         init {
-            smallIcon = R.drawable.notify_ic_message_24
+            smallIcon = R.drawable.notify_ic_email_24
         }
     }
 

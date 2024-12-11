@@ -88,8 +88,9 @@ private fun withProgress(activity: MainActivity) {
             SimpleNotify.with(activity)
                 .asInbox {
                     title = "Dina Basurearte: With her phrase “Your mom!"
+                    subText = if (progress < 100) "${progress}%" else "Messages loaded"
                     text = "A never-before-seen response from a female president to the people"
-                    lines = arrayListOf(
+                    lines = if (progress < 100) arrayListOf() else arrayListOf(
                         "My item One",
                         "My item Second",
                         "My item Third",
@@ -112,8 +113,9 @@ private fun withIndeterminateProgress(activity: MainActivity) {
             SimpleNotify.with(activity)
                 .asInbox {
                     title = "Dina Basurearte: With her phrase “Your mom!"
+                    subText = if (progress < 100) "Waiting messages..." else "Messages loaded"
                     text = "A never-before-seen response from a female president to the people"
-                    lines = arrayListOf(
+                    lines = if (progress < 100) arrayListOf() else arrayListOf(
                         "My item One",
                         "My item Second",
                         "My item Third",
