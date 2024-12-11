@@ -131,15 +131,17 @@ sealed class Data {
          */
         var title: CharSequence? = null,
         /**
-         * Set the text (second row) of the notification, in a standard notification.
+         * Set the text (second row) of the notification. Shown when the notification is collapsed.
          */
         var text: CharSequence? = null,
         /**
          * Set the first line of text after the detail section in the big form of the template.
+         * Shown when the notification is expanded
          */
         var summaryText: CharSequence? = null,
         /**
          * Provide the bitmap to be used as the payload for the BigPicture notification.
+         * Shown when the notification is expanded
          */
         var image: Bitmap? = null
     ) : Data() {
