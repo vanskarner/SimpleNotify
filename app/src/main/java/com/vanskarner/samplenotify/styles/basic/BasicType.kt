@@ -85,6 +85,7 @@ private fun withProgress(activity: MainActivity) {
             delay(1000)
             SimpleNotify.with(activity)
                 .asBasic {
+                    smallIcon = R.drawable.baseline_file_download_24
                     title = "Downloading Dina's Prosecutor File"
                     subText = if (progress < 100) "${progress}%" else "Complete download"
                     text = if (progress < 100) "${100-progress} seconds left"
@@ -105,6 +106,7 @@ private fun withIndeterminateProgress(activity: MainActivity) {
             delay(1000)
             SimpleNotify.with(activity)
                 .asBasic {
+                    smallIcon = R.drawable.baseline_file_download_24
                     title = "Downloading Dina's Prosecutor File"
                     subText = if (progress < 100) "Downloading..." else "Complete download"
                     text = if (progress < 100) "Please wait..."
