@@ -1,4 +1,4 @@
-package com.vanskarner.samplenotify.styles.bigtext
+package com.vanskarner.samplenotify.types.bigpicture
 
 import android.graphics.BitmapFactory
 import android.widget.ArrayAdapter
@@ -13,13 +13,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-fun showBigTextTypes(activity: MainActivity, binding: MainActivityBinding) {
+fun showBigPictureTypes(activity: MainActivity, binding: MainActivityBinding) {
     val options = mapOf(
-        "Big Text" to ::basic,
-        "Big Text with details" to ::withDetails,
-        "Big Text with actions" to ::withActions,
-        "Big Text with progress" to ::withProgress,
-        "Big Text with indeterminate progress" to ::withIndeterminateProgress
+        "Big Picture" to ::basic,
+        "Big Picture with details" to ::withDetails,
+        "Big Picture with actions" to ::withActions,
+        "Big Picture with progress" to ::withProgress,
+        "Big Picture with indeterminate progress" to ::withIndeterminateProgress
     )
     binding.gridView.adapter =
         ArrayAdapter(activity, android.R.layout.simple_list_item_1, options.keys.toList())
@@ -30,43 +30,45 @@ fun showBigTextTypes(activity: MainActivity, binding: MainActivityBinding) {
 
 private fun basic(activity: MainActivity) {
     SimpleNotify.with(activity)
-        .asBigText {
+        .asBigPicture {
             title = "Dina Basurearte: With her phrase “Your mom!"
             text = "A never-before-seen response from a female president to the people"
-            bigText =
-                "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
+            summaryText =
+                "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+            image = BitmapFactory.decodeStream(activity.assets.open("dina2.jpg"))
         }
         .show()
 }
 
 private fun withDetails(activity: MainActivity) {
     SimpleNotify.with(activity)
-        .asBigText {
-            id = 30
-            tag = "BIG_TEXT_TAG"
+        .asBigPicture {
+            id = 20
+            tag = "BIG_PICTURE_TAG"
             smallIcon = R.drawable.baseline_handshake_24
             largeIcon = BitmapFactory.decodeStream(activity.assets.open("dina2.jpg"))
             contentIntent = activity.pendingIntentToCloseNotification(id ?: 0)
             timeoutAfter = 5000L
             title = "Dina Balearte: Order with bullets and promotions"
             text = "Promotions after repression, a touch of presidential irony."
-            bigText =
-                "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
+            summaryText =
+                "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+            image = BitmapFactory.decodeStream(activity.assets.open("dina2.jpg"))
             subText = "Any SubText"
         }
         .show()
 }
 
 private fun withActions(activity: MainActivity) {
-    val notifyId = 31
+    val notifyId = 21
     SimpleNotify.with(activity)
-        .asBigText {
+        .asBigPicture {
             id = notifyId
             title = "Dina Corruptuarte: Waykis case in the shadows"
             text = "An alleged criminal network dedicated to influence peddling"
-            bigText =
-                "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
-            subText = "Summary Text"
+            summaryText =
+                "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+            image = BitmapFactory.decodeStream(activity.assets.open("dina2.jpg"))
         }
         .addReplyAction {
             title = "Respond"
@@ -89,11 +91,12 @@ private fun withProgress(activity: MainActivity) {
         for (progress in 0..100 step 20) {
             delay(1000)
             SimpleNotify.with(activity)
-                .asBigText {
+                .asBigPicture {
                     title = "Dina Basurearte: With her phrase “Your mom!"
                     text = "A never-before-seen response from a female president to the people"
-                    bigText = if (progress < 100) "${100-progress} seconds left, please wait..."
-                    else "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
+                    summaryText = if (progress < 100) "${100-progress} seconds left"
+                    else "Your request has been processed successfully"
+                    image = BitmapFactory.decodeStream(activity.assets.open("dina2.jpg"))
                     subText = if (progress < 100) "${progress}%" else "Complete download"
                 }
                 .progress {
@@ -110,11 +113,12 @@ private fun withIndeterminateProgress(activity: MainActivity) {
         for (progress in 0..100 step 20) {
             delay(1000)
             SimpleNotify.with(activity)
-                .asBigText {
+                .asBigPicture {
                     title = "Dina Basurearte: With her phrase “Your mom!"
                     text = "A never-before-seen response from a female president to the people"
-                    bigText = if (progress < 100) "Please wait while your request is being processed..."
-                        else "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
+                    summaryText = if (progress < 100) "Please wait..."
+                    else "Your request has been processed successfully"
+                    image = BitmapFactory.decodeStream(activity.assets.open("dina2.jpg"))
                     subText = if (progress < 100) "Downloading..." else "Complete download"
                 }
                 .progress {

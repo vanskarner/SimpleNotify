@@ -7,7 +7,7 @@ import android.graphics.BitmapFactory
 import android.os.IBinder
 import androidx.core.app.Person
 import androidx.core.graphics.drawable.IconCompat
-import com.vanskarner.samplenotify.styles.call.EXTRA_CALL_TYPE
+import com.vanskarner.samplenotify.types.call.EXTRA_CALL_TYPE
 import com.vanskarner.simplenotify.SimpleNotify
 
 class CallNotificationService : Service() {

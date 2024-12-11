@@ -1,4 +1,4 @@
-package com.vanskarner.samplenotify.styles.call
+package com.vanskarner.samplenotify.types.call
 
 import android.content.Intent
 import android.widget.ArrayAdapter

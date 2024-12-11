@@ -1,4 +1,4 @@
-package com.vanskarner.samplenotify.styles.messaging
+package com.vanskarner.samplenotify.types.messaging
 
 data class Messages(
     val id: Long,

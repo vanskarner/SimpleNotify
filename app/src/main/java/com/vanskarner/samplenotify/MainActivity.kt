@@ -7,14 +7,14 @@ import android.view.View
 import android.widget.ArrayAdapter
 import androidx.activity.result.contract.ActivityResultContracts
 import com.vanskarner.samplenotify.databinding.MainActivityBinding
-import com.vanskarner.samplenotify.styles.basic.showBasicTypes
-import com.vanskarner.samplenotify.styles.bigpicture.showBigPictureTypes
-import com.vanskarner.samplenotify.styles.bigtext.showBigTextTypes
-import com.vanskarner.samplenotify.styles.call.showCallTypes
-import com.vanskarner.samplenotify.styles.customdesign.showCustomDesignTypes
-import com.vanskarner.samplenotify.styles.duomessaging.showDuoMessagingTypes
-import com.vanskarner.samplenotify.styles.groupmessaging.showGroupMessagingTypes
-import com.vanskarner.samplenotify.styles.inbox.showInboxTypes
+import com.vanskarner.samplenotify.types.basic.showBasicTypes
+import com.vanskarner.samplenotify.types.bigpicture.showBigPictureTypes
+import com.vanskarner.samplenotify.types.bigtext.showBigTextTypes
+import com.vanskarner.samplenotify.types.call.showCallTypes
+import com.vanskarner.samplenotify.types.customdesign.showCustomDesignTypes
+import com.vanskarner.samplenotify.types.duomessaging.showDuoMessagingTypes
+import com.vanskarner.samplenotify.types.groupmessaging.showGroupMessagingTypes
+import com.vanskarner.samplenotify.types.inbox.showInboxTypes
 
 class MainActivity : BaseActivity() {
 

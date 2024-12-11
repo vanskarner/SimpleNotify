@@ -1,4 +1,4 @@
-package com.vanskarner.samplenotify.styles.inbox
+package com.vanskarner.samplenotify.types.basic
 
 import android.graphics.BitmapFactory
 import android.widget.ArrayAdapter
@@ -13,13 +13,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-fun showInboxTypes(activity: MainActivity, binding: MainActivityBinding) {
+fun showBasicTypes(activity: MainActivity, binding: MainActivityBinding) {
     val options = mapOf(
-        "Inbox" to ::basic,
-        "Inbox with details" to ::withDetails,
-        "Inbox with actions" to ::withActions,
-        "Inbox with progress" to ::withProgress,
-        "Inbox with indeterminate Progress" to ::withIndeterminateProgress
+        "Basic" to ::basic,
+        "Basic with details" to ::withDetails,
+        "Basic with actions" to ::withActions,
+        "Basic with progress" to ::withProgress,
+        "Basic with undetermined progress" to ::withIndeterminateProgress
     )
     binding.gridView.adapter =
         ArrayAdapter(activity, android.R.layout.simple_list_item_1, options.keys.toList())
@@ -30,38 +30,36 @@ fun showInboxTypes(activity: MainActivity, binding: MainActivityBinding) {
 
 private fun basic(activity: MainActivity) {
     SimpleNotify.with(activity)
-        .asInbox {
+        .asBasic {
             title = "Dina Basurearte: With her phrase “Your mom!"
             text = "A never-before-seen response from a female president to the people"
-            lines = arrayListOf("My item One", "My item Second", "My item Third", "My item Four")
         }
         .show()
 }
 
 private fun withDetails(activity: MainActivity) {
     SimpleNotify.with(activity)
-        .asInbox {
-            id = 80
-            tag = "INBOX_TAG"
+        .asBasic {
+            id = 10
+            tag = "BASIC_TAG"
             smallIcon = R.drawable.baseline_handshake_24
             largeIcon = BitmapFactory.decodeStream(activity.assets.open("dina2.jpg"))
             contentIntent = activity.pendingIntentToCloseNotification(id ?: 0)
             timeoutAfter = 5000L
             title = "Dina Balearte: Order with bullets and promotions"
             text = "Promotions after repression, a touch of presidential irony."
-            lines = arrayListOf("My item One", "My item Second", "My item Third", "My item Four")
+            subText = "Any SubText"
         }
         .show()
 }
 
 private fun withActions(activity: MainActivity) {
-    val notifyId = 81
+    val notifyId = 11
     SimpleNotify.with(activity)
-        .asInbox {
+        .asBasic {
             id = notifyId
             title = "Dina Corruptuarte: Waykis case in the shadows"
             text = "An alleged criminal network dedicated to influence peddling"
-            lines = arrayListOf("My item One", "My item Second", "My item Third", "My item Four")
         }
         .addReplyAction {
             title = "Respond"
@@ -84,16 +82,12 @@ private fun withProgress(activity: MainActivity) {
         for (progress in 0..100 step 20) {
             delay(1000)
             SimpleNotify.with(activity)
-                .asInbox {
-                    title = "Dina Basurearte: With her phrase “Your mom!"
-                    subText = if (progress < 100) "${progress}%" else "Messages loaded"
-                    text = "A never-before-seen response from a female president to the people"
-                    lines = if (progress < 100) arrayListOf() else arrayListOf(
-                        "My item One",
-                        "My item Second",
-                        "My item Third",
-                        "My item Four"
-                    )
+                .asBasic {
+                    smallIcon = R.drawable.baseline_file_download_24
+                    title = "Downloading Dina's Prosecutor File"
+                    subText = if (progress < 100) "${progress}%" else "Complete download"
+                    text = if (progress < 100) "${100-progress} seconds left"
+                    else "Be careful their government and most of the police work together."
                 }
                 .progress {
                     currentValue = progress
@@ -109,16 +103,12 @@ private fun withIndeterminateProgress(activity: MainActivity) {
         for (progress in 0..100 step 20) {
             delay(1000)
             SimpleNotify.with(activity)
-                .asInbox {
-                    title = "Dina Basurearte: With her phrase “Your mom!"
-                    subText = if (progress < 100) "Waiting messages..." else "Messages loaded"
-                    text = "A never-before-seen response from a female president to the people"
-                    lines = if (progress < 100) arrayListOf() else arrayListOf(
-                        "My item One",
-                        "My item Second",
-                        "My item Third",
-                        "My item Four"
-                    )
+                .asBasic {
+                    smallIcon = R.drawable.baseline_file_download_24
+                    title = "Downloading Dina's Prosecutor File"
+                    subText = if (progress < 100) "Downloading..." else "Complete download"
+                    text = if (progress < 100) "Please wait..."
+                    else "Request processed"
                 }
                 .progress {
                     indeterminate = true

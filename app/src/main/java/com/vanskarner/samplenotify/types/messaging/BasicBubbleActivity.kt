@@ -1,4 +1,4 @@
-package com.vanskarner.samplenotify.styles.messaging
+package com.vanskarner.samplenotify.types.messaging
 
 import android.os.Bundle
 import android.widget.EditText

@@ -26,7 +26,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".styles.messaging.BasicBubbleActivity"
+            android:name=".types.messaging.BasicBubbleActivity"
             android:allowEmbedded="true"
             android:documentLaunchMode="always"
             android:exported="true"

@@ -1,4 +1,4 @@
-package com.vanskarner.samplenotify.styles.duomessaging
+package com.vanskarner.samplenotify.types.duomessaging
 
 import android.app.PendingIntent
 import android.content.Intent
@@ -12,7 +12,7 @@ import androidx.core.net.toUri
 import com.vanskarner.samplenotify.BaseActivity.Companion.REMOTE_INPUT_KEY
 import com.vanskarner.samplenotify.MainActivity
 import com.vanskarner.samplenotify.databinding.MainActivityBinding
-import com.vanskarner.samplenotify.styles.messaging.BasicBubbleActivity
+import com.vanskarner.samplenotify.types.messaging.BasicBubbleActivity
 import com.vanskarner.simplenotify.NotifyMessaging
 import com.vanskarner.simplenotify.SimpleNotify
 

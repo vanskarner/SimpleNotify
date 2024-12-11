@@ -1,4 +1,4 @@
-package com.vanskarner.samplenotify.styles.customdesign
+package com.vanskarner.samplenotify.types.customdesign
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
