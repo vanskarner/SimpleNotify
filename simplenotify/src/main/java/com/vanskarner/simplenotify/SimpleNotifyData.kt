@@ -324,15 +324,21 @@ sealed class Data {
      */
     data class CustomDesignData(
         /**
-         * Specifies whether to set the [android.app.Notification.DecoratedCustomViewStyle] style. By default this is true.
+         * Specifies whether to set the style [android.app.Notification.DecoratedCustomViewStyle]
+         * which is the container that wraps the notification. Applicable for versions prior to
+         * version [android.os.Build.VERSION_CODES.S].
+         *
+         * By default this is true.
          */
         var hasStyle: Boolean = true,
         /**
-         * Provides a customized [RemoteViews] for the collapsed view of the notification
+         * Provides a customized [RemoteViews] for the collapsed view of the notification. Starting
+         * with version [android.os.Build.VERSION_CODES.S], style(container) is not applied by default.
          */
         var smallRemoteViews: () -> RemoteViews? = { null },
         /**
-         * Provides a customized [RemoteViews] for the expanded view of the notification
+         * Provides a customized [RemoteViews] for the expanded view of the notification. Starting
+         * with version [android.os.Build.VERSION_CODES.S], style(container) is applied by default.
          */
         var largeRemoteViews: () -> RemoteViews? = { null }
     ) : Data()
