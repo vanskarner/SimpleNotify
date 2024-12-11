@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="48dp"
-    android:gravity="center"
-    tools:ignore="TextSizeCheck">
+    android:gravity="center">
 
     <TextView
         android:id="@+id/notification_timer"
@@ -12,11 +11,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
-        android:layout_marginStart="8dp"
         android:ellipsize="end"
         android:maxLines="1"
         android:textColor="@android:color/holo_red_light"
-        android:textSize="28sp"
+        android:textSize="20sp"
         android:textStyle="bold"
         tools:text="00:00:00" />
 
@@ -27,7 +25,6 @@
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
         android:layout_toEndOf="@id/notification_timer"
         android:ellipsize="end"
         android:maxLength="100"
