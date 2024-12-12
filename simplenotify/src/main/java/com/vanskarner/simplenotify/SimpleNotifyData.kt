@@ -345,7 +345,6 @@ sealed class Data {
 
 }
 
-@Suppress("ArrayInDataClass")
 /**
  * Data structure that gathers several attributes that allows to change the predefined
  * characteristics of the notification types.
@@ -450,7 +449,7 @@ data class ExtraData(
      *
      * Note: The reply text will only be shown on notifications that have least one action with a [RemoteInput]
      */
-    var remoteInputHistory: Array<CharSequence>? = null,
+    var remoteInputHistory: List<CharSequence>? = null,
     /**
      * Set this notification to be part of a group of notifications sharing the same key.
      * Grouped notifications may display in a cluster or stack on devices which support such rendering

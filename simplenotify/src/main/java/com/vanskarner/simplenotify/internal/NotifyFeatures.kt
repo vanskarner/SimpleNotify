@@ -32,7 +32,7 @@ internal object NotifyFeatures {
         extras.allowSystemGeneratedContextualActions?.let {
             builder.setAllowSystemGeneratedContextualActions(it)
         }
-        extras.remoteInputHistory?.let { builder.setRemoteInputHistory(it) }
+        extras.remoteInputHistory?.let { builder.setRemoteInputHistory(it.toTypedArray()) }
         extras.groupKey?.let { builder.setGroup(it) }
     }
 

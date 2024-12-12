@@ -264,7 +264,7 @@ class TestDataProvider {
             badgeIconType = NotificationCompat.BADGE_ICON_SMALL,
             shortCutId = "anyShortCutId",
             allowSystemGeneratedContextualActions = true,
-            remoteInputHistory = arrayOf("History 1", "History 2"),
+            remoteInputHistory = listOf("History 1", "History 2"),
             groupKey = "some_group_key"
         )
 
