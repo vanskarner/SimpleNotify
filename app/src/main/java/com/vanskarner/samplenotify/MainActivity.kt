@@ -15,6 +15,7 @@ import com.vanskarner.samplenotify.types.customdesign.showCustomDesignTypes
 import com.vanskarner.samplenotify.types.duomessaging.showDuoMessagingTypes
 import com.vanskarner.samplenotify.types.groupmessaging.showGroupMessagingTypes
 import com.vanskarner.samplenotify.types.inbox.showInboxTypes
+import com.vanskarner.samplenotify.types.stacking.showStacking
 
 class MainActivity : BaseActivity() {
 
@@ -52,7 +53,8 @@ class MainActivity : BaseActivity() {
             "DuoMessaging" to ::showDuoMessagingTypes,
             "GroupMessaging" to ::showGroupMessagingTypes,
             "Call" to ::showCallTypes,
-            "CustomDesign" to ::showCustomDesignTypes
+            "CustomDesign" to ::showCustomDesignTypes,
+            "Stacking" to ::showStacking
         )
         binding.gridView.adapter =
             ArrayAdapter(this, android.R.layout.simple_list_item_1, actions.keys.toList())
