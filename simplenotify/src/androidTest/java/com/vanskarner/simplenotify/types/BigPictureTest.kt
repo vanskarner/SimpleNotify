@@ -192,13 +192,16 @@ class BigPictureTest {
             summaryText = expectedData.summaryText
             image = expectedData.image
         }.generateBuilder()
-        val actualNotification = actualBuilder.build()
+        val actualNotification = actualBuilder?.build() ?: Notification()
 
         assertNotificationChannelId(DEFAULT_CHANNEL_ID, actualNotification)
         assertCommonData(expectedData, actualNotification)
     }
 
-    private fun assertCommonData(expectedData: Data.BigPictureData, actualNotification: Notification) {
+    private fun assertCommonData(
+        expectedData: Data.BigPictureData,
+        actualNotification: Notification
+    ) {
         val actualExtras = actualNotification.extras
         val actualSummaryText = actualExtras.getString(NotificationCompat.EXTRA_SUMMARY_TEXT)
         val actualPicture =

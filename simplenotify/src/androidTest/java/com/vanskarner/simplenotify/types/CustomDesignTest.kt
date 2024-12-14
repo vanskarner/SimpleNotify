@@ -178,7 +178,7 @@ class CustomDesignTest {
             smallIcon = expectedData.smallIcon
             smallRemoteViews = expectedData.smallRemoteViews
             largeRemoteViews = expectedData.largeRemoteViews
-        }.generateBuilder().build()
+        }.generateBuilder()?.build() ?: Notification()
 
         assertNotificationChannelId(DEFAULT_CHANNEL_ID, actualNotification)
         assertCommonData(expectedData, actualNotification)

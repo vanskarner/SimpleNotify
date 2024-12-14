@@ -182,7 +182,7 @@ class NotifyGeneratorTest {
             actions = emptyArray(),
             stackableData = null
         )
-        val actualNotification = createNotificationForCall(data)
+        val actualNotification = createNotificationForCall(data) ?: Notification()
 
         assertNotificationChannelId(DEFAULT_CALL_CHANNEL_ID, actualNotification)
     }
@@ -201,7 +201,7 @@ class NotifyGeneratorTest {
             actions = emptyArray(),
             stackableData = null
         )
-        val actualNotification = createNotificationForCall(data)
+        val actualNotification = createNotificationForCall(data) ?: Notification()
 
         assertNotificationChannelId(expectedChannelId, actualNotification)
     }
@@ -220,7 +220,7 @@ class NotifyGeneratorTest {
             actions = emptyArray(),
             stackableData = null
         )
-        val actualNotification = createNotificationForCall(data)
+        val actualNotification = createNotificationForCall(data) ?: Notification()
 
         assertNotificationChannelId(DEFAULT_CALL_CHANNEL_ID, actualNotification)
     }
@@ -354,11 +354,11 @@ class NotifyGeneratorTest {
         assertEquals(INVALID_NOTIFICATION_ID, notificationUsingShow.second)
     }
 
-    private suspend fun createNotificationForCall(data: Data.CallData): Notification {
+    private suspend fun createNotificationForCall(data: Data.CallData): Notification? {
         return when {
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
                 // From API 31, CallStyle notifications must either be for a foreground Service
-                notifyGenerator.generateBuilder().build()
+                notifyGenerator.generateBuilder()?.build()
             }
 
             else -> {

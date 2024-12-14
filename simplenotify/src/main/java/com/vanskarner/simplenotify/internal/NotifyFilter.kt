@@ -128,16 +128,42 @@ object NotifyFilter {
             }
 
             is Data.CallData -> {
-                builder.setPriority(NotificationCompat.PRIORITY_HIGH)
+                val caller = data.caller ?: Data.CallData.defaultCaller(context)
                 val secondCaller = Data.CallData.defaultSecondCaller(context)
-                val style = callTypeFilter(context, data)
-                style.setVerificationText(data.verificationText)
-                style.setVerificationIcon(data.verificationIcon)
-                builder.setStyle(style)
-                    .setCategory(NotificationCompat.CATEGORY_CALL)
-                    .addPerson(secondCaller)
-                    .setVibrate(longArrayOf(0, 500, 1000, 500))
-                    .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE))
+                val notificationSettings: (NotificationCompat.CallStyle) -> Unit = { style ->
+                    style.setVerificationText(data.verificationText)
+                        .setVerificationIcon(data.verificationIcon)
+                    builder.setPriority(NotificationCompat.PRIORITY_HIGH)
+                        .setCategory(NotificationCompat.CATEGORY_CALL)
+                        .setVibrate(longArrayOf(0, 500, 1000, 500))
+                        .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE))
+                        .setStyle(style)
+                        .addPerson(secondCaller)
+                }
+                val options = mapOf(
+                    "incoming" to {
+                        val answerIntent = data.answer
+                        val declineIntent = data.declineOrHangup
+                        if (answerIntent != null && declineIntent != null) {
+                            val style = NotificationCompat.CallStyle
+                                .forIncomingCall(caller, declineIntent, answerIntent)
+                            notificationSettings(style)
+                        }
+                    }, "ongoing" to {
+                        data.declineOrHangup?.let {
+                            val style = NotificationCompat.CallStyle.forOngoingCall(caller, it)
+                            notificationSettings(style)
+                        }
+                    }, "screening" to {
+                        val hangUpIntent = data.declineOrHangup
+                        val answerIntent = data.answer
+                        if (hangUpIntent != null && answerIntent != null) {
+                            val style = NotificationCompat.CallStyle
+                                .forScreeningCall(caller, hangUpIntent, answerIntent)
+                            notificationSettings(style)
+                        }
+                    })
+                options[data.type.lowercase()]?.invoke()
             }
 
             is Data.CustomDesignData -> {
@@ -145,35 +171,6 @@ object NotifyFilter {
                 builder.setCustomContentView(data.smallRemoteViews.invoke())
                     .setCustomBigContentView(data.largeRemoteViews.invoke())
             }
-        }
-    }
-
-    private fun callTypeFilter(
-        context: Context,
-        data: Data.CallData
-    ): NotificationCompat.CallStyle {
-        val caller = data.caller ?: Data.CallData.defaultCaller(context)
-        val declineOrHangup = data.declineOrHangup ?: Data.CallData.defaultDeclineOrHangup(context)
-        return when (data.type.lowercase()) {
-            "incoming" -> NotificationCompat.CallStyle.forIncomingCall(
-                caller,
-                declineOrHangup,
-                data.answer ?: Data.CallData.defaultAnswer(context)
-            )
-
-            "ongoing" -> NotificationCompat.CallStyle.forOngoingCall(caller, declineOrHangup)
-
-            "screening" -> NotificationCompat.CallStyle.forScreeningCall(
-                caller,
-                declineOrHangup,
-                data.answer ?: Data.CallData.defaultAnswer(context)
-            )
-
-            else -> NotificationCompat.CallStyle.forIncomingCall(
-                caller,
-                declineOrHangup,
-                data.answer ?: Data.CallData.defaultAnswer(context)
-            )
         }
     }
 

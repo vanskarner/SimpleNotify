@@ -72,7 +72,7 @@ class InboxTest {
     fun show_usingProgress_shouldBeShown() = runTest {
         val expectedData = TestDataProvider.inboxData()
         val expectedProgress = 50
-        val notificationId =  80
+        val notificationId = 80
         notifyConfig.asInbox {
             id = notificationId
             smallIcon = expectedData.smallIcon
@@ -100,7 +100,7 @@ class InboxTest {
     @Test
     fun show_whenProgressIsHide_shouldBeShown() = runTest {
         val expectedData = TestDataProvider.inboxData()
-        val notificationId =  81
+        val notificationId = 81
         notifyConfig.asInbox {
             id = notificationId
             smallIcon = expectedData.smallIcon
@@ -183,7 +183,7 @@ class InboxTest {
             title = expectedData.title
             text = expectedData.text
             lines = expectedData.lines
-        }.generateBuilder().build()
+        }.generateBuilder()?.build() ?: Notification()
 
         assertNotificationChannelId(DEFAULT_CHANNEL_ID, actualNotification)
         assertCommonData(expectedData, actualNotification)

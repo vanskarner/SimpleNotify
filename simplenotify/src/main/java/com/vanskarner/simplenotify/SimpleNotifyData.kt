@@ -2,7 +2,6 @@ package com.vanskarner.simplenotify
 
 import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.Icon
 import android.net.Uri
@@ -250,6 +249,9 @@ sealed class Data {
     data class CallData(
         /**
          * Specifies the type of call. There are 3 types: `incoming`,`ongoing` and `screening`.
+         * The `incoming` type requires the attributes [answer] and [declineOrHangup].
+         * The `ongoing` type requires the [declineOrHangup] attribute.
+         * The `screening` type requires the attributes [answer] and [declineOrHangup].
          */
         var type: String = "incoming",
         /**
@@ -269,13 +271,12 @@ sealed class Data {
         var caller: Person? = null,
         /**
          * The intent used in types “incoming” and “screening” to be sent when the user clicks
-         * on the response action. If it is not specified, it is an empty intention.
+         * on the response action.
          */
         var answer: PendingIntent? = null,
         /**
          * The intent used in all types. When the type is `incoming` it refers to decline and when
-         * it refers to the other types it refers to hangUp.If it is not specified, it is an empty
-         * intention.
+         * it refers to the other types it refers to hangUp.
          */
         var declineOrHangup: PendingIntent? = null
     ) : Data() {
@@ -284,24 +285,6 @@ sealed class Data {
         }
 
         companion object {
-            internal fun defaultAnswer(context: Context): PendingIntent {
-                return PendingIntent.getActivity(
-                    context,
-                    -333,
-                    Intent(),
-                    PendingIntent.FLAG_IMMUTABLE
-                )
-            }
-
-            internal fun defaultDeclineOrHangup(context: Context): PendingIntent {
-                return PendingIntent.getActivity(
-                    context,
-                    -333,
-                    Intent(),
-                    PendingIntent.FLAG_IMMUTABLE
-                )
-            }
-
             internal fun defaultSecondCaller(context: Context): Person {
                 return Person.Builder()
                     .setName("You")

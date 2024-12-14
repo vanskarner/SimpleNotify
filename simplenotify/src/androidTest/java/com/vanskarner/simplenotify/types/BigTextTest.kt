@@ -190,7 +190,7 @@ class BigTextTest {
             bigText = expectedData.bigText
             subText = expectedData.subText
         }.generateBuilder()
-        val actualNotification = actualBuilder.build()
+        val actualNotification = actualBuilder?.build() ?: Notification()
 
         assertNotificationChannelId(DEFAULT_CHANNEL_ID, actualNotification)
         assertCommonData(expectedData, actualNotification)

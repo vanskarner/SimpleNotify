@@ -26,7 +26,7 @@ internal class NotifyGenerator(
 
     fun show(): Pair<Int, Int> {
         val invalidResponse = Pair(INVALID_NOTIFICATION_ID, INVALID_NOTIFICATION_ID)
-        val myData = data ?: return invalidResponse
+        val myData = validateData() ?: return invalidResponse
         val notificationManager = NotificationManagerCompat.from(context)
         if (notificationManager.areNotificationsEnabled()) {
             val currentNotificationId = generateNotificationId(myData)
@@ -49,9 +49,24 @@ internal class NotifyGenerator(
         return invalidResponse
     }
 
-    fun generateBuilder(): NotificationCompat.Builder {
-        val myData = data ?: Data.BasicData()
+    fun generateBuilder(): NotificationCompat.Builder? {
+        val myData = validateData() ?: return null
         return createNotification(myData)
+    }
+
+    private fun validateData(): Data? {
+        val myData = data ?: return null
+        if (myData is Data.CallData) {
+            val requiredFields = when (myData.type.lowercase()) {
+                "incoming" -> listOf(myData.answer, myData.declineOrHangup)
+                "ongoing" -> listOf(myData.declineOrHangup)
+                "screening" -> listOf(myData.declineOrHangup, myData.answer)
+                else -> return null
+            }
+            if (requiredFields.any { it == null }) return null
+            return myData
+        }
+        return myData
     }
 
     private fun selectChannelId(): String {

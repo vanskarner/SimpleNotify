@@ -94,8 +94,12 @@ class NotifyConfig(private val context: Context) {
     }
 
     /**
-     * Configures a call style notification.
-     * Uses by default a notification channel for calls provided by the library.
+     * Configures a call style notification. Uses by default a notification channel for calls
+     * provided by the library.
+     *
+     * If the type and attributes required by the call type are not provided, then when invoking
+     * show or generateBuilder, the notification will not be displayed or the notification will not
+     * be generated.
      *
      * @param content Lambda to define [Data.CallData] properties.
      * @return The current [NotifyConfig] instance.
@@ -197,9 +201,10 @@ class NotifyConfig(private val context: Context) {
     /**
      * Generates a [NotificationCompat.Builder] with the current configuration.
      *
-     * @return A configured [NotificationCompat.Builder] instance.
+     * @return A fully configured [NotificationCompat.Builder] instance, or `null` if the builder
+     * cannot be generated.
      */
-    fun generateBuilder(): NotificationCompat.Builder {
+    fun generateBuilder(): NotificationCompat.Builder? {
         return NotifyGenerator(
             context = context,
             data = data,

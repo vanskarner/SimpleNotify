@@ -71,7 +71,7 @@ class BasicTest {
     fun show_usingProgress_shouldBeShown() = runTest {
         val expectedData = TestDataProvider.basicData()
         val expectedProgress = 50
-        val notificationId =  10
+        val notificationId = 10
         notifyConfig.asBasic {
             id = notificationId
             smallIcon = expectedData.smallIcon
@@ -98,7 +98,7 @@ class BasicTest {
     @Test
     fun show_whenProgressIsHide_shouldBeShown() = runTest {
         val expectedData = TestDataProvider.basicData()
-        val notificationId =  11
+        val notificationId = 11
         notifyConfig.asBasic {
             id = notificationId
             smallIcon = expectedData.smallIcon
@@ -178,7 +178,7 @@ class BasicTest {
             title = expectedData.title
             text = expectedData.text
         }.generateBuilder()
-        val actualNotification = actualBuilder.build()
+        val actualNotification = actualBuilder?.build() ?: Notification()
 
         assertNotificationChannelId(DEFAULT_CHANNEL_ID, actualNotification)
         assertCommonData(expectedData, actualNotification)

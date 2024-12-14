@@ -178,7 +178,7 @@ class CallTest {
     private suspend fun showOrGenerateNotificationAccordingAPI(): Notification {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             //From API 31, CallStyle notifications must either be for a foreground Service
-            notifyConfig.generateBuilder().build()
+            notifyConfig.generateBuilder()?.build() ?: Notification()
         } else {
             val notificationPair = notifyConfig.show()
             val actualStatusBarNotification =
