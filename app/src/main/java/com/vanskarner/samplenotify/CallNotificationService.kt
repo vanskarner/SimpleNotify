@@ -29,7 +29,7 @@ class CallNotificationService : Service() {
                         .setName("Capibara")
                         .setIcon(IconCompat.createWithBitmap(image))
                         .build()
-//                    answer = pendingIntentionHangupCall()
+                    answer = pendingIntentionHangupCall()
                     declineOrHangup = pendingIntentionHangupCall()
                 }
                 .generateBuilder()
