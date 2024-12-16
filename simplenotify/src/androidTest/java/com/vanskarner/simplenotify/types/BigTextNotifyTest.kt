@@ -28,7 +28,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class BigTextTest {
+class BigTextNotifyTest {
     private lateinit var notifyConfig: NotifyConfig
     private lateinit var notificationManager: NotificationManager
 

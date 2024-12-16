@@ -4,6 +4,9 @@ import android.content.Context
 import androidx.core.app.NotificationCompat
 import com.vanskarner.simplenotify.internal.MAXIMUM_ACTIONS
 import com.vanskarner.simplenotify.internal.NotifyGenerator
+import com.vanskarner.simplenotify.types.BasicNotify
+import com.vanskarner.simplenotify.types.BigTextNotify
+import com.vanskarner.simplenotify.types.CallNotify
 
 /**
  * NotifyConfig: Configures and builds notifications using a fluent API.
@@ -239,4 +242,34 @@ class NotifyConfig(private val context: Context) {
         ).show()
     }
 
+    private fun filter(data: Data): Notify {
+        return when (data) {
+            is Data.BasicData -> BasicNotify(
+                context,
+                data,
+                progressData,
+                channelId,
+                extras,
+                stackableData,
+                actions
+            )
+
+            is Data.BigPictureData -> TODO()
+            is Data.BigTextData -> BigTextNotify()
+            is Data.CallData -> CallNotify(
+                context,
+                data,
+                channelId,
+                extras,
+                progressData,
+                stackableData,
+                actions
+            )
+
+            is Data.CustomDesignData -> TODO()
+            is Data.DuoMessageData -> TODO()
+            is Data.GroupMessageData -> TODO()
+            is Data.InboxData -> TODO()
+        }
+    }
 }
