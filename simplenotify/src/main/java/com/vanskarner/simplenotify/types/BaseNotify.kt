@@ -65,10 +65,12 @@ internal abstract class BaseNotify(
 
     open fun selectChannelId(): String {
         return when {
-            progressData == null && notifyChannel.checkChannelNotExists(context, channelId) ->
+            enableProgress() && progressData == null &&
+                    notifyChannel.checkChannelNotExists(context, channelId) ->
                 notifyChannel.applyDefaultChannel(context)
 
-            progressData != null && notifyChannel.checkChannelNotExists(context, channelId) ->
+            enableProgress() && progressData != null &&
+                    notifyChannel.checkChannelNotExists(context, channelId) ->
                 notifyChannel.applyProgressChannel(context)
 
             else -> channelId ?: notifyChannel.applyDefaultChannel(context)
@@ -92,7 +94,9 @@ internal abstract class BaseNotify(
 
     private fun generateNotificationId(dataType: Data): Int {
         return when {
-            progressData != null && dataType.id == null -> DEFAULT_PROGRESS_NOTIFICATION_ID
+            enableProgress() && progressData != null && dataType.id == null ->
+                DEFAULT_PROGRESS_NOTIFICATION_ID
+
             else -> dataType.id ?: Random.nextInt(
                 RANGE_NOTIFICATION.first,
                 RANGE_NOTIFICATION.second
@@ -140,10 +144,15 @@ internal abstract class BaseNotify(
     }
 
     private fun applyProgress(builder: NotificationCompat.Builder) {
-        progressData?.let { progress ->
-            builder.setSound(null)
-            if (progress.hide) builder.setProgress(0, 0, false)
-            else builder.setProgress(100, progress.currentValue, progress.indeterminate)
+        if (enableProgress()) {
+            progressData?.let { progress ->
+                if (progress.hide) {
+                    builder.setProgress(0, 0, false)
+                } else {
+                    builder.setSound(null)
+                    builder.setProgress(100, progress.currentValue, progress.indeterminate)
+                }
+            }
         }
     }
 
