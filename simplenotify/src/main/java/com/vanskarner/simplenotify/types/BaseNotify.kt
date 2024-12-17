@@ -26,7 +26,8 @@ internal abstract class BaseNotify(
     private val progressData: ProgressData?,
     private val extras: ExtraData,
     private val stackableData: StackableData?,
-    private val actions: Array<ActionData?>,
+    private val channelId: String?,
+    private val actions: List<ActionData?>,
 ) {
     val notifyChannel = NotifyChannel
 
@@ -62,9 +63,21 @@ internal abstract class BaseNotify(
 
     fun invalidNotificationResult() = Pair(INVALID_NOTIFICATION_ID, INVALID_NOTIFICATION_ID)
 
+    open fun selectChannelId(): String {
+        return when {
+            progressData == null && notifyChannel.checkChannelNotExists(context, channelId) ->
+                notifyChannel.applyDefaultChannel(context)
+
+            progressData != null && notifyChannel.checkChannelNotExists(context, channelId) ->
+                notifyChannel.applyProgressChannel(context)
+
+            else -> channelId ?: notifyChannel.applyDefaultChannel(context)
+        }
+    }
+
     abstract fun applyData(builder: NotificationCompat.Builder)
 
-    abstract fun selectChannelId(): String
+    abstract fun enableProgress(): Boolean
 
     private fun generateGroupNotificationId(): Int {
         return when {

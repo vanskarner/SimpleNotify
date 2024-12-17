@@ -3,40 +3,43 @@ package com.vanskarner.simplenotify.types
 import android.content.Context
 import android.media.RingtoneManager
 import androidx.core.app.NotificationCompat
-import com.vanskarner.simplenotify.ActionData
 import com.vanskarner.simplenotify.Data
-import com.vanskarner.simplenotify.ExtraData
 import com.vanskarner.simplenotify.Notify
-import com.vanskarner.simplenotify.ProgressData
-import com.vanskarner.simplenotify.StackableData
 
 internal class CallNotify(
-    private val context: Context,
-    private val data: Data.CallData?,
-    private val channelId: String?,
-    extra: ExtraData,
-    progressData: ProgressData?,
-    stackableData: StackableData?,
-    actions: Array<ActionData?>,
-) : Notify, BaseNotify(context, progressData, extra, stackableData, actions) {
+    private val context: Context, private val configData: ConfigData
+) : Notify, BaseNotify(
+    context,
+    configData.progressData,
+    configData.extras,
+    configData.stackableData,
+    configData.channelId,
+    configData.actions
+) {
+    companion object {
+        private const val INCOMING = "incoming"
+        private const val ONGOING = "ongoing"
+        private const val SCREENING = "screening"
+    }
+
+    private val data = configData.data as Data.CallData
 
     override fun show(): Pair<Int, Int> {
-        val requiredData = validateData() ?: return invalidNotificationResult()
-        return notify(requiredData)
+        if (isDataInvalid()) return invalidNotificationResult()
+        return notify(data)
     }
 
     override fun generateBuilder(): NotificationCompat.Builder? {
-        val myData = validateData() ?: return null
-        return createNotification(myData, selectChannelId())
+        if (isDataInvalid()) return null
+        return createNotification(data, selectChannelId())
     }
 
     override fun applyData(builder: NotificationCompat.Builder) {
-        val requiredData = data ?: return
-        val caller = requiredData.caller ?: Data.CallData.defaultCaller(context)
+        val caller = data.caller ?: Data.CallData.defaultCaller(context)
         val secondCaller = Data.CallData.defaultSecondCaller(context)
         val notificationSettings: (NotificationCompat.CallStyle) -> Unit = { style ->
-            style.setVerificationText(requiredData.verificationText)
-                .setVerificationIcon(requiredData.verificationIcon)
+            style.setVerificationText(data.verificationText)
+                .setVerificationIcon(data.verificationIcon)
             builder.setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE))
                 .setCategory(NotificationCompat.CATEGORY_CALL)
@@ -44,8 +47,8 @@ internal class CallNotify(
                 .setStyle(style)
                 .addPerson(secondCaller)
         }
-        val options = mapOf(
-            "incoming" to {
+        when (data.type.lowercase()) {
+            INCOMING -> {
                 val answerIntent = data.answer
                 val declineIntent = data.declineOrHangup
                 if (answerIntent != null && declineIntent != null) {
@@ -53,12 +56,16 @@ internal class CallNotify(
                         .forIncomingCall(caller, declineIntent, answerIntent)
                     notificationSettings(style)
                 }
-            }, "ongoing" to {
+            }
+
+            ONGOING -> {
                 data.declineOrHangup?.let {
                     val style = NotificationCompat.CallStyle.forOngoingCall(caller, it)
                     notificationSettings(style)
                 }
-            }, "screening" to {
+            }
+
+            SCREENING -> {
                 val hangUpIntent = data.declineOrHangup
                 val answerIntent = data.answer
                 if (hangUpIntent != null && answerIntent != null) {
@@ -66,27 +73,28 @@ internal class CallNotify(
                         .forScreeningCall(caller, hangUpIntent, answerIntent)
                     notificationSettings(style)
                 }
-            })
-        options[requiredData.type.lowercase()]?.invoke()
+            }
+        }
     }
+
+    override fun enableProgress(): Boolean = false
 
     override fun selectChannelId(): String {
         return when {
-            notifyChannel.checkChannelNotExists(context, channelId) -> notifyChannel.applyCallChannel(context)
+            notifyChannel.checkChannelNotExists(context, configData.channelId) ->
+                notifyChannel.applyCallChannel(context)
 
-            else -> channelId ?: notifyChannel.applyDefaultChannel(context)
+            else -> configData.channelId ?: notifyChannel.applyDefaultChannel(context)
         }
     }
 
-    private fun validateData(): Data? {
-        val myData = data ?: return null
-        val requiredFields = when (myData.type.lowercase()) {
-            "incoming", "screening" -> listOf(myData.answer, myData.declineOrHangup)
-            "ongoing" -> listOf(myData.declineOrHangup)
-            else -> return null
+    private fun isDataInvalid(): Boolean {
+        val requiredFields = when (data.type.lowercase()) {
+            INCOMING, SCREENING -> listOf(data.answer, data.declineOrHangup)
+            ONGOING -> listOf(data.declineOrHangup)
+            else -> return true
         }
-        if (requiredFields.any { it == null }) return null
-        return myData
+        return requiredFields.any { it == null }
     }
 
 }

@@ -3,10 +3,16 @@ package com.vanskarner.simplenotify
 import android.content.Context
 import androidx.core.app.NotificationCompat
 import com.vanskarner.simplenotify.internal.MAXIMUM_ACTIONS
-import com.vanskarner.simplenotify.internal.NotifyGenerator
 import com.vanskarner.simplenotify.types.BasicNotify
+import com.vanskarner.simplenotify.types.BigPictureNotify
 import com.vanskarner.simplenotify.types.BigTextNotify
 import com.vanskarner.simplenotify.types.CallNotify
+import com.vanskarner.simplenotify.types.ConfigData
+import com.vanskarner.simplenotify.types.CustomDesignNotify
+import com.vanskarner.simplenotify.types.DuoMessageNotify
+import com.vanskarner.simplenotify.types.GroupMessageNotify
+import com.vanskarner.simplenotify.types.InboxNotify
+import com.vanskarner.simplenotify.types.InvalidNotify
 
 /**
  * NotifyConfig: Configures and builds notifications using a fluent API.
@@ -207,17 +213,7 @@ class NotifyConfig(private val context: Context) {
      * @return A fully configured [NotificationCompat.Builder] instance, or `null` if the builder
      * cannot be generated.
      */
-    fun generateBuilder(): NotificationCompat.Builder? {
-        return NotifyGenerator(
-            context = context,
-            data = data,
-            extra = extras,
-            actions = actions,
-            stackableData = stackableData,
-            channelId = channelId,
-            progressData = progressData
-        ).generateBuilder()
-    }
+    fun generateBuilder(): NotificationCompat.Builder? = filter().generateBuilder()
 
     /**
      * Displays the configured notification.
@@ -230,46 +226,28 @@ class NotifyConfig(private val context: Context) {
      * @return A pair with the notification ID and the group notification ID. If no notification
      *         type is specified, Pair(-1, -1) will be returned.
      */
-    fun show(): Pair<Int, Int> {
-        return NotifyGenerator(
-            context = context,
-            data = data,
-            extra = extras,
-            actions = actions,
+    fun show(): Pair<Int, Int> = filter().show()
+
+    private fun filter(): Notify {
+        val requiredData = data ?: return InvalidNotify()
+        val configData = ConfigData(
+            data = requiredData,
+            extras = extras,
+            progressData = progressData,
             stackableData = stackableData,
             channelId = channelId,
-            progressData = progressData
-        ).show()
-    }
-
-    private fun filter(data: Data): Notify {
-        return when (data) {
-            is Data.BasicData -> BasicNotify(
-                context,
-                data,
-                progressData,
-                channelId,
-                extras,
-                stackableData,
-                actions
-            )
-
-            is Data.BigPictureData -> TODO()
-            is Data.BigTextData -> BigTextNotify()
-            is Data.CallData -> CallNotify(
-                context,
-                data,
-                channelId,
-                extras,
-                progressData,
-                stackableData,
-                actions
-            )
-
-            is Data.CustomDesignData -> TODO()
-            is Data.DuoMessageData -> TODO()
-            is Data.GroupMessageData -> TODO()
-            is Data.InboxData -> TODO()
+            actions = actions.toList()
+        )
+        return when (requiredData) {
+            is Data.BasicData -> BasicNotify(context, configData)
+            is Data.BigPictureData -> BigPictureNotify(context, configData)
+            is Data.BigTextData -> BigTextNotify(context, configData)
+            is Data.CallData -> CallNotify(context, configData)
+            is Data.CustomDesignData -> CustomDesignNotify(context, configData)
+            is Data.DuoMessageData -> DuoMessageNotify(context, configData)
+            is Data.GroupMessageData -> GroupMessageNotify(context, configData)
+            is Data.InboxData -> InboxNotify(context, configData)
         }
     }
+
 }
