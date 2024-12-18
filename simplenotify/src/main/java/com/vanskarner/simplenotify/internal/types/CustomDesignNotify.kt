@@ -1,12 +1,13 @@
-package com.vanskarner.simplenotify.types
+package com.vanskarner.simplenotify.internal.types
 
 import android.content.Context
 import android.media.RingtoneManager
 import androidx.core.app.NotificationCompat
 import com.vanskarner.simplenotify.Data
-import com.vanskarner.simplenotify.Notify
+import com.vanskarner.simplenotify.internal.ConfigData
+import com.vanskarner.simplenotify.internal.Notify
 
-internal class BigPictureNotify(context: Context, configData: ConfigData) :
+internal class CustomDesignNotify(context: Context, configData: ConfigData) :
     Notify, BaseNotify(
     context,
     configData.progressData,
@@ -15,7 +16,7 @@ internal class BigPictureNotify(context: Context, configData: ConfigData) :
     configData.channelId,
     configData.actions
 ) {
-    private val data = configData.data as Data.BigPictureData
+    private val data = configData.data as Data.CustomDesignData
 
     override fun show(): Pair<Int, Int> = notify(data)
 
@@ -23,17 +24,12 @@ internal class BigPictureNotify(context: Context, configData: ConfigData) :
         createNotification(data, selectChannelId())
 
     override fun applyData(builder: NotificationCompat.Builder) {
-        val style = NotificationCompat.BigPictureStyle()
-            .setSummaryText(data.summaryText)
-            .bigPicture(data.image)
-        builder
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+        if (data.hasStyle) builder.setStyle(NotificationCompat.DecoratedCustomViewStyle())
+        builder.setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-            .setContentTitle(data.title)
-            .setContentText(data.text)
-            .setStyle(style)
+            .setCustomContentView(data.smallRemoteViews.invoke())
+            .setCustomBigContentView(data.largeRemoteViews.invoke())
     }
 
     override fun enableProgress(): Boolean = true
-
 }

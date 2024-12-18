@@ -1,4 +1,4 @@
-package com.vanskarner.simplenotify.types
+package com.vanskarner.simplenotify.internal.types
 
 import android.content.Context
 import android.media.RingtoneManager
@@ -7,13 +7,11 @@ import androidx.core.app.NotificationCompat.MessagingStyle.Message
 import androidx.core.app.Person
 import androidx.core.content.pm.ShortcutManagerCompat
 import com.vanskarner.simplenotify.Data
-import com.vanskarner.simplenotify.Notify
+import com.vanskarner.simplenotify.internal.Notify
 import com.vanskarner.simplenotify.NotifyMessaging
+import com.vanskarner.simplenotify.internal.ConfigData
 
-internal class GroupMessageNotify(
-    private val context: Context,
-    private val configData: ConfigData
-) :
+internal class DuoMessageNotify(private val context: Context, private val configData: ConfigData) :
     Notify, BaseNotify(
     context,
     configData.progressData,
@@ -22,7 +20,7 @@ internal class GroupMessageNotify(
     configData.channelId,
     configData.actions
 ) {
-    private val data = configData.data as Data.GroupMessageData
+    private val data = configData.data as Data.DuoMessageData
 
     override fun show(): Pair<Int, Int> = notify(data)
 
@@ -33,12 +31,11 @@ internal class GroupMessageNotify(
         builder.setPriority(NotificationCompat.PRIORITY_HIGH)
             .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
         val style = NotificationCompat.MessagingStyle(data.you)
-            .setConversationTitle(data.conversationTitle)
-            .setGroupConversation(true)
+            .setGroupConversation(false)
         data.messages.forEachIndexed { index, item ->
             val message = when (item) {
                 is NotifyMessaging.ContactMsg -> {
-                    Message(item.msg, item.timestamp, item.person)
+                    Message(item.msg, item.timestamp, data.contact)
                 }
 
                 is NotifyMessaging.YourMsg -> {
@@ -66,6 +63,7 @@ internal class GroupMessageNotify(
         }
         builder.setCategory(NotificationCompat.CATEGORY_MESSAGE)
             .setStyle(style)
+            .addPerson(data.contact)
     }
 
     override fun enableProgress(): Boolean = false

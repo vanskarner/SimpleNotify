@@ -1,7 +1,7 @@
-package com.vanskarner.simplenotify.types
+package com.vanskarner.simplenotify.internal.types
 
 import androidx.core.app.NotificationCompat
-import com.vanskarner.simplenotify.Notify
+import com.vanskarner.simplenotify.internal.Notify
 import com.vanskarner.simplenotify.internal.INVALID_NOTIFICATION_ID
 
 class InvalidNotify : Notify {

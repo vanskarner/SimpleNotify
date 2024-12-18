@@ -3,16 +3,17 @@ package com.vanskarner.simplenotify
 import android.content.Context
 import androidx.core.app.NotificationCompat
 import com.vanskarner.simplenotify.internal.MAXIMUM_ACTIONS
-import com.vanskarner.simplenotify.types.BasicNotify
-import com.vanskarner.simplenotify.types.BigPictureNotify
-import com.vanskarner.simplenotify.types.BigTextNotify
-import com.vanskarner.simplenotify.types.CallNotify
-import com.vanskarner.simplenotify.types.ConfigData
-import com.vanskarner.simplenotify.types.CustomDesignNotify
-import com.vanskarner.simplenotify.types.DuoMessageNotify
-import com.vanskarner.simplenotify.types.GroupMessageNotify
-import com.vanskarner.simplenotify.types.InboxNotify
-import com.vanskarner.simplenotify.types.InvalidNotify
+import com.vanskarner.simplenotify.internal.Notify
+import com.vanskarner.simplenotify.internal.types.BasicNotify
+import com.vanskarner.simplenotify.internal.types.BigPictureNotify
+import com.vanskarner.simplenotify.internal.types.BigTextNotify
+import com.vanskarner.simplenotify.internal.types.CallNotify
+import com.vanskarner.simplenotify.internal.ConfigData
+import com.vanskarner.simplenotify.internal.types.CustomDesignNotify
+import com.vanskarner.simplenotify.internal.types.DuoMessageNotify
+import com.vanskarner.simplenotify.internal.types.GroupMessageNotify
+import com.vanskarner.simplenotify.internal.types.InboxNotify
+import com.vanskarner.simplenotify.internal.types.InvalidNotify
 
 /**
  * NotifyConfig: Configures and builds notifications using a fluent API.

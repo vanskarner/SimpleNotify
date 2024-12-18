@@ -1,8 +1,8 @@
-package com.vanskarner.simplenotify
+package com.vanskarner.simplenotify.internal
 
 import androidx.core.app.NotificationCompat
 
-interface Notify {
+internal interface Notify {
     fun show(): Pair<Int, Int>
     fun generateBuilder(): NotificationCompat.Builder?
 }

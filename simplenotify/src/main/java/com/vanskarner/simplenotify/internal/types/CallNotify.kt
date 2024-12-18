@@ -1,10 +1,11 @@
-package com.vanskarner.simplenotify.types
+package com.vanskarner.simplenotify.internal.types
 
 import android.content.Context
 import android.media.RingtoneManager
 import androidx.core.app.NotificationCompat
 import com.vanskarner.simplenotify.Data
-import com.vanskarner.simplenotify.Notify
+import com.vanskarner.simplenotify.internal.ConfigData
+import com.vanskarner.simplenotify.internal.Notify
 
 internal class CallNotify(
     private val context: Context, private val configData: ConfigData
@@ -41,8 +42,8 @@ internal class CallNotify(
             style.setVerificationText(data.verificationText)
                 .setVerificationIcon(data.verificationIcon)
             builder.setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE))
                 .setCategory(NotificationCompat.CATEGORY_CALL)
+                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE))
                 .setVibrate(longArrayOf(0, 500, 1000, 500))
                 .setStyle(style)
                 .addPerson(secondCaller)

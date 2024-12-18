@@ -1,10 +1,11 @@
-package com.vanskarner.simplenotify.types
+package com.vanskarner.simplenotify.internal.types
 
 import android.content.Context
 import android.media.RingtoneManager
 import androidx.core.app.NotificationCompat
 import com.vanskarner.simplenotify.Data
-import com.vanskarner.simplenotify.Notify
+import com.vanskarner.simplenotify.internal.ConfigData
+import com.vanskarner.simplenotify.internal.Notify
 
 internal class BigTextNotify(context: Context, configData: ConfigData) :
     Notify, BaseNotify(

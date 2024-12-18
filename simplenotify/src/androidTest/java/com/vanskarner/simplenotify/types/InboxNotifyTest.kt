@@ -31,7 +31,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class BigTextNotifyTest {
+class InboxNotifyTest {
     private lateinit var context: Context
     private lateinit var notifyManager: NotificationManager
 
@@ -54,15 +54,14 @@ class BigTextNotifyTest {
     }
 
     @Test
-    fun useBigText_shouldApply() = runTest {
-        val expectedData = TestDataProvider.bigTextData()
+    fun useInbox_shouldApply() = runTest {
+        val expectedData = TestDataProvider.inboxData()
         val actualNotifyConfig = SimpleNotify.with(context)
-            .asBigText {
+            .asInbox {
                 smallIcon = expectedData.smallIcon
                 title = expectedData.title
                 text = expectedData.text
-                bigText = expectedData.bigText
-                subText = expectedData.subText
+                lines = expectedData.lines
             }
         val actualNotificationIds = actualNotifyConfig.show()
         val actualNotificationGenerated =
@@ -83,7 +82,7 @@ class BigTextNotifyTest {
     fun useExtras_shouldApply() {
         val expectedExtra = TestDataProvider.extraData()
         val actualNotification = SimpleNotify.with(context)
-            .asBigText {}
+            .asInbox { }
             .extras {
                 priority = expectedExtra.priority
                 sounds = expectedExtra.sounds
@@ -153,17 +152,16 @@ class BigTextNotifyTest {
 
     @Test
     fun useProgress_shouldBeShown() = runTest {
-        val expectedData = TestDataProvider.bigTextData()
+        val expectedData = TestDataProvider.inboxData()
         val expectedProgress = 50
-        val notificationId = 30
+        val notificationId = 80
         SimpleNotify.with(context)
-            .asBigText {
+            .asInbox {
                 id = notificationId
                 smallIcon = expectedData.smallIcon
                 title = expectedData.title
                 text = expectedData.text
-                bigText = expectedData.bigText
-                subText = expectedData.subText
+                lines = expectedData.lines
             }.progress {
                 currentValue = expectedProgress
                 indeterminate = true
@@ -183,18 +181,20 @@ class BigTextNotifyTest {
 
     @Test
     fun useProgress_whenIsHide_shouldBeShown() = runTest {
-        val expectedData = TestDataProvider.bigTextData()
-        val notificationId = 31
-        SimpleNotify.with(context).asBigText {
-            id = notificationId
-            smallIcon = expectedData.smallIcon
-            title = expectedData.title
-            text = expectedData.text
-            bigText = expectedData.bigText
-            subText = expectedData.subText
-        }.progress {
-            hide = true
-        }.show()
+        val expectedData = TestDataProvider.inboxData()
+        val notificationId = 81
+        SimpleNotify.with(context)
+            .asInbox {
+                id = notificationId
+                smallIcon = expectedData.smallIcon
+                title = expectedData.title
+                text = expectedData.text
+                lines = expectedData.lines
+            }
+            .progress {
+                hide = true
+            }
+            .show()
         val actualStatusBarNotification = notifyManager.waitForNotification(notificationId)
         val actualNotification = actualStatusBarNotification.notification
         val actualExtras = actualNotification.extras
@@ -211,15 +211,16 @@ class BigTextNotifyTest {
     @Test
     fun useChannel_shouldBeShown() = runTest {
         val expectedChannelId = TestDataProvider.createChannel(notifyManager)
-        val expectedData = TestDataProvider.bigTextData()
-        val actualNotificationIds = SimpleNotify.with(context).asBigText {
-            smallIcon = expectedData.smallIcon
-            title = expectedData.title
-            text = expectedData.text
-            bigText = expectedData.bigText
-            subText = expectedData.subText
-        }
-            .useChannel(expectedChannelId).show()
+        val expectedData = TestDataProvider.inboxData()
+        val actualNotificationIds = SimpleNotify.with(context)
+            .asInbox {
+                smallIcon = expectedData.smallIcon
+                title = expectedData.title
+                text = expectedData.text
+                lines = expectedData.lines
+            }
+            .useChannel(expectedChannelId)
+            .show()
         val notificationId = actualNotificationIds.first
         val actualStatusBarNotification = notifyManager.waitForNotification(notificationId)
         val actualNotification = actualStatusBarNotification.notification
@@ -230,16 +231,15 @@ class BigTextNotifyTest {
 
     @Test
     fun useActionAndReplyAction_shouldBeShown() = runTest {
-        val expectedData = TestDataProvider.bigTextData()
+        val expectedData = TestDataProvider.inboxData()
         val expectedAction = TestDataProvider.basicAction()
         val expectedReplyAction = TestDataProvider.replyAction()
         val actualNotificationIds = SimpleNotify.with(context)
-            .asBigText {
+            .asInbox {
                 smallIcon = expectedData.smallIcon
                 title = expectedData.title
                 text = expectedData.text
-                bigText = expectedData.bigText
-                subText = expectedData.subText
+                lines = expectedData.lines
             }
             .addAction {
                 icon = expectedAction.icon
@@ -262,17 +262,16 @@ class BigTextNotifyTest {
         assertEquals(2, actualNotification.actions.size)
     }
 
-    private fun assertCommonData(expectedData: Data.BigTextData, actualNotification: Notification) {
+
+    private fun assertCommonData(expectedData: Data.InboxData, actualNotification: Notification) {
         val actualExtras = actualNotification.extras
-        val actualBigText = actualExtras.getString(NotificationCompat.EXTRA_BIG_TEXT)
-        val actualSubText = actualExtras.getString(NotificationCompat.EXTRA_SUB_TEXT)
+        val actualTextLines = actualExtras.getCharSequenceArray(NotificationCompat.EXTRA_TEXT_LINES)
 
         assertEquals(expectedData.smallIcon, actualNotification.smallIcon.resId)
         assertNotificationPriority(NotificationCompat.PRIORITY_DEFAULT, actualNotification)
         assertEquals(expectedData.title, actualExtras?.getString(NotificationCompat.EXTRA_TITLE))
         assertEquals(expectedData.text, actualExtras?.getString(NotificationCompat.EXTRA_TEXT))
-        assertEquals(expectedData.bigText, actualBigText)
-        assertEquals(expectedData.subText, actualSubText)
+        assertEquals(expectedData.lines.size, actualTextLines?.size ?: 0)
     }
 
 }

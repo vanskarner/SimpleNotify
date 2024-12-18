@@ -1,4 +1,4 @@
-package com.vanskarner.simplenotify.types
+package com.vanskarner.simplenotify.internal.types
 
 import android.app.Notification
 import android.app.NotificationManager
@@ -29,7 +29,7 @@ internal abstract class BaseNotify(
     private val channelId: String?,
     private val actions: List<ActionData?>,
 ) {
-    val notifyChannel = NotifyChannel
+    protected val notifyChannel = NotifyChannel
 
     fun notify(data: Data): Pair<Int, Int> {
         val notifyManager = NotificationManagerCompat.from(context)
