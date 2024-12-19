@@ -17,7 +17,6 @@ import com.vanskarner.simplenotify.internal.INVALID_NOTIFICATION_ID
 import com.vanskarner.simplenotify.internal.MAXIMUM_ACTIONS
 import com.vanskarner.simplenotify.internal.RANGE_GROUP_NOTIFICATION
 import com.vanskarner.simplenotify.internal.RANGE_NOTIFICATION
-import com.vanskarner.simplenotify.test.R
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -142,23 +141,23 @@ class CommonBehaviorTest {
         val expectedRemote = RemoteInput.Builder("anyKey").build()
         val actualNotifyConfig = SimpleNotify.with(context)
             .addAction {
-                icon = R.drawable.test_ic_message_24
+                icon = R.drawable.notify_ic_image_24
                 title = "Action 1"
                 pending = expectedPendingIntent
             }
             .addReplyAction {
-                icon = R.drawable.test_ic_mail_24
+                icon = R.drawable.notify_ic_text_24
                 title = "Action 2"
                 replyPending = expectedPendingIntent
                 remote = expectedRemote
             }
             .addAction {
-                icon = R.drawable.test_ic_archive_24
+                icon = R.drawable.notify_ic_email_24
                 title = "Action 3"
                 pending = expectedPendingIntent
             }
             .addReplyAction {
-                icon = R.drawable.test_ic_notification_24
+                icon = R.drawable.notify_ic_message_24
                 title = "Action 4"
                 replyPending = expectedPendingIntent
                 remote = expectedRemote

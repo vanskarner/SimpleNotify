@@ -23,8 +23,8 @@ import com.vanskarner.simplenotify.Data
 import com.vanskarner.simplenotify.ExtraData
 import com.vanskarner.simplenotify.NotifyMessaging
 import com.vanskarner.simplenotify.ProgressData
+import com.vanskarner.simplenotify.R
 import com.vanskarner.simplenotify.StackableData
-import com.vanskarner.simplenotify.test.R
 
 class TestDataProvider {
 
@@ -49,7 +49,7 @@ class TestDataProvider {
                 title = "Basic Style"
                 text = "Text for Basic"
                 subText = "SubText for Basic"
-                smallIcon = R.drawable.test_ic_notification_24
+                smallIcon = R.drawable.notify_ic_notification_24
                 largeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
                 contentIntent = pendingIntent
                 autoCancel = true
@@ -65,7 +65,7 @@ class TestDataProvider {
                 bigText = "BigText"
                 text = "Text for BigText"
                 subText = "SubText for BigTextData"
-                smallIcon = R.drawable.test_ic_notification_24
+                smallIcon = R.drawable.notify_ic_notification_24
                 largeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
                 contentIntent = pendingIntent
                 autoCancel = true
@@ -81,7 +81,7 @@ class TestDataProvider {
                 text = "Text for Inbox"
                 subText = "SubText for InboxData"
                 lines = arrayListOf("Any line 1", "Any line 2", "Any line 3")
-                smallIcon = R.drawable.test_ic_notification_24
+                smallIcon = R.drawable.notify_ic_notification_24
                 largeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
                 contentIntent = pendingIntent
                 autoCancel = true
@@ -98,7 +98,7 @@ class TestDataProvider {
                 subText = "SubText for BigPictureData"
                 summaryText = "Summary for BigPicture"
                 image = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
-                smallIcon = R.drawable.test_ic_notification_24
+                smallIcon = R.drawable.notify_ic_notification_24
                 largeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
                 contentIntent = pendingIntent
                 autoCancel = true
@@ -146,7 +146,7 @@ class TestDataProvider {
                     .setPerson(contact)
                     .build()
                 addShortcutIfNotExists = false
-                smallIcon = R.drawable.test_ic_notification_24
+                smallIcon = R.drawable.notify_ic_notification_24
                 largeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
                 contentIntent = pendingIntent
                 autoCancel = true
@@ -195,7 +195,7 @@ class TestDataProvider {
                     .setIcon(groupIcon)
                     .build()
                 addShortcutIfNotExists = false
-                smallIcon = R.drawable.test_ic_notification_24
+                smallIcon = R.drawable.notify_ic_notification_24
                 largeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
                 contentIntent = pendingIntent
                 autoCancel = true
@@ -210,11 +210,11 @@ class TestDataProvider {
                 subText = "SubText for CallData"
                 type = "incoming"
                 verificationText = "Verification Text"
-                verificationIcon = Icon.createWithResource(context, R.drawable.test_ic_archive_24)
+                verificationIcon = Icon.createWithResource(context, R.drawable.notify_ic_phone_24)
                 caller = Person.Builder().setName("Max").build()
                 answer = pendingIntent()
                 declineOrHangup = pendingIntent()
-                smallIcon = R.drawable.test_ic_notification_24
+                smallIcon = R.drawable.notify_ic_notification_24
                 largeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
                 contentIntent = pendingIntent
                 autoCancel = true
@@ -227,18 +227,22 @@ class TestDataProvider {
                 subText = "SubText for CustomDesignData"
                 hasStyle = false
                 smallRemoteViews = {
+                    val layoutId = com.vanskarner.simplenotify.test.R.layout.test_small_notification
+                    val viewId = com.vanskarner.simplenotify.test.R.id.notification_title
                     val remoteViews =
-                        RemoteViews(context.packageName, R.layout.test_small_notification)
-                    remoteViews.setTextViewText(R.id.notification_title, "Small title")
+                        RemoteViews(context.packageName, layoutId)
+                    remoteViews.setTextViewText(viewId, "Small title")
                     remoteViews
                 }
                 largeRemoteViews = {
+                    val layoutId = com.vanskarner.simplenotify.test.R.layout.test_large_notification
+                    val viewId = com.vanskarner.simplenotify.test.R.id.notification_title
                     val remoteViews =
-                        RemoteViews(context.packageName, R.layout.test_large_notification)
-                    remoteViews.setTextViewText(R.id.notification_title, "Large title")
+                        RemoteViews(context.packageName, layoutId)
+                    remoteViews.setTextViewText(viewId, "Large title")
                     remoteViews
                 }
-                smallIcon = R.drawable.test_ic_notification_24
+                smallIcon = R.drawable.notify_ic_notification_24
                 contentIntent = pendingIntent()
                 autoCancel = true
                 largeIcon = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
@@ -270,7 +274,7 @@ class TestDataProvider {
 
         fun basicAction(): ActionData.BasicAction {
             return ActionData.BasicAction().apply {
-                icon = R.drawable.test_ic_archive_24
+                icon = R.drawable.notify_ic_message_24
                 title = "Action1"
                 pending = pendingIntent()
             }
@@ -278,7 +282,7 @@ class TestDataProvider {
 
         fun replyAction(): ActionData.ReplyAction {
             return ActionData.ReplyAction().apply {
-                icon = R.drawable.test_ic_mail_24
+                icon = R.drawable.notify_ic_email_24
                 title = "ReplyAction1"
                 replyPending = pendingIntent()
                 remote = RemoteInput.Builder("ANY_KEY").build()
@@ -296,7 +300,7 @@ class TestDataProvider {
 
         fun stackableData(): StackableData {
             return StackableData().apply {
-                smallIcon = R.drawable.test_ic_notification_24
+                smallIcon = R.drawable.notify_ic_view_list_24
                 title = "My Group Summary"
                 summaryText = "Any description"
                 initialAmount = 3
@@ -317,7 +321,7 @@ class TestDataProvider {
 
         fun basicNotification(context: Context, channelId: String): NotificationCompat.Builder {
             return NotificationCompat.Builder(context, channelId)
-                .setSmallIcon(R.drawable.test_ic_notification_24)
+                .setSmallIcon(R.drawable.notify_ic_notification_24)
                 .setContentTitle("Any Title")
                 .setContentText("Any Text")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
