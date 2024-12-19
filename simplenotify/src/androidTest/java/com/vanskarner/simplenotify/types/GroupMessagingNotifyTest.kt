@@ -4,7 +4,6 @@ import android.Manifest
 import android.app.Notification
 import android.app.NotificationManager
 import android.content.Context
-import android.net.Uri
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.test.core.app.ApplicationProvider
@@ -13,10 +12,11 @@ import com.vanskarner.simplenotify.Data
 import com.vanskarner.simplenotify.SimpleNotify
 import com.vanskarner.simplenotify.common.ConditionalPermissionRule
 import com.vanskarner.simplenotify.common.TestDataProvider
+import com.vanskarner.simplenotify.common.assertBaseData
+import com.vanskarner.simplenotify.common.assertExtraData
 import com.vanskarner.simplenotify.common.assertNotificationChannelId
 import com.vanskarner.simplenotify.common.assertNotificationMessages
 import com.vanskarner.simplenotify.common.assertNotificationPriority
-import com.vanskarner.simplenotify.common.assertNotificationSound
 import com.vanskarner.simplenotify.common.waitForNotification
 import com.vanskarner.simplenotify.internal.DEFAULT_MESSAGING_CHANNEL_ID
 import com.vanskarner.simplenotify.internal.INVALID_NOTIFICATION_ID
@@ -58,11 +58,9 @@ class GroupMessagingNotifyTest {
         val expectedData = TestDataProvider.groupMessageData(context, "contact_015")
         val actualNotifyConfig = SimpleNotify.with(context)
             .asGroupMessaging {
-                smallIcon = expectedData.smallIcon
                 you = expectedData.you
                 conversationTitle = expectedData.conversationTitle
                 messages = expectedData.messages
-                useHistoricMessage = false
             }
         val actualNotificationIds = actualNotifyConfig.show()
         val actualNotificationGenerated =
@@ -74,9 +72,50 @@ class GroupMessagingNotifyTest {
 
         assertEquals(INVALID_NOTIFICATION_ID, actualGroupNotificationId)
         assertNotificationChannelId(DEFAULT_MESSAGING_CHANNEL_ID, actualNotification)
-        assertCommonData(expectedData, actualNotification)
+        assertGroupMessaging(expectedData, actualNotification)
         assertNotificationChannelId(DEFAULT_MESSAGING_CHANNEL_ID, actualNotificationGenerated)
-        assertCommonData(expectedData, actualNotificationGenerated)
+        assertGroupMessaging(expectedData, actualNotificationGenerated)
+    }
+
+    @Test
+    fun useGroupMessaging_withAllAttributes_shouldApply() {
+        val expectedShortCutId = "contact_123"
+        val expectedData = TestDataProvider.groupMessageData(context, expectedShortCutId)
+        val actualNotification = SimpleNotify.with(context)
+            .asGroupMessaging {
+                subText = expectedData.subText
+                largeIcon = expectedData.largeIcon
+                contentIntent = expectedData.contentIntent
+                autoCancel = expectedData.autoCancel
+                timeoutAfter = expectedData.timeoutAfter
+                smallIcon = expectedData.smallIcon
+                you = expectedData.you
+                conversationTitle = expectedData.conversationTitle
+                messages = expectedData.messages
+                bubble = expectedData.bubble
+                shortcut = expectedData.shortcut
+                addShortcutIfNotExists = expectedData.addShortcutIfNotExists
+            }.generateBuilder()?.build() ?: Notification()
+
+        assertNotificationChannelId(DEFAULT_MESSAGING_CHANNEL_ID, actualNotification)
+        assertBaseData(expectedData, actualNotification)
+        assertGroupMessaging(expectedData, actualNotification)
+        //Notification bubbles are available from API 29
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            val expectedBubble = expectedData.bubble
+            val actualBubble = actualNotification.bubbleMetadata
+
+            assertEquals(expectedBubble?.desiredHeight, actualBubble?.desiredHeight)
+            assertEquals(expectedBubble?.autoExpandBubble, actualBubble?.autoExpandBubble)
+            assertEquals(
+                expectedBubble?.isNotificationSuppressed,
+                actualBubble?.isNotificationSuppressed
+            )
+        }
+        //Notification ShortCut are available from API 26
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            assertEquals(expectedShortCutId, actualNotification.shortcutId)
+        }
     }
 
     @Test
@@ -106,64 +145,22 @@ class GroupMessagingNotifyTest {
                 groupKey = expectedExtra.groupKey
             }
             .generateBuilder()?.build() ?: Notification()
-        val expectedPriority = expectedExtra.priority ?: -666
-        val actualExtras = actualNotification.extras
-        val actualOngoing = actualNotification.flags and NotificationCompat.FLAG_ONGOING_EVENT != 0
-        val actualOnlyAlertOnce =
-            actualNotification.flags and Notification.FLAG_ONLY_ALERT_ONCE != 0
-        val actualShowWhen = actualExtras.getBoolean(NotificationCompat.EXTRA_SHOW_WHEN)
-        val actualUsesChronometer = NotificationCompat.getUsesChronometer(actualNotification)
-        val actualBadgeNumber = actualNotification.number
-        val actualRemoteInputHistory =
-            actualExtras.getCharSequenceArray(NotificationCompat.EXTRA_REMOTE_INPUT_HISTORY)
-        val actualGroupKey = actualNotification.group
-        val expectedSound = expectedExtra.sounds ?: Uri.EMPTY
 
-        assertNotificationPriority(expectedPriority, actualNotification)
-        assertEquals(expectedExtra.category, actualNotification.category)
-        assertEquals(expectedExtra.visibility, actualNotification.visibility)
-        assertEquals(expectedExtra.ongoing, actualOngoing)
-        assertEquals(expectedExtra.color, actualNotification.color)
-        assertEquals(expectedExtra.timestampWhen, actualNotification.`when`)
-        assertEquals(expectedExtra.deleteIntent, actualNotification.deleteIntent)
-        assertEquals(expectedExtra.fullScreenIntent?.first, actualNotification.fullScreenIntent)
-        assertEquals(expectedExtra.onlyAlertOnce, actualOnlyAlertOnce)
-        assertEquals(expectedExtra.showWhen, actualShowWhen)
-        assertEquals(expectedExtra.useChronometer, actualUsesChronometer)
-        assertEquals(expectedExtra.badgeNumber, actualBadgeNumber)
-        assertNotificationSound(expectedSound, actualNotification)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val actualBadgeIconType = actualNotification.badgeIconType
-            val actualShortcutId = actualNotification.shortcutId
-
-            assertEquals(expectedExtra.badgeIconType, actualBadgeIconType)
-            assertEquals(expectedExtra.shortCutId, actualShortcutId)
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            val actualSystemGeneratedActions =
-                actualNotification.allowSystemGeneratedContextualActions
-            assertEquals(
-                expectedExtra.allowSystemGeneratedContextualActions,
-                actualSystemGeneratedActions
-            )
-        }
-        assertEquals(expectedExtra.remoteInputHistory?.size, actualRemoteInputHistory?.size)
-        assertEquals(expectedExtra.groupKey, actualGroupKey)
+        assertExtraData(expectedExtra, actualNotification)
     }
 
     @Test
     fun useProgress_shouldNotApply() = runTest {
         val expectedData = TestDataProvider.groupMessageData(context, "contact_015")
+        val expectedProgress = TestDataProvider.progressData()
         val actualNotificationIds = SimpleNotify.with(context)
             .asGroupMessaging {
-                smallIcon = expectedData.smallIcon
                 you = expectedData.you
                 conversationTitle = expectedData.conversationTitle
                 messages = expectedData.messages
-                useHistoricMessage = false
             }.progress {
-                currentValue = 50
-                indeterminate = true
+                currentValue = expectedProgress.currentValue
+                indeterminate = expectedProgress.indeterminate
             }.show()
         val actualNotificationId = actualNotificationIds.first
         val actualStatusBarNotification = notifyManager.waitForNotification(actualNotificationId)
@@ -183,11 +180,9 @@ class GroupMessagingNotifyTest {
         val expectedData = TestDataProvider.groupMessageData(context, "contact_015")
         val actualNotificationIds = SimpleNotify.with(context)
             .asGroupMessaging {
-                smallIcon = expectedData.smallIcon
                 you = expectedData.you
                 conversationTitle = expectedData.conversationTitle
                 messages = expectedData.messages
-                useHistoricMessage = false
             }.progress {
                 hide = true
             }.show()
@@ -210,11 +205,9 @@ class GroupMessagingNotifyTest {
         val expectedData = TestDataProvider.groupMessageData(context, "contact_015")
         val actualNotificationIds = SimpleNotify.with(context)
             .asGroupMessaging {
-                smallIcon = expectedData.smallIcon
                 you = expectedData.you
                 conversationTitle = expectedData.conversationTitle
                 messages = expectedData.messages
-                useHistoricMessage = false
             }
             .useChannel(expectedChannelId)
             .show()
@@ -223,7 +216,7 @@ class GroupMessagingNotifyTest {
         val actualNotification = actualStatusBarNotification.notification
 
         assertNotificationChannelId(expectedChannelId, actualNotification)
-        assertCommonData(expectedData, actualNotification)
+        assertGroupMessaging(expectedData, actualNotification)
     }
 
     @Test
@@ -233,11 +226,9 @@ class GroupMessagingNotifyTest {
         val expectedReplyAction = TestDataProvider.replyAction()
         val actualNotificationIds = SimpleNotify.with(context)
             .asGroupMessaging {
-                smallIcon = expectedData.smallIcon
                 you = expectedData.you
                 conversationTitle = expectedData.conversationTitle
                 messages = expectedData.messages
-                useHistoricMessage = false
             }
             .addAction {
                 icon = expectedAction.icon
@@ -256,11 +247,11 @@ class GroupMessagingNotifyTest {
         val actualNotification = actualStatusBarNotification.notification
 
         assertNotificationChannelId(DEFAULT_MESSAGING_CHANNEL_ID, actualNotification)
-        assertCommonData(expectedData, actualNotification)
+        assertGroupMessaging(expectedData, actualNotification)
         assertEquals(2, actualNotification.actions.size)
     }
 
-    private fun assertCommonData(
+    private fun assertGroupMessaging(
         expectedData: Data.GroupMessageData,
         actualNotification: Notification
     ) {
@@ -275,15 +266,14 @@ class GroupMessagingNotifyTest {
         )
         val actualLastMsg = actualStyle?.messages?.last()
 
-        assertEquals(expectedData.smallIcon, actualNotification.smallIcon.resId)
         assertNotificationPriority(NotificationCompat.PRIORITY_HIGH, actualNotification)
+        assertEquals(NotificationCompat.CATEGORY_MESSAGE, actualNotification.category)
         assertEquals(expectedData.you.name, actualUserName)
         assertEquals(expectedData.conversationTitle, actualConversationTitle)
         assertTrue(actualIsGroupConversation)
         assertNotificationMessages(expectedData.messages, actualNotification)
         assertEquals(expectedData.messages.last().mimeData?.first, actualLastMsg?.dataMimeType)
         assertTrue(expectedData.messages.last().mimeData?.second == actualLastMsg?.dataUri)
-        assertEquals(NotificationCompat.CATEGORY_MESSAGE, actualNotification.category)
     }
 
 }

@@ -5,6 +5,7 @@ import android.app.Notification
 import android.app.NotificationManager
 import android.content.Context
 import android.graphics.Bitmap
+import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
 import androidx.core.app.NotificationCompat
@@ -14,6 +15,8 @@ import com.vanskarner.simplenotify.Data
 import com.vanskarner.simplenotify.SimpleNotify
 import com.vanskarner.simplenotify.common.ConditionalPermissionRule
 import com.vanskarner.simplenotify.common.TestDataProvider
+import com.vanskarner.simplenotify.common.assertBaseData
+import com.vanskarner.simplenotify.common.assertExtraData
 import com.vanskarner.simplenotify.common.assertNotificationChannelId
 import com.vanskarner.simplenotify.common.assertNotificationPriority
 import com.vanskarner.simplenotify.common.assertNotificationSound
@@ -60,7 +63,6 @@ class BigPictureNotifyTest {
         val expectedData = TestDataProvider.bigPictureData()
         val actualNotifyConfig = SimpleNotify.with(context)
             .asBigPicture {
-                smallIcon = expectedData.smallIcon
                 title = expectedData.title
                 text = expectedData.text
                 summaryText = expectedData.summaryText
@@ -76,9 +78,31 @@ class BigPictureNotifyTest {
 
         assertEquals(INVALID_NOTIFICATION_ID, actualGroupNotificationId)
         assertNotificationChannelId(DEFAULT_CHANNEL_ID, actualNotification)
-        assertCommonData(expectedData, actualNotification)
+        assertBigPicture(expectedData, actualNotification)
         assertNotificationChannelId(DEFAULT_CHANNEL_ID, actualNotificationGenerated)
-        assertCommonData(expectedData, actualNotificationGenerated)
+        assertBigPicture(expectedData, actualNotificationGenerated)
+    }
+
+    @Test
+    fun useBigPicture_withAllBaseAttributes_shouldApply() {
+        val expectedData = TestDataProvider.bigPictureData()
+        val actualNotification = SimpleNotify.with(context)
+            .asBigPicture {
+                subText = expectedData.subText
+                largeIcon = expectedData.largeIcon
+                contentIntent = expectedData.contentIntent
+                autoCancel = expectedData.autoCancel
+                timeoutAfter = expectedData.timeoutAfter
+                smallIcon = expectedData.smallIcon
+                title = expectedData.title
+                text = expectedData.text
+                summaryText = expectedData.summaryText
+                image = expectedData.image
+            }.generateBuilder()?.build() ?: Notification()
+
+        assertNotificationChannelId(DEFAULT_CHANNEL_ID, actualNotification)
+        assertBaseData(expectedData, actualNotification)
+        assertBigPicture(expectedData, actualNotification)
     }
 
     @Test
@@ -108,67 +132,25 @@ class BigPictureNotifyTest {
                 groupKey = expectedExtra.groupKey
             }
             .generateBuilder()?.build() ?: Notification()
-        val expectedPriority = expectedExtra.priority ?: -666
-        val actualExtras = actualNotification.extras
-        val actualOngoing = actualNotification.flags and NotificationCompat.FLAG_ONGOING_EVENT != 0
-        val actualOnlyAlertOnce =
-            actualNotification.flags and Notification.FLAG_ONLY_ALERT_ONCE != 0
-        val actualShowWhen = actualExtras.getBoolean(NotificationCompat.EXTRA_SHOW_WHEN)
-        val actualUsesChronometer = NotificationCompat.getUsesChronometer(actualNotification)
-        val actualBadgeNumber = actualNotification.number
-        val actualRemoteInputHistory =
-            actualExtras.getCharSequenceArray(NotificationCompat.EXTRA_REMOTE_INPUT_HISTORY)
-        val actualGroupKey = actualNotification.group
-        val expectedSound = expectedExtra.sounds ?: Uri.EMPTY
 
-        assertNotificationPriority(expectedPriority, actualNotification)
-        assertEquals(expectedExtra.category, actualNotification.category)
-        assertEquals(expectedExtra.visibility, actualNotification.visibility)
-        assertEquals(expectedExtra.ongoing, actualOngoing)
-        assertEquals(expectedExtra.color, actualNotification.color)
-        assertEquals(expectedExtra.timestampWhen, actualNotification.`when`)
-        assertEquals(expectedExtra.deleteIntent, actualNotification.deleteIntent)
-        assertEquals(expectedExtra.fullScreenIntent?.first, actualNotification.fullScreenIntent)
-        assertEquals(expectedExtra.onlyAlertOnce, actualOnlyAlertOnce)
-        assertEquals(expectedExtra.showWhen, actualShowWhen)
-        assertEquals(expectedExtra.useChronometer, actualUsesChronometer)
-        assertEquals(expectedExtra.badgeNumber, actualBadgeNumber)
-        assertNotificationSound(expectedSound, actualNotification)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val actualBadgeIconType = actualNotification.badgeIconType
-            val actualShortcutId = actualNotification.shortcutId
-
-            assertEquals(expectedExtra.badgeIconType, actualBadgeIconType)
-            assertEquals(expectedExtra.shortCutId, actualShortcutId)
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            val actualSystemGeneratedActions =
-                actualNotification.allowSystemGeneratedContextualActions
-            assertEquals(
-                expectedExtra.allowSystemGeneratedContextualActions,
-                actualSystemGeneratedActions
-            )
-        }
-        assertEquals(expectedExtra.remoteInputHistory?.size, actualRemoteInputHistory?.size)
-        assertEquals(expectedExtra.groupKey, actualGroupKey)
+        assertExtraData(expectedExtra, actualNotification)
     }
 
     @Test
     fun useProgress_shouldBeShown() = runTest {
         val expectedData = TestDataProvider.bigPictureData()
-        val expectedProgress = 50
+        val expectedProgress = TestDataProvider.progressData()
         val notificationId = 20
         SimpleNotify.with(context)
             .asBigPicture {
                 id = notificationId
-                smallIcon = expectedData.smallIcon
                 title = expectedData.title
                 text = expectedData.text
                 summaryText = expectedData.summaryText
                 image = expectedData.image
             }.progress {
-                currentValue = expectedProgress
-                indeterminate = true
+                currentValue = expectedProgress.currentValue
+                indeterminate = expectedProgress.indeterminate
             }.show()
         val actualStatusBarNotification = notifyManager.waitForNotification(notificationId)
         val actualNotification = actualStatusBarNotification.notification
@@ -178,9 +160,9 @@ class BigPictureNotifyTest {
             actualExtras.getBoolean(NotificationCompat.EXTRA_PROGRESS_INDETERMINATE)
 
         assertNotificationChannelId(DEFAULT_PROGRESS_CHANNEL_ID, actualNotification)
-        assertEquals(expectedProgress, actualProgress)
-        assertTrue(actualIndeterminate)
-        assertCommonData(expectedData, actualNotification)
+        assertEquals(expectedProgress.currentValue, actualProgress)
+        assertEquals(expectedProgress.indeterminate, actualIndeterminate)
+        assertBigPictureForProgress(expectedData, actualNotification)
     }
 
     @Test
@@ -190,7 +172,6 @@ class BigPictureNotifyTest {
         SimpleNotify.with(context)
             .asBigPicture {
                 id = notificationId
-                smallIcon = expectedData.smallIcon
                 title = expectedData.title
                 text = expectedData.text
                 summaryText = expectedData.summaryText
@@ -208,7 +189,7 @@ class BigPictureNotifyTest {
         assertNotificationChannelId(DEFAULT_PROGRESS_CHANNEL_ID, actualNotification)
         assertEquals(0, actualProgress)
         assertFalse(actualIndeterminate)
-        assertCommonData(expectedData, actualNotification)
+        assertBigPicture(expectedData, actualNotification)
     }
 
     @Test
@@ -217,7 +198,6 @@ class BigPictureNotifyTest {
         val expectedData = TestDataProvider.bigPictureData()
         val actualNotificationIds = SimpleNotify.with(context)
             .asBigPicture {
-                smallIcon = expectedData.smallIcon
                 title = expectedData.title
                 text = expectedData.text
                 summaryText = expectedData.summaryText
@@ -230,7 +210,7 @@ class BigPictureNotifyTest {
         val actualNotification = actualStatusBarNotification.notification
 
         assertNotificationChannelId(expectedChannelId, actualNotification)
-        assertCommonData(expectedData, actualNotification)
+        assertBigPicture(expectedData, actualNotification)
     }
 
     @Test
@@ -240,7 +220,6 @@ class BigPictureNotifyTest {
         val expectedReplyAction = TestDataProvider.replyAction()
         val actualNotificationIds = SimpleNotify.with(context)
             .asBigPicture {
-                smallIcon = expectedData.smallIcon
                 title = expectedData.title
                 text = expectedData.text
                 summaryText = expectedData.summaryText
@@ -263,12 +242,28 @@ class BigPictureNotifyTest {
         val actualNotification = actualStatusBarNotification.notification
 
         assertNotificationChannelId(DEFAULT_CHANNEL_ID, actualNotification)
-        assertCommonData(expectedData, actualNotification)
+        assertBigPicture(expectedData, actualNotification)
         assertEquals(2, actualNotification.actions.size)
     }
 
-    private fun assertCommonData(
+    private fun assertBigPicture(
         expectedData: Data.BigPictureData,
+        actualNotification: Notification
+    ) {
+        val expectedSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+        assertBigPictureNotification(expectedData, expectedSound, actualNotification)
+    }
+
+    private fun assertBigPictureForProgress(
+        expectedData: Data.BigPictureData,
+        actualNotification: Notification
+    ) {
+        assertBigPictureNotification(expectedData, null, actualNotification)
+    }
+
+    private fun assertBigPictureNotification(
+        expectedData: Data.BigPictureData,
+        expectedSound: Uri?,
         actualNotification: Notification
     ) {
         val actualExtras = actualNotification.extras
@@ -276,12 +271,12 @@ class BigPictureNotifyTest {
         val actualPicture =
             actualExtras.getCustomParcelable(NotificationCompat.EXTRA_PICTURE, Bitmap::class.java)
 
-        assertEquals(expectedData.smallIcon, actualNotification.smallIcon.resId)
         assertNotificationPriority(NotificationCompat.PRIORITY_DEFAULT, actualNotification)
         assertEquals(expectedData.title, actualExtras?.getString(NotificationCompat.EXTRA_TITLE))
         assertEquals(expectedData.text, actualExtras?.getString(NotificationCompat.EXTRA_TEXT))
         assertEquals(expectedData.summaryText, actualSummaryText)
         assertTrue(expectedData.image?.sameAs(actualPicture) ?: false)
+        assertNotificationSound(expectedSound, actualNotification)
     }
 
 }

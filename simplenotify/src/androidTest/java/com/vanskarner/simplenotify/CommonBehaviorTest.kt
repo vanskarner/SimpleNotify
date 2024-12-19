@@ -98,6 +98,7 @@ class CommonBehaviorTest {
         //wait for all notifications to be displayed to activate the grouping function
         val notificationIds = setOf(notification1.first, notification2.first)
         notifyManager.waitForAllNotificationsPresents(notificationIds)
+        val expectedStackableData = TestDataProvider.stackableData()
         val notification3 = SimpleNotify.with(context)
             .asBigText {
                 title = "Test Title 3"
@@ -106,9 +107,9 @@ class CommonBehaviorTest {
             }.extras {
                 groupKey = myGroupKey
             }.stackable {
-                title = "Any Group Title"
-                summaryText = "Any Group Summary"
-                initialAmount = 3
+                title = expectedStackableData.title
+                summaryText = expectedStackableData.summaryText
+                initialAmount = expectedStackableData.initialAmount
             }
             .show()
         //Here are the identification of the individual and group notifications
@@ -122,7 +123,7 @@ class CommonBehaviorTest {
         val groupNotificationRange = RANGE_GROUP_NOTIFICATION.first..RANGE_GROUP_NOTIFICATION.second
 
         //group notification is also considered in verification
-        assertEquals(4, actualGroupedNotificationsSize)
+        assertEquals(expectedStackableData.initialAmount + 1, actualGroupedNotificationsSize)
         assertTrue(activeNotifications.any { it.id == notification1.first })
         assertTrue(activeNotifications.any { it.id == notification2.first })
         assertEquals(-1, notification1.second)

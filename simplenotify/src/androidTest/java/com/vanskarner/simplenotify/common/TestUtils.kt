@@ -15,6 +15,7 @@ import androidx.core.app.NotificationCompat
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.platform.app.InstrumentationRegistry
 import com.vanskarner.simplenotify.Data
+import com.vanskarner.simplenotify.ExtraData
 import com.vanskarner.simplenotify.NotifyMessaging
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -106,7 +107,7 @@ internal fun assertNotificationChannelId(expectedId: String, actualNotification:
     }
 }
 
-internal fun assertCommonData(expectedData: Data, actualNotification: Notification) {
+internal fun assertBaseData(expectedData: Data, actualNotification: Notification) {
     val actualExtras = actualNotification.extras
     val actualLargeIcon =
         actualExtras.getCustomParcelable(NotificationCompat.EXTRA_LARGE_ICON, Icon::class.java)
@@ -123,7 +124,53 @@ internal fun assertCommonData(expectedData: Data, actualNotification: Notificati
     }
 }
 
-internal fun assertNotificationSound(expectedUri: Uri, actualNotification: Notification) {
+internal fun assertExtraData(expectedExtra: ExtraData, actualNotification: Notification) {
+    val expectedPriority = expectedExtra.priority ?: -666
+    val actualExtras = actualNotification.extras
+    val actualOngoing = actualNotification.flags and NotificationCompat.FLAG_ONGOING_EVENT != 0
+    val actualOnlyAlertOnce =
+        actualNotification.flags and Notification.FLAG_ONLY_ALERT_ONCE != 0
+    val actualShowWhen = actualExtras.getBoolean(NotificationCompat.EXTRA_SHOW_WHEN)
+    val actualUsesChronometer = NotificationCompat.getUsesChronometer(actualNotification)
+    val actualBadgeNumber = actualNotification.number
+    val actualRemoteInputHistory =
+        actualExtras.getCharSequenceArray(NotificationCompat.EXTRA_REMOTE_INPUT_HISTORY)
+    val actualGroupKey = actualNotification.group
+    val expectedSound = expectedExtra.sounds ?: Uri.EMPTY
+
+    assertNotificationPriority(expectedPriority, actualNotification)
+    assertEquals(expectedExtra.category, actualNotification.category)
+    assertEquals(expectedExtra.visibility, actualNotification.visibility)
+    assertEquals(expectedExtra.ongoing, actualOngoing)
+    assertEquals(expectedExtra.color, actualNotification.color)
+    assertEquals(expectedExtra.timestampWhen, actualNotification.`when`)
+    assertEquals(expectedExtra.deleteIntent, actualNotification.deleteIntent)
+    assertEquals(expectedExtra.fullScreenIntent?.first, actualNotification.fullScreenIntent)
+    assertEquals(expectedExtra.onlyAlertOnce, actualOnlyAlertOnce)
+    assertEquals(expectedExtra.showWhen, actualShowWhen)
+    assertEquals(expectedExtra.useChronometer, actualUsesChronometer)
+    assertEquals(expectedExtra.badgeNumber, actualBadgeNumber)
+    assertNotificationSound(expectedSound, actualNotification)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        val actualBadgeIconType = actualNotification.badgeIconType
+        val actualShortcutId = actualNotification.shortcutId
+
+        assertEquals(expectedExtra.badgeIconType, actualBadgeIconType)
+        assertEquals(expectedExtra.shortCutId, actualShortcutId)
+    }
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        val actualSystemGeneratedActions =
+            actualNotification.allowSystemGeneratedContextualActions
+        assertEquals(
+            expectedExtra.allowSystemGeneratedContextualActions,
+            actualSystemGeneratedActions
+        )
+    }
+    assertEquals(expectedExtra.remoteInputHistory?.size, actualRemoteInputHistory?.size)
+    assertEquals(expectedExtra.groupKey, actualGroupKey)
+}
+
+internal fun assertNotificationSound(expectedUri: Uri?, actualNotification: Notification) {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
         @Suppress("DEPRECATION")
         assertEquals(expectedUri, actualNotification.sound)

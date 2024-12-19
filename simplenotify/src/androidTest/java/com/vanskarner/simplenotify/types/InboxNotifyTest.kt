@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Notification
 import android.app.NotificationManager
 import android.content.Context
+import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
 import androidx.core.app.NotificationCompat
@@ -13,6 +14,8 @@ import com.vanskarner.simplenotify.Data
 import com.vanskarner.simplenotify.SimpleNotify
 import com.vanskarner.simplenotify.common.ConditionalPermissionRule
 import com.vanskarner.simplenotify.common.TestDataProvider
+import com.vanskarner.simplenotify.common.assertBaseData
+import com.vanskarner.simplenotify.common.assertExtraData
 import com.vanskarner.simplenotify.common.assertNotificationChannelId
 import com.vanskarner.simplenotify.common.assertNotificationPriority
 import com.vanskarner.simplenotify.common.assertNotificationSound
@@ -24,7 +27,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -58,7 +60,6 @@ class InboxNotifyTest {
         val expectedData = TestDataProvider.inboxData()
         val actualNotifyConfig = SimpleNotify.with(context)
             .asInbox {
-                smallIcon = expectedData.smallIcon
                 title = expectedData.title
                 text = expectedData.text
                 lines = expectedData.lines
@@ -73,9 +74,30 @@ class InboxNotifyTest {
 
         assertEquals(INVALID_NOTIFICATION_ID, actualGroupNotificationId)
         assertNotificationChannelId(DEFAULT_CHANNEL_ID, actualNotification)
-        assertCommonData(expectedData, actualNotification)
+        assertInbox(expectedData, actualNotification)
         assertNotificationChannelId(DEFAULT_CHANNEL_ID, actualNotificationGenerated)
-        assertCommonData(expectedData, actualNotificationGenerated)
+        assertInbox(expectedData, actualNotificationGenerated)
+    }
+
+    @Test
+    fun useCustomDesign_withAllBaseAttributes_shouldApply() {
+        val expectedData = TestDataProvider.inboxData()
+        val actualNotification = SimpleNotify.with(context)
+            .asInbox {
+                subText = expectedData.subText
+                largeIcon = expectedData.largeIcon
+                contentIntent = expectedData.contentIntent
+                autoCancel = expectedData.autoCancel
+                timeoutAfter = expectedData.timeoutAfter
+                smallIcon = expectedData.smallIcon
+                title = expectedData.title
+                text = expectedData.text
+                lines = expectedData.lines
+            }.generateBuilder()?.build() ?: Notification()
+
+        assertNotificationChannelId(DEFAULT_CHANNEL_ID, actualNotification)
+        assertBaseData(expectedData, actualNotification)
+        assertInbox(expectedData, actualNotification)
     }
 
     @Test
@@ -105,66 +127,24 @@ class InboxNotifyTest {
                 groupKey = expectedExtra.groupKey
             }
             .generateBuilder()?.build() ?: Notification()
-        val expectedPriority = expectedExtra.priority ?: -666
-        val actualExtras = actualNotification.extras
-        val actualOngoing = actualNotification.flags and NotificationCompat.FLAG_ONGOING_EVENT != 0
-        val actualOnlyAlertOnce =
-            actualNotification.flags and Notification.FLAG_ONLY_ALERT_ONCE != 0
-        val actualShowWhen = actualExtras.getBoolean(NotificationCompat.EXTRA_SHOW_WHEN)
-        val actualUsesChronometer = NotificationCompat.getUsesChronometer(actualNotification)
-        val actualBadgeNumber = actualNotification.number
-        val actualRemoteInputHistory =
-            actualExtras.getCharSequenceArray(NotificationCompat.EXTRA_REMOTE_INPUT_HISTORY)
-        val actualGroupKey = actualNotification.group
-        val expectedSound = expectedExtra.sounds ?: Uri.EMPTY
 
-        assertNotificationPriority(expectedPriority, actualNotification)
-        assertEquals(expectedExtra.category, actualNotification.category)
-        assertEquals(expectedExtra.visibility, actualNotification.visibility)
-        assertEquals(expectedExtra.ongoing, actualOngoing)
-        assertEquals(expectedExtra.color, actualNotification.color)
-        assertEquals(expectedExtra.timestampWhen, actualNotification.`when`)
-        assertEquals(expectedExtra.deleteIntent, actualNotification.deleteIntent)
-        assertEquals(expectedExtra.fullScreenIntent?.first, actualNotification.fullScreenIntent)
-        assertEquals(expectedExtra.onlyAlertOnce, actualOnlyAlertOnce)
-        assertEquals(expectedExtra.showWhen, actualShowWhen)
-        assertEquals(expectedExtra.useChronometer, actualUsesChronometer)
-        assertEquals(expectedExtra.badgeNumber, actualBadgeNumber)
-        assertNotificationSound(expectedSound, actualNotification)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val actualBadgeIconType = actualNotification.badgeIconType
-            val actualShortcutId = actualNotification.shortcutId
-
-            assertEquals(expectedExtra.badgeIconType, actualBadgeIconType)
-            assertEquals(expectedExtra.shortCutId, actualShortcutId)
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            val actualSystemGeneratedActions =
-                actualNotification.allowSystemGeneratedContextualActions
-            assertEquals(
-                expectedExtra.allowSystemGeneratedContextualActions,
-                actualSystemGeneratedActions
-            )
-        }
-        assertEquals(expectedExtra.remoteInputHistory?.size, actualRemoteInputHistory?.size)
-        assertEquals(expectedExtra.groupKey, actualGroupKey)
+        assertExtraData(expectedExtra, actualNotification)
     }
 
     @Test
     fun useProgress_shouldBeShown() = runTest {
         val expectedData = TestDataProvider.inboxData()
-        val expectedProgress = 50
+        val expectedProgress = TestDataProvider.progressData()
         val notificationId = 80
         SimpleNotify.with(context)
             .asInbox {
                 id = notificationId
-                smallIcon = expectedData.smallIcon
                 title = expectedData.title
                 text = expectedData.text
                 lines = expectedData.lines
             }.progress {
-                currentValue = expectedProgress
-                indeterminate = true
+                currentValue = expectedProgress.currentValue
+                indeterminate = expectedProgress.indeterminate
             }.show()
         val actualStatusBarNotification = notifyManager.waitForNotification(notificationId)
         val actualNotification = actualStatusBarNotification.notification
@@ -174,9 +154,9 @@ class InboxNotifyTest {
             actualExtras.getBoolean(NotificationCompat.EXTRA_PROGRESS_INDETERMINATE)
 
         assertNotificationChannelId(DEFAULT_PROGRESS_CHANNEL_ID, actualNotification)
-        assertEquals(expectedProgress, actualProgress)
-        assertTrue(actualIndeterminate)
-        assertCommonData(expectedData, actualNotification)
+        assertEquals(expectedProgress.currentValue, actualProgress)
+        assertEquals(expectedProgress.indeterminate, actualIndeterminate)
+        assertInboxForProgress(expectedData, actualNotification)
     }
 
     @Test
@@ -186,7 +166,6 @@ class InboxNotifyTest {
         SimpleNotify.with(context)
             .asInbox {
                 id = notificationId
-                smallIcon = expectedData.smallIcon
                 title = expectedData.title
                 text = expectedData.text
                 lines = expectedData.lines
@@ -205,7 +184,7 @@ class InboxNotifyTest {
         assertNotificationChannelId(DEFAULT_PROGRESS_CHANNEL_ID, actualNotification)
         assertEquals(0, actualProgress)
         assertFalse(actualIndeterminate)
-        assertCommonData(expectedData, actualNotification)
+        assertInbox(expectedData, actualNotification)
     }
 
     @Test
@@ -214,7 +193,6 @@ class InboxNotifyTest {
         val expectedData = TestDataProvider.inboxData()
         val actualNotificationIds = SimpleNotify.with(context)
             .asInbox {
-                smallIcon = expectedData.smallIcon
                 title = expectedData.title
                 text = expectedData.text
                 lines = expectedData.lines
@@ -226,7 +204,7 @@ class InboxNotifyTest {
         val actualNotification = actualStatusBarNotification.notification
 
         assertNotificationChannelId(expectedChannelId, actualNotification)
-        assertCommonData(expectedData, actualNotification)
+        assertInbox(expectedData, actualNotification)
     }
 
     @Test
@@ -236,7 +214,6 @@ class InboxNotifyTest {
         val expectedReplyAction = TestDataProvider.replyAction()
         val actualNotificationIds = SimpleNotify.with(context)
             .asInbox {
-                smallIcon = expectedData.smallIcon
                 title = expectedData.title
                 text = expectedData.text
                 lines = expectedData.lines
@@ -258,20 +235,38 @@ class InboxNotifyTest {
         val actualNotification = actualStatusBarNotification.notification
 
         assertNotificationChannelId(DEFAULT_CHANNEL_ID, actualNotification)
-        assertCommonData(expectedData, actualNotification)
+        assertInbox(expectedData, actualNotification)
         assertEquals(2, actualNotification.actions.size)
     }
 
+    private fun assertInbox(
+        expectedData: Data.InboxData,
+        actualNotification: Notification
+    ) {
+        val expectedSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+        assertInboxNotification(expectedData, expectedSound, actualNotification)
+    }
 
-    private fun assertCommonData(expectedData: Data.InboxData, actualNotification: Notification) {
+    private fun assertInboxForProgress(
+        expectedData: Data.InboxData,
+        actualNotification: Notification
+    ) {
+        assertInboxNotification(expectedData, null, actualNotification)
+    }
+
+    private fun assertInboxNotification(
+        expectedData: Data.InboxData,
+        expectedSound: Uri?,
+        actualNotification: Notification
+    ) {
         val actualExtras = actualNotification.extras
         val actualTextLines = actualExtras.getCharSequenceArray(NotificationCompat.EXTRA_TEXT_LINES)
 
-        assertEquals(expectedData.smallIcon, actualNotification.smallIcon.resId)
         assertNotificationPriority(NotificationCompat.PRIORITY_DEFAULT, actualNotification)
         assertEquals(expectedData.title, actualExtras?.getString(NotificationCompat.EXTRA_TITLE))
         assertEquals(expectedData.text, actualExtras?.getString(NotificationCompat.EXTRA_TEXT))
         assertEquals(expectedData.lines.size, actualTextLines?.size ?: 0)
+        assertNotificationSound(expectedSound, actualNotification)
     }
 
 }

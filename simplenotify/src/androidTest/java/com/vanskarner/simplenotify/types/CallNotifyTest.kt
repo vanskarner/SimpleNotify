@@ -6,6 +6,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.graphics.drawable.Icon
+import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
 import androidx.core.app.NotificationCompat
@@ -16,6 +17,7 @@ import com.vanskarner.simplenotify.NotifyConfig
 import com.vanskarner.simplenotify.SimpleNotify
 import com.vanskarner.simplenotify.common.ConditionalPermissionRule
 import com.vanskarner.simplenotify.common.TestDataProvider
+import com.vanskarner.simplenotify.common.assertBaseData
 import com.vanskarner.simplenotify.common.assertNotificationChannelId
 import com.vanskarner.simplenotify.common.assertNotificationPriority
 import com.vanskarner.simplenotify.common.assertNotificationSound
@@ -56,12 +58,35 @@ class CallNotifyTest {
     }
 
     @Test
+    fun useCall_withAllBaseAttributes_shouldApply() {
+        val expectedData = TestDataProvider.callData(context)
+        val actualNotification = SimpleNotify.with(context)
+            .asCall {
+                subText = expectedData.subText
+                largeIcon = expectedData.largeIcon
+                contentIntent = expectedData.contentIntent
+                autoCancel = expectedData.autoCancel
+                timeoutAfter = expectedData.timeoutAfter
+                smallIcon = expectedData.smallIcon
+                type = expectedData.type
+                verificationText = expectedData.verificationText
+                verificationIcon = expectedData.verificationIcon
+                caller = expectedData.caller
+                answer = expectedData.answer
+                declineOrHangup = expectedData.declineOrHangup
+            }.generateBuilder()?.build() ?: Notification()
+
+        assertNotificationChannelId(DEFAULT_CALL_CHANNEL_ID, actualNotification)
+        assertBaseData(expectedData, actualNotification)
+        assertCallNotification(expectedData, actualNotification)
+    }
+
+    @Test
     fun useCall_whenIsIncoming_shouldApply() = runTest {
         val expectedData = TestDataProvider.callData(context)
         expectedData.type = "incoming"
         val actualConfig = SimpleNotify.with(context)
             .asCall {
-                smallIcon = expectedData.smallIcon
                 type = expectedData.type
                 verificationText = expectedData.verificationText
                 verificationIcon = expectedData.verificationIcon
@@ -72,7 +97,7 @@ class CallNotifyTest {
         val actualNotification = showOrGenerateNotificationAccordingAPI(actualConfig)
 
         assertNotificationChannelId(DEFAULT_CALL_CHANNEL_ID, actualNotification)
-        assertCommonData(expectedData, actualNotification)
+        assertCallNotification(expectedData, actualNotification)
     }
 
     @Test
@@ -81,7 +106,6 @@ class CallNotifyTest {
         expectedData.type = "ongoing"
         val actualConfig = SimpleNotify.with(context)
             .asCall {
-                smallIcon = expectedData.smallIcon
                 type = expectedData.type
                 verificationText = expectedData.verificationText
                 verificationIcon = expectedData.verificationIcon
@@ -91,7 +115,7 @@ class CallNotifyTest {
         val actualNotification = showOrGenerateNotificationAccordingAPI(actualConfig)
 
         assertNotificationChannelId(DEFAULT_CALL_CHANNEL_ID, actualNotification)
-        assertCommonData(expectedData, actualNotification)
+        assertCallNotification(expectedData, actualNotification)
     }
 
     @Test
@@ -100,7 +124,6 @@ class CallNotifyTest {
         expectedData.type = "screening"
         val actualConfig = SimpleNotify.with(context)
             .asCall {
-                smallIcon = expectedData.smallIcon
                 type = expectedData.type
                 verificationText = expectedData.verificationText
                 verificationIcon = expectedData.verificationIcon
@@ -111,7 +134,7 @@ class CallNotifyTest {
         val actualNotification = showOrGenerateNotificationAccordingAPI(actualConfig)
 
         assertNotificationChannelId(DEFAULT_CALL_CHANNEL_ID, actualNotification)
-        assertCommonData(expectedData, actualNotification)
+        assertCallNotification(expectedData, actualNotification)
     }
 
     @Test
@@ -200,6 +223,7 @@ class CallNotifyTest {
     @Test
     fun useProgress_shouldNotApply() = runTest {
         val expectedData = TestDataProvider.callData(context)
+        val expectedProgress = TestDataProvider.progressData()
         val actualConfig = SimpleNotify.with(context)
             .asCall {
                 type = expectedData.type
@@ -207,8 +231,8 @@ class CallNotifyTest {
                 answer = expectedData.answer
                 declineOrHangup = expectedData.declineOrHangup
             }.progress {
-                currentValue = 50
-                indeterminate = true
+                currentValue = expectedProgress.currentValue
+                indeterminate = expectedProgress.indeterminate
             }
         val actualNotification = showOrGenerateNotificationAccordingAPI(actualConfig)
         val actualExtras = actualNotification.extras
@@ -250,7 +274,6 @@ class CallNotifyTest {
         val expectedData = TestDataProvider.callData(context)
         val actualConfig = SimpleNotify.with(context)
             .asCall {
-                smallIcon = expectedData.smallIcon
                 type = expectedData.type
                 verificationText = expectedData.verificationText
                 verificationIcon = expectedData.verificationIcon
@@ -261,7 +284,7 @@ class CallNotifyTest {
         val actualNotification = showOrGenerateNotificationAccordingAPI(actualConfig)
 
         assertNotificationChannelId(expectedChannelId, actualNotification)
-        assertCommonData(expectedData, actualNotification)
+        assertCallNotification(expectedData, actualNotification)
     }
 
     @Test
@@ -271,7 +294,6 @@ class CallNotifyTest {
         val expectedReplyAction = TestDataProvider.replyAction()
         val actualConfig = SimpleNotify.with(context)
             .asCall {
-                smallIcon = expectedData.smallIcon
                 type = "incoming"
                 verificationText = expectedData.verificationText
                 verificationIcon = expectedData.verificationIcon
@@ -295,7 +317,7 @@ class CallNotifyTest {
         assertNotificationChannelId(DEFAULT_CALL_CHANNEL_ID, actualNotification)
         //type “incoming” already includes 2 actions: “decline” and “answer”, and maximum 3 are allowed
         assertEquals(3, actualNotification.actions.size)
-        assertCommonData(expectedData, actualNotification)
+        assertCallNotification(expectedData, actualNotification)
     }
 
     private suspend fun showOrGenerateNotificationAccordingAPI(config: NotifyConfig): Notification {
@@ -310,7 +332,7 @@ class CallNotifyTest {
         }
     }
 
-    private fun assertCommonData(expectedData: Data.CallData, actualNotification: Notification) {
+    private fun assertCallNotification(expectedData: Data.CallData, actualNotification: Notification) {
         val expectedCallType = mapOf(
             "incoming" to NotificationCompat.CallStyle.CALL_TYPE_INCOMING,
             "ongoing" to NotificationCompat.CallStyle.CALL_TYPE_ONGOING,
@@ -325,6 +347,7 @@ class CallNotifyTest {
             NotificationCompat.EXTRA_VERIFICATION_ICON,
             Icon::class.java
         )
+        val expectedSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
 
         assertEquals(expectedCallType, actualCallType)
         when (expectedCallType) {
@@ -369,10 +392,10 @@ class CallNotifyTest {
         }
         assertNotificationPriority(NotificationCompat.PRIORITY_HIGH, actualNotification)
         assertEquals(NotificationCompat.CATEGORY_CALL, actualNotification.category)
-        assertEquals(expectedData.smallIcon, actualNotification.smallIcon.resId)
         assertEquals(expectedData.caller?.name, actualNamePersonAdded)
         assertEquals(expectedData.verificationText, actualVerificationText)
         assertNotNull(actualVerificationIcon)
+        assertNotificationSound(expectedSound, actualNotification)
     }
 
 }

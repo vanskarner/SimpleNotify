@@ -286,21 +286,12 @@ class TestDataProvider {
             }
         }
 
-        fun progressData(isHide: Boolean): ProgressData {
-            return if (isHide) {
-                ProgressData(
-                    currentValue = 50,
-                    indeterminate = true,
-                    hide = true
-                )
-
-            } else {
-                ProgressData(
-                    currentValue = 50,
-                    indeterminate = true,
-                    hide = false
-                )
-            }
+        fun progressData(): ProgressData {
+            return ProgressData(
+                currentValue = 50,
+                indeterminate = true,
+                hide = false
+            )
         }
 
         fun stackableData(): StackableData {
@@ -308,7 +299,7 @@ class TestDataProvider {
                 smallIcon = R.drawable.test_ic_notification_24
                 title = "My Group Summary"
                 summaryText = "Any description"
-                initialAmount = 4
+                initialAmount = 3
             }
         }
 
