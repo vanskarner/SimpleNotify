@@ -26,7 +26,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".types.messaging.BasicBubbleActivity"
+            android:name=".types.duomessaging.DuoBubbleActivity"
+            android:allowEmbedded="true"
+            android:documentLaunchMode="always"
+            android:exported="true"
+            android:resizeableActivity="true" />
+        <activity
+            android:name=".types.groupmessaging.GroupBubbleActivity"
             android:allowEmbedded="true"
             android:documentLaunchMode="always"
             android:exported="true"

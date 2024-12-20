@@ -10,6 +10,8 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcvMessages"
         android:layout_width="match_parent"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:stackFromEnd="true"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:scrollbars="vertical"
@@ -18,7 +20,7 @@
         android:paddingBottom="@dimen/spacing_small"
         app:layout_constraintVertical_bias="0.0"
         tools:itemCount="12"
-        tools:listitem="@layout/item_msg" />
+        tools:listitem="@layout/item_duo_msg" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/input_bar"

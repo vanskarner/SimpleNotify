@@ -12,7 +12,6 @@ import androidx.core.net.toUri
 import com.vanskarner.samplenotify.BaseActivity.Companion.REMOTE_INPUT_KEY
 import com.vanskarner.samplenotify.MainActivity
 import com.vanskarner.samplenotify.databinding.MainActivityBinding
-import com.vanskarner.samplenotify.types.messaging.BasicBubbleActivity
 import com.vanskarner.simplenotify.NotifyMessaging
 import com.vanskarner.simplenotify.SimpleNotify
 
@@ -24,7 +23,7 @@ fun showGroupMessagingTypes(activity: MainActivity, binding: MainActivityBinding
     )
     binding.gridView.adapter =
         ArrayAdapter(activity, android.R.layout.simple_list_item_1, options.keys.toList())
-    binding.gridView.setOnItemClickListener{_, _, position, _ ->
+    binding.gridView.setOnItemClickListener { _, _, position, _ ->
         options.values.elementAt(position).invoke(activity)
     }
 }
@@ -118,48 +117,27 @@ private fun withBubbles(activity: MainActivity) {
             conversationTitle = "Titulo del Grupo"
             you = Person.Builder()
                 .setName("You")
-                .setIcon(activity.iconFromAssets("dina1.jpg"))
+                .setIcon(activity.iconFromAssets("sample_avatar.jpg"))
                 .build()
-            messages = arrayListOf(
-                NotifyMessaging.YourMsg(
-                    "Do you like my rolex?",
-                    System.currentTimeMillis() - (3 * 60 * 1000)
-                ),
-                NotifyMessaging.ContactMsg(
-                    "Mensaje de Max",
-                    System.currentTimeMillis() - (2 * 60 * 1000),
-                    Person.Builder().setName("Max").build()
-                ),
-                NotifyMessaging.ContactMsg(
-                    "Algun Otro mensaje de Albert",
-                    System.currentTimeMillis() - (1 * 60 * 1000),
-                    Person.Builder().setName("Albert").build()
-                ).setData(
-                    "image/jpeg",
-                    "content://com.vanskarner.samplenotify/photo/rolex_dina.jpg".toUri()
-                )
-            )
+            messages = GroupBubbleActivity.groupBubbleMsgSamples()
             val contentUri =
-                "https://android.example.com/chat/yourChatId".toUri()
+                "https://android.example.com/chat/yourGroupChatId".toUri()
             val bubbleIntent = PendingIntent.getActivity(
                 activity,
                 70,
-                Intent(
-                    activity,
-                    BasicBubbleActivity::class.java
-                )
+                Intent(activity, GroupBubbleActivity::class.java)
                     .setAction(Intent.ACTION_VIEW)
                     .setData(contentUri),
                 activity.flagUpdateCurrent()
             )
-            val icon = activity.iconFromAssets("dina1.jpg")
-            bubble = NotificationCompat.BubbleMetadata.Builder(bubbleIntent, icon)
+            val groupIcon = activity.iconFromAssets("dina1.jpg")
+            bubble = NotificationCompat.BubbleMetadata.Builder(bubbleIntent, groupIcon)
                 .setDesiredHeight(500)
                 .setAutoExpandBubble(true)
                 .setSuppressNotification(true)
                 .build()
-            shortcut = ShortcutInfoCompat.Builder(activity, "contact_1")
-                .setLocusId(LocusIdCompat("contact_1"))
+            shortcut = ShortcutInfoCompat.Builder(activity, "group_1")
+                .setLocusId(LocusIdCompat("group_1"))
                 .setLongLived(true)
                 .setIntent(
                     Intent(activity, MainActivity::class.java)
@@ -167,7 +145,7 @@ private fun withBubbles(activity: MainActivity) {
                         .setData(contentUri)
                 )
                 .setShortLabel("Nombre del grupo")
-                .setIcon(activity.iconFromAssets("dina1.jpg"))
+                .setIcon(groupIcon)
                 .build()
         }
         .addReplyAction {

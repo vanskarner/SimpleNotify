@@ -12,7 +12,6 @@ import androidx.core.net.toUri
 import com.vanskarner.samplenotify.BaseActivity.Companion.REMOTE_INPUT_KEY
 import com.vanskarner.samplenotify.MainActivity
 import com.vanskarner.samplenotify.databinding.MainActivityBinding
-import com.vanskarner.samplenotify.types.messaging.BasicBubbleActivity
 import com.vanskarner.simplenotify.NotifyMessaging
 import com.vanskarner.simplenotify.SimpleNotify
 
@@ -69,7 +68,7 @@ private fun basic(activity: MainActivity) {
         .show()
 }
 
-private fun withImages(activity: MainActivity){
+private fun withImages(activity: MainActivity) {
     val notifyId = 61
     SimpleNotify.with(activity)
         .asDuoMessaging {
@@ -117,25 +116,23 @@ private fun withBubbles(activity: MainActivity) {
                 .setName("You")
                 .setIcon(activity.iconFromAssets("sample_avatar.jpg"))
                 .build()
+            val contactIcon = activity.iconFromAssets("almirante_charco.jpg")
             contact = Person.Builder()
                 .setName("Admiral of Charco")
-                .setIcon(activity.iconFromAssets("almirante_charco.jpg"))
+                .setIcon(contactIcon)
                 .build()
-            messages = BasicBubbleActivity.bubbleMessageSamples()
+            messages = DuoBubbleActivity.duoBubbleMsgSamples()
             val contentUri =
                 "https://android.example.com/chat/yourChatId".toUri()
             val bubbleIntent = PendingIntent.getActivity(
                 activity,
                 60,
-                Intent(
-                    activity,
-                    BasicBubbleActivity::class.java
-                )
+                Intent(activity, DuoBubbleActivity::class.java)
                     .setAction(Intent.ACTION_VIEW)
                     .setData(contentUri),
                 activity.flagUpdateCurrent()
             )
-            bubble = NotificationCompat.BubbleMetadata.Builder(bubbleIntent, contact.icon!!)
+            bubble = NotificationCompat.BubbleMetadata.Builder(bubbleIntent, contactIcon)
                 .setDesiredHeight(500)
                 .setAutoExpandBubble(true)
                 .setSuppressNotification(true)
@@ -149,7 +146,7 @@ private fun withBubbles(activity: MainActivity) {
                         .setData(contentUri)
                 )
                 .setShortLabel(contact.name!!)
-                .setIcon(contact.icon)
+                .setIcon(contactIcon)
                 .setPerson(contact)
                 .build()
         }
