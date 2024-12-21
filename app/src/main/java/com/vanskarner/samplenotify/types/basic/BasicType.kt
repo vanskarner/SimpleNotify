@@ -31,8 +31,8 @@ fun showBasicTypes(activity: MainActivity, binding: MainActivityBinding) {
 private fun basic(activity: MainActivity) {
     SimpleNotify.with(activity)
         .asBasic {
-            title = "Dina Basurearte: With her phrase “Your mom!"
-            text = "A never-before-seen response from a female president to the people"
+            title = "Peru: Corrupt pact and millionaire arms purchases"
+            text = "Emergencies in health, housing and education are left aside"
         }
         .show()
 }
