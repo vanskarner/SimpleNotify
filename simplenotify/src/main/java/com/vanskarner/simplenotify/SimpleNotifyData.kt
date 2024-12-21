@@ -444,6 +444,7 @@ sealed class ActionData {
     /**
      * Resource ID of a drawable that represents the action.
      */
+    @DrawableRes
     var icon: Int = 0
 
     /**

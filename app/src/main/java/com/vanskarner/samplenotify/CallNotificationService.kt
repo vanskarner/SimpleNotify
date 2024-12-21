@@ -24,22 +24,27 @@ class CallNotificationService : Service() {
             "incoming" -> SimpleNotify.with(this)
                 .asCall {
                     type = "incoming"
-                    val image = BitmapFactory.decodeStream(assets.open("dina2.jpg"))
+                    val image = BitmapFactory.decodeStream(assets.open("dina1.jpg"))
                     caller = Person.Builder()
-                        .setName("Capibara")
+                        .setName("Dina Balearte")
                         .setIcon(IconCompat.createWithBitmap(image))
                         .build()
                     answer = pendingIntentionHangupCall()
                     declineOrHangup = pendingIntentionHangupCall()
+                }
+                .addAction {
+                    icon = R.drawable.baseline_video_camera_front_24
+                    title = "Screen Call"
+                    pending = pendingIntentionHangupCall()
                 }
                 .generateBuilder()
 
             "ongoing" -> SimpleNotify.with(this)
                 .asCall {
                     type = "ongoing"
-                    val image = BitmapFactory.decodeStream(assets.open("dina2.jpg"))
+                    val image = BitmapFactory.decodeStream(assets.open("ministroll.jpg"))
                     caller = Person.Builder()
-                        .setName("Capibara")
+                        .setName("Ministroll")
                         .setIcon(IconCompat.createWithBitmap(image))
                         .build()
                     declineOrHangup = pendingIntentionHangupCall()
@@ -49,9 +54,9 @@ class CallNotificationService : Service() {
             "screening" -> SimpleNotify.with(this)
                 .asCall {
                     type = "screening"
-                    val image = BitmapFactory.decodeStream(assets.open("dina2.jpg"))
+                    val image = BitmapFactory.decodeStream(assets.open("morgan_rata.jpg"))
                     caller = Person.Builder()
-                        .setName("Capibara")
+                        .setName("Morgan Rata")
                         .setIcon(IconCompat.createWithBitmap(image))
                         .build()
                     answer = pendingIntentionHangupCall()
