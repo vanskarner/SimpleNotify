@@ -31,11 +31,11 @@ fun showBigPictureTypes(activity: MainActivity, binding: MainActivityBinding) {
 private fun basic(activity: MainActivity) {
     SimpleNotify.with(activity)
         .asBigPicture {
-            title = "Dina Basurearte: With her phrase “Your mom!"
-            text = "A never-before-seen response from a female president to the people"
+            title = "Dina Balearte's Rolex watches"
+            text = "Luxury watches in loan quality."
             summaryText =
-                "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-            image = BitmapFactory.decodeStream(activity.assets.open("dina2.jpg"))
+                "Passive bribery punishes officials who accept bribes with imprisonment and disqualification."
+            image = BitmapFactory.decodeStream(activity.assets.open("dina_rolex.jpg"))
         }
         .show()
 }
@@ -46,15 +46,15 @@ private fun withDetails(activity: MainActivity) {
             id = 20
             tag = "BIG_PICTURE_TAG"
             smallIcon = R.drawable.baseline_handshake_24
-            largeIcon = BitmapFactory.decodeStream(activity.assets.open("dina2.jpg"))
+            largeIcon = BitmapFactory.decodeStream(activity.assets.open("dina1.jpg"))
             contentIntent = activity.pendingIntentToCloseNotification(id ?: 0)
-            timeoutAfter = 5000L
-            title = "Dina Balearte: Order with bullets and promotions"
-            text = "Promotions after repression, a touch of presidential irony."
+            timeoutAfter = 7000L
+            title = "Dina Miseriarte romanticizes poverty."
+            text = "Praises cooking with S/10"
             summaryText =
-                "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-            image = BitmapFactory.decodeStream(activity.assets.open("dina2.jpg"))
-            subText = "Any SubText"
+                "Dina celebrates cooking with S/10, while in Palacio they spend S/4000 a day on food."
+            image = BitmapFactory.decodeStream(activity.assets.open("dina_10soles.jpg"))
+            subText = "Trends"
         }
         .show()
 }
@@ -64,10 +64,10 @@ private fun withActions(activity: MainActivity) {
     SimpleNotify.with(activity)
         .asBigPicture {
             id = notifyId
-            title = "Dina Corruptuarte: Waykis case in the shadows"
-            text = "An alleged criminal network dedicated to influence peddling"
+            title = "No progress in the investigation of deaths in Dina's government."
+            text = "Organizations condemn lack of progress."
             summaryText =
-                "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+                "Families of the deceased from Dec 2022 to Mar 2023 seek justice and accountability."
             image = BitmapFactory.decodeStream(activity.assets.open("dina2.jpg"))
         }
         .addReplyAction {
@@ -92,11 +92,12 @@ private fun withProgress(activity: MainActivity) {
             delay(1000)
             SimpleNotify.with(activity)
                 .asBigPicture {
-                    title = "Dina Basurearte: With her phrase “Your mom!"
-                    text = "A never-before-seen response from a female president to the people"
-                    summaryText = if (progress < 100) "${100-progress} seconds left"
-                    else "Your request has been processed successfully"
-                    image = BitmapFactory.decodeStream(activity.assets.open("dina2.jpg"))
+                    title = "Dina Boluarte's case file"
+                    text =
+                        if (progress < 100) "Downloading investigations..." else "Investigations downloaded."
+                    summaryText = if (progress < 100) "${100 - progress} seconds left"
+                    else "Downloaded files. It's time to do something."
+                    image = BitmapFactory.decodeStream(activity.assets.open("dina_files.jpg"))
                     subText = if (progress < 100) "${progress}%" else "Complete download"
                 }
                 .progress {
@@ -114,11 +115,12 @@ private fun withIndeterminateProgress(activity: MainActivity) {
             delay(1000)
             SimpleNotify.with(activity)
                 .asBigPicture {
-                    title = "Dina Basurearte: With her phrase “Your mom!"
-                    text = "A never-before-seen response from a female president to the people"
-                    summaryText = if (progress < 100) "Please wait..."
-                    else "Your request has been processed successfully"
-                    image = BitmapFactory.decodeStream(activity.assets.open("dina2.jpg"))
+                    title = "Dina Boluarte's case file"
+                    text =
+                        if (progress < 100) "Downloading investigations..." else "Investigations downloaded."
+                    summaryText =
+                        if (progress < 100) "Please wait..." else "Downloaded files. It's time to do something."
+                    image = BitmapFactory.decodeStream(activity.assets.open("dina_files.jpg"))
                     subText = if (progress < 100) "Downloading..." else "Complete download"
                 }
                 .progress {

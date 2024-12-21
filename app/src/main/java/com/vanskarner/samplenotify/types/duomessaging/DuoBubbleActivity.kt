@@ -12,21 +12,22 @@ import kotlinx.coroutines.launch
 //This is just a very simple example of the bubble content.
 internal class DuoBubbleActivity : BaseActivity() {
     companion object {
-        private fun chooseRandomPhrase(): String {
+        private fun chooseDinaPhrases(): String {
             val phrases = listOf(
-                "El éxito es la suma de pequeños",
-                "La vida es como andar en bicicleta",
-                "Nunca es demasiado tarde para ser quien",
-                "El único límite para nuestros",
-                "La creatividad es la inteligencia divirtiéndose.",
-                "La mejor forma de predecir el futuro es crearlo."
+                "Your mom...",
+                "My cat rum rum...",
+                "I'm not here for your tears",
+                "Those who commit crimes do so because they do not have an income, surely.",
+                "Peruvian families can eat with only 10 soles.",
+                "Stop making up false stories or we will have a Pinocchio collection.",
+                "I greet my friend, my wayki, the governor of Ayacucho. It's nice my rolex."
             )
             return phrases.random()
         }
 
         fun duoBubbleMsgSamples(): ArrayList<NotifyMessaging> {
             return arrayListOf(
-                NotifyMessaging.ContactMsg(chooseRandomPhrase(), System.currentTimeMillis())
+                NotifyMessaging.ContactMsg(chooseDinaPhrases(), System.currentTimeMillis())
             )
         }
     }
@@ -59,7 +60,7 @@ internal class DuoBubbleActivity : BaseActivity() {
                 lifecycleScope.launch {
                     delay(2000)
                     val contactMsg =
-                        NotifyMessaging.ContactMsg(chooseRandomPhrase(), System.currentTimeMillis())
+                        NotifyMessaging.ContactMsg(chooseDinaPhrases(), System.currentTimeMillis())
                     sendMsg(contactMsg)
                 }
             }
