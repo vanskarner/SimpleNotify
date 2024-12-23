@@ -50,10 +50,10 @@ private fun withDetails(activity: MainActivity) {
             id = 50
             tag = "CUSTOM_DESIGN_TAG"
             smallIcon = R.drawable.baseline_handshake_24
-            largeIcon = BitmapFactory.decodeStream(activity.assets.open("dina2.jpg"))
+            largeIcon = BitmapFactory.decodeStream(activity.assets.open("sample_avatar.jpg"))
             contentIntent = activity.pendingIntentToCloseNotification(id ?: 0)
             timeoutAfter = 5000L
-            subText = "Any SubText"
+            subText = "Some SubText"
             smallRemoteViews = {
                 RemoteViews(activity.packageName, R.layout.small_notification_1)
             }
@@ -144,7 +144,7 @@ private fun counterTypeNotification(
             largeRemoteViews = {
                 val largeView =
                     RemoteViews(activity.packageName, R.layout.large_notification_2)
-                val image = BitmapFactory.decodeStream(activity.assets.open("dina2.jpg"))
+                val image = BitmapFactory.decodeStream(activity.assets.open("offers-svgrepo-com.png"))
                 val titleMsg = activity.getString(R.string.custom_notification_msg_3)
                 largeView.setTextViewText(R.id.notification_timer, time)
                 largeView.setTextViewText(R.id.notification_title, titleMsg)
