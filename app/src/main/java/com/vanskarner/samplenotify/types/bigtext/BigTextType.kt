@@ -32,9 +32,9 @@ private fun basic(activity: MainActivity) {
     SimpleNotify.with(activity)
         .asBigText {
             title = "Dina Basurearte: With her phrase “Your mom!"
-            text = "A never-before-seen response from a female president to the people"
+            text = "Dina responds to citizen with: your mom!"
             bigText =
-                "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
+                "Peru's President Dina Boluarte replied \"your mom\" to a citizen who called her \"corrupt\" during the 203rd independence anniversary parade. She remained smiling, raised her hand, and continued thanking the audience despite the incident."
         }
         .show()
 }
@@ -51,8 +51,8 @@ private fun withDetails(activity: MainActivity) {
             title = "Dina Balearte: Order with bullets and promotions"
             text = "Promotions after repression, a touch of presidential irony."
             bigText =
-                "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
-            subText = "Any SubText"
+                "Despite denying under oath any direct contact with commanders, President Boluarte met with military and police chiefs during protests, praised security forces, vilified protesters without proof, and promoted officials tied to deadly operations instead of demanding accountability."
+            subText = "Trends"
         }
         .show()
 }
@@ -65,7 +65,7 @@ private fun withActions(activity: MainActivity) {
             title = "Dina Corruptuarte: Waykis case in the shadows"
             text = "An alleged criminal network dedicated to influence peddling"
             bigText =
-                "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
+                "The \"Los Waykis in the shadows\" case has drawn significant attention in Peru. Judge Richard Concepción Carhuancho ordered 36 months of preventive detention for Nicanor Boluarte, the president’s brother, for alleged ties to a criminal group influencing political appointments."
             subText = "Summary Text"
         }
         .addReplyAction {
@@ -90,10 +90,10 @@ private fun withProgress(activity: MainActivity) {
             delay(1000)
             SimpleNotify.with(activity)
                 .asBigText {
-                    title = "Dina Basurearte: With her phrase “Your mom!"
-                    text = "A never-before-seen response from a female president to the people"
-                    bigText = if (progress < 100) "${100-progress} seconds left, please wait..."
-                    else "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
+                    title = "Downloading Dina's File"
+                    text = "5 Investigations in less than 2 years."
+                    bigText = if (progress < 100) "${100 - progress} seconds left, please wait..."
+                    else "Investigations downloaded: These include charges of abandonment of office, alleged corruption, deaths and massacres during protests, cover-up of a fugitive, and secret agreements with former National Prosecutor 'Vane'"
                     subText = if (progress < 100) "${progress}%" else "Complete download"
                 }
                 .progress {
@@ -111,10 +111,11 @@ private fun withIndeterminateProgress(activity: MainActivity) {
             delay(1000)
             SimpleNotify.with(activity)
                 .asBigText {
-                    title = "Dina Basurearte: With her phrase “Your mom!"
-                    text = "A never-before-seen response from a female president to the people"
-                    bigText = if (progress < 100) "Please wait while your request is being processed..."
-                        else "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
+                    title = "Downloading Dina's File"
+                    text = "5 Investigations in less than 2 years."
+                    bigText =
+                        if (progress < 100) "Please wait while your request is being processed..."
+                        else "Investigations downloaded: These include charges of abandonment of office, alleged corruption, deaths and massacres during protests, cover-up of a fugitive, and secret agreements with former National Prosecutor 'Vane'"
                     subText = if (progress < 100) "Downloading..." else "Complete download"
                 }
                 .progress {
