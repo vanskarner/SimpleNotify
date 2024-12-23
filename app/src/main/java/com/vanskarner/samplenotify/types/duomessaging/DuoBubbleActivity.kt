@@ -20,7 +20,7 @@ internal class DuoBubbleActivity : BaseActivity() {
                 "Those who commit crimes do so because they do not have an income, surely.",
                 "Peruvian families can eat with only 10 soles.",
                 "Stop making up false stories or we will have a Pinocchio collection.",
-                "I greet my friend, my wayki, the governor of Ayacucho. It's nice my rolex."
+                "I greet my friend, my wayki, the governor of Ayacucho. The Rolex he gave me is nice."
             )
             return phrases.random()
         }
