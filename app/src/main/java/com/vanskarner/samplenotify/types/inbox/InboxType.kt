@@ -31,9 +31,13 @@ fun showInboxTypes(activity: MainActivity, binding: MainActivityBinding) {
 private fun basic(activity: MainActivity) {
     SimpleNotify.with(activity)
         .asInbox {
-            title = "Dina Basurearte: With her phrase “Your mom!"
-            text = "A never-before-seen response from a female president to the people"
-            lines = arrayListOf("My item One", "My item Second", "My item Third", "My item Four")
+            title = "3 New mails from Dina"
+            text = "3 new messages from the unpresentable"
+            lines = arrayListOf(
+                "Cover-up of fugitive Cerrón.",
+                "Cover-up of fugitive Nicanor.",
+                "Work to favor The Pact."
+            )
         }
         .show()
 }
@@ -44,12 +48,16 @@ private fun withDetails(activity: MainActivity) {
             id = 80
             tag = "INBOX_TAG"
             smallIcon = R.drawable.baseline_handshake_24
-            largeIcon = BitmapFactory.decodeStream(activity.assets.open("dina2.jpg"))
+            largeIcon = BitmapFactory.decodeStream(activity.assets.open("dina1.jpg"))
             contentIntent = activity.pendingIntentToCloseNotification(id ?: 0)
             timeoutAfter = 5000L
-            title = "Dina Balearte: Order with bullets and promotions"
-            text = "Promotions after repression, a touch of presidential irony."
-            lines = arrayListOf("My item One", "My item Second", "My item Third", "My item Four")
+            title = "3 New mails from Dina"
+            text = "3 new messages from the unpresentable"
+            lines = arrayListOf(
+                "Cover-up of fugitive Cerrón.",
+                "Cover-up of fugitive Nicanor.",
+                "Work to favor The Pact."
+            )
         }
         .show()
 }
@@ -59,9 +67,13 @@ private fun withActions(activity: MainActivity) {
     SimpleNotify.with(activity)
         .asInbox {
             id = notifyId
-            title = "Dina Corruptuarte: Waykis case in the shadows"
-            text = "An alleged criminal network dedicated to influence peddling"
-            lines = arrayListOf("My item One", "My item Second", "My item Third", "My item Four")
+            title = "3 New mails from Dina"
+            text = "3 new messages from the unpresentable"
+            lines = arrayListOf(
+                "Cover-up of fugitive Cerrón.",
+                "Cover-up of fugitive Nicanor.",
+                "Work to favor The Pact."
+            )
         }
         .addReplyAction {
             title = "Respond"
@@ -69,11 +81,7 @@ private fun withActions(activity: MainActivity) {
             remote = RemoteInput.Builder(REMOTE_INPUT_KEY).setLabel("response").build()
         }
         .addAction {
-            title = "Impeachment"
-            pending = activity.pendingIntentToCloseNotification(notifyId)
-        }
-        .addAction {
-            title = "Report"
+            title = "Archive"
             pending = activity.pendingIntentToCloseNotification(notifyId)
         }
         .show()
@@ -85,14 +93,15 @@ private fun withProgress(activity: MainActivity) {
             delay(1000)
             SimpleNotify.with(activity)
                 .asInbox {
-                    title = "Dina Basurearte: With her phrase “Your mom!"
+                    title = "100 New mails from The Pact"
                     subText = if (progress < 100) "${progress}%" else "Messages loaded"
-                    text = "A never-before-seen response from a female president to the people"
+                    text = "New messages for the 2025 plan"
                     lines = if (progress < 100) arrayListOf() else arrayListOf(
-                        "My item One",
-                        "My item Second",
-                        "My item Third",
-                        "My item Four"
+                        "Other 96 messages...",
+                        "Continue favoring crime to keep the population busy.",
+                        "Capture the voting system.",
+                        "Deactivate research units.",
+                        "Protecting Congressmen."
                     )
                 }
                 .progress {
@@ -110,14 +119,15 @@ private fun withIndeterminateProgress(activity: MainActivity) {
             delay(1000)
             SimpleNotify.with(activity)
                 .asInbox {
-                    title = "Dina Basurearte: With her phrase “Your mom!"
+                    title = "100 New mails from The Pact"
                     subText = if (progress < 100) "Waiting messages..." else "Messages loaded"
-                    text = "A never-before-seen response from a female president to the people"
+                    text = "New messages for the 2025 plan"
                     lines = if (progress < 100) arrayListOf() else arrayListOf(
-                        "My item One",
-                        "My item Second",
-                        "My item Third",
-                        "My item Four"
+                        "Other 96 messages...",
+                        "Continue favoring crime to keep the population busy.",
+                        "Capture the voting system.",
+                        "Deactivate research units.",
+                        "Protecting Congressmen."
                     )
                 }
                 .progress {
