@@ -28,8 +28,8 @@ private fun withDifferentStyles(activity: MainActivity) {
 private fun showBasicType(activity: MainActivity) {
     SimpleNotify.with(activity)
         .asBasic {
-            title = "Dina Basurearte: With her phrase “Your mom!"
-            text = "A never-before-seen response from a female president to the people"
+            title = "Dina Balearte: Order with bullets and promotions"
+            text = "Promotions after repression, a touch of presidential irony."
         }
         .extras {
             groupKey = "Samples"
@@ -40,11 +40,11 @@ private fun showBasicType(activity: MainActivity) {
 private fun showBigPictureType(activity: MainActivity) {
     SimpleNotify.with(activity)
         .asBigPicture {
-            title = "Dina Basurearte: With her phrase “Your mom!"
-            text = "A never-before-seen response from a female president to the people"
+            title = "Dina Miseriarte romanticizes poverty."
+            text = "Praises cooking with S/10"
             summaryText =
-                "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-            image = BitmapFactory.decodeStream(activity.assets.open("dina2.jpg"))
+                "Dina celebrates cooking with S/10, while in Palacio they spend S/4000 a day on food."
+            image = BitmapFactory.decodeStream(activity.assets.open("dina_10soles.jpg"))
         }
         .extras {
             groupKey = "Samples"
@@ -56,9 +56,9 @@ private fun showBigTextType(activity: MainActivity) {
     SimpleNotify.with(activity)
         .asBigText {
             title = "Dina Basurearte: With her phrase “Your mom!"
-            text = "A never-before-seen response from a female president to the people"
+            text = "Dina responds to citizen with: your mom!"
             bigText =
-                "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
+                "Peru's President Dina Boluarte replied \"your mom\" to a citizen who called her \"corrupt\" during the 203rd independence anniversary parade. She remained smiling, raised her hand, and continued thanking the audience despite the incident."
         }
         .extras {
             groupKey = "Samples"
@@ -69,17 +69,21 @@ private fun showBigTextType(activity: MainActivity) {
 private fun stacking(activity: MainActivity) {
     SimpleNotify.with(activity)
         .asInbox {
-            title = "Dina Basurearte: With her phrase “Your mom!"
-            text = "A never-before-seen response from a female president to the people"
-            lines = arrayListOf("My item One", "My item Second", "My item Third", "My item Four")
+            title = "3 New mails from Dina"
+            text = "3 new messages from the unpresentable"
+            lines = arrayListOf(
+                "Cover-up of fugitive Cerrón.",
+                "Cover-up of fugitive Nicanor.",
+                "Work to favor The Pact."
+            )
         }
         .extras {
             groupKey = "Samples"
         }
         .stackable {
             smallIcon = R.drawable.baseline_handshake_24
-            title = "My Summary"
-            summaryText = "My Group"
+            title = "The Corrupt Pact"
+            summaryText = "Some Group"
         }
         .show()
 }
