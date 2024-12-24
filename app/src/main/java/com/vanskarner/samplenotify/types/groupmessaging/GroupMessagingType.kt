@@ -46,12 +46,18 @@ private fun basic(activity: MainActivity) {
                 NotifyMessaging.ContactMsg(
                     "Damm, Morgan, now that you've said it, can you say it again?",
                     System.currentTimeMillis() - (2 * 60 * 1000),
-                    Person.Builder().setName("Max").build()
+                    Person.Builder()
+                        .setName("Dina")
+                        .setIcon(activity.iconFromAssets("dina1.jpg"))
+                        .build()
                 ),
                 NotifyMessaging.ContactMsg(
                     "Human rights are for people, not for rats.",
                     System.currentTimeMillis() - (1 * 60 * 1000),
-                    Person.Builder().setName("Albert").build()
+                    Person.Builder()
+                        .setName("Morgan")
+                        .setIcon(activity.iconFromAssets("morgan.jpg"))
+                        .build()
                 )
             )
         }
@@ -95,7 +101,7 @@ private fun withImages(activity: MainActivity) {
                     System.currentTimeMillis() - (1 * 60 * 1000),
                     Person.Builder()
                         .setName("Morgan")
-                        .setIcon(activity.iconFromAssets("morgan_rata.jpg"))
+                        .setIcon(activity.iconFromAssets("morgan.jpg"))
                         .build()
                 ).setData(
                     "image/jpeg",

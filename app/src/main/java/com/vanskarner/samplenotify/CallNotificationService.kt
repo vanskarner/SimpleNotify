@@ -54,7 +54,7 @@ class CallNotificationService : Service() {
             "screening" -> SimpleNotify.with(this)
                 .asCall {
                     type = "screening"
-                    val image = BitmapFactory.decodeStream(assets.open("morgan_rata.jpg"))
+                    val image = BitmapFactory.decodeStream(assets.open("morgan.jpg"))
                     caller = Person.Builder()
                         .setName("Morgan Rata")
                         .setIcon(IconCompat.createWithBitmap(image))
