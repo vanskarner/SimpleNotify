@@ -35,24 +35,24 @@ private fun basic(activity: MainActivity) {
             id = notifyId
             you = Person.Builder()
                 .setName("You")
-                .setIcon(activity.iconFromAssets("dina1.jpg"))
+                .setIcon(activity.iconFromAssets("sample_avatar.jpg"))
                 .build()
             contact = Person.Builder()
-                .setName("Ministroll")
-                .setIcon(activity.iconFromAssets("ministroll.jpg"))
+                .setName("Dina")
+                .setIcon(activity.iconFromAssets("dina1.jpg"))
                 .build()
             messages = arrayListOf(
                 NotifyMessaging.YourMsg(
-                    "Help me find my rolex...",
+                    " President, what do you think about the fact that most people call you 'Dina the Killer'?",
                     System.currentTimeMillis() - (3 * 60 * 1000)
                 ),
                 NotifyMessaging.ContactMsg(
-                    "I'm sorry, but I already supported her by making Harvey Colchado fall.",
+                    "I ask those who shout these words, who have killed our brothers in these violent demonstrations?",
                     System.currentTimeMillis() - (1 * 60 * 1000)
                 ),
-                NotifyMessaging.YourMsg(
-                    "Only for this detail you are Minister, otherwise it would be a different story.",
-                    System.currentTimeMillis()
+                NotifyMessaging.ContactMsg(
+                    "It was they themselves",
+                    System.currentTimeMillis() - (1 * 60 * 1000)
                 )
             )
         }
@@ -75,20 +75,20 @@ private fun withImages(activity: MainActivity) {
             id = notifyId
             you = Person.Builder()
                 .setName("You")
-                .setIcon(activity.iconFromAssets("dina1.jpg"))
+                .setIcon(activity.iconFromAssets("sample_avatar.jpg"))
                 .build()
             contact = Person.Builder()
-                .setName("Ministroll")
-                .setIcon(activity.iconFromAssets("ministroll.jpg"))
+                .setName("Dina")
+                .setIcon(activity.iconFromAssets("dina1.jpg"))
                 .build()
             messages = arrayListOf(
                 NotifyMessaging.YourMsg(
-                    "Help me find my rolex...",
+                    "President, the situation is tough, there's a lack of money, and insecurity is very high.",
                     System.currentTimeMillis() - (3 * 60 * 1000)
                 ),
                 NotifyMessaging.ContactMsg(
-                    "I'm sorry, but I already supported her by making Harvey Colchado fall.",
-                    System.currentTimeMillis() - (1 * 60 * 1000)
+                    "What do you think of my Rolex, isn't it pretty?",
+                    System.currentTimeMillis()
                 ).setData(
                     "image/jpeg",
                     "content://com.vanskarner.samplenotify/photo/rolex_dina.jpg".toUri()

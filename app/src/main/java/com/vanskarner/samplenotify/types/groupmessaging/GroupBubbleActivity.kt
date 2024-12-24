@@ -15,22 +15,23 @@ internal class GroupBubbleActivity : BaseActivity() {
     companion object {
         val contactPhrases1 = Pair(
             Person.Builder().setName("Dina Balearte").build(), listOf(
-                "El éxito es la suma de pequeños",
-                "La vida es como andar en bicicleta",
-                "Nunca es demasiado tarde para ser quien",
-                "El único límite para nuestros",
-                "La creatividad es la inteligencia",
-                "La mejor forma de predecir"
+                "Your mom...",
+                "My cat rum rum...",
+                "I'm not here for your tears",
+                "Those who commit crimes do so because they do not have an income, surely.",
+                "Peruvian families can eat with only 10 soles.",
+                "Stop making up false stories or we will have a Pinocchio collection.",
+                "I greet my friend, my wayki, the governor of Ayacucho. The Rolex he gave me is nice."
             )
         )
         val contactPhrases2 = Pair(
             Person.Builder().setName("Ministroll").build(), listOf(
-                "El éxito es la suma de pequeños",
-                "La vida es como andar en bicicleta",
-                "Nunca es demasiado tarde para ser quien",
-                "El único límite para nuestros",
-                "La creatividad es la inteligencia",
-                "La mejor forma de predecir"
+                "To go up, anything goes",
+                "Keep that idiot from 'La Encerrona' in check.",
+                "I do not respond to qualifiers, I respond with my work.",
+                "Have you come to interview or rate me?",
+                "I don’t want to be an instructor. I want to be President, man!",
+                "It's true, there are still deaths, but there are fewer robberies."
             )
         )
 

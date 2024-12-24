@@ -33,23 +33,23 @@ private fun basic(activity: MainActivity) {
     SimpleNotify.with(activity)
         .asGroupMessaging {
             id = notifyId
-            conversationTitle = "Titulo del Grupo"
+            conversationTitle = "Government slips"
             you = Person.Builder()
                 .setName("You")
-                .setIcon(activity.iconFromAssets("dina1.jpg"))
+                .setIcon(activity.iconFromAssets("sample_avatar.jpg"))
                 .build()
             messages = arrayListOf(
                 NotifyMessaging.YourMsg(
-                    "Do you like my rolex?",
+                    "Dina, your Minister of Education said that the protesters in your government are rats and have no human rights.",
                     System.currentTimeMillis() - (3 * 60 * 1000)
                 ),
                 NotifyMessaging.ContactMsg(
-                    "Mensaje de Max",
+                    "Damm, Morgan, now that you've said it, can you say it again?",
                     System.currentTimeMillis() - (2 * 60 * 1000),
                     Person.Builder().setName("Max").build()
                 ),
                 NotifyMessaging.ContactMsg(
-                    "Algun Otro mensaje de Albert",
+                    "Human rights are for people, not for rats.",
                     System.currentTimeMillis() - (1 * 60 * 1000),
                     Person.Builder().setName("Albert").build()
                 )
@@ -72,28 +72,34 @@ private fun withImages(activity: MainActivity) {
     SimpleNotify.with(activity)
         .asGroupMessaging {
             id = notifyId
-            conversationTitle = "Titulo del Grupo"
+            conversationTitle = "Government slips"
             you = Person.Builder()
                 .setName("You")
-                .setIcon(activity.iconFromAssets("dina1.jpg"))
+                .setIcon(activity.iconFromAssets("sample_avatar.jpg"))
                 .build()
             messages = arrayListOf(
                 NotifyMessaging.YourMsg(
-                    "Do you like my rolex?",
+                    "Dina, your Minister of Education said that the protesters in your government are rats and have no human rights.",
                     System.currentTimeMillis() - (3 * 60 * 1000)
                 ),
                 NotifyMessaging.ContactMsg(
-                    "Mensaje de Max",
+                    "Damm, Morgan, now that you've said it, can you say it again?",
                     System.currentTimeMillis() - (2 * 60 * 1000),
-                    Person.Builder().setName("Max").build()
+                    Person.Builder()
+                        .setName("Dina")
+                        .setIcon(activity.iconFromAssets("dina1.jpg"))
+                        .build()
                 ),
                 NotifyMessaging.ContactMsg(
-                    "Algun Otro mensaje de Albert",
+                    "Human rights are for people, not for rats.",
                     System.currentTimeMillis() - (1 * 60 * 1000),
-                    Person.Builder().setName("Albert").build()
+                    Person.Builder()
+                        .setName("Morgan")
+                        .setIcon(activity.iconFromAssets("morgan_rata.jpg"))
+                        .build()
                 ).setData(
                     "image/jpeg",
-                    "content://com.vanskarner.samplenotify/photo/rolex_dina.jpg".toUri()
+                    "content://com.vanskarner.samplenotify/photo/ratas.jpg".toUri()
                 )
             )
         }
@@ -114,7 +120,7 @@ private fun withBubbles(activity: MainActivity) {
     SimpleNotify.with(activity)
         .asGroupMessaging {
             id = notifyId
-            conversationTitle = "Titulo del Grupo"
+            conversationTitle = "Authoritarian Coalition"
             you = Person.Builder()
                 .setName("You")
                 .setIcon(activity.iconFromAssets("sample_avatar.jpg"))
@@ -130,7 +136,7 @@ private fun withBubbles(activity: MainActivity) {
                     .setData(contentUri),
                 activity.flagUpdateCurrent()
             )
-            val groupIcon = activity.iconFromAssets("dina1.jpg")
+            val groupIcon = activity.iconFromAssets("government_chat_group.png")
             bubble = NotificationCompat.BubbleMetadata.Builder(bubbleIntent, groupIcon)
                 .setDesiredHeight(500)
                 .setAutoExpandBubble(true)
@@ -144,7 +150,7 @@ private fun withBubbles(activity: MainActivity) {
                         .setAction(Intent.ACTION_VIEW)
                         .setData(contentUri)
                 )
-                .setShortLabel("Nombre del grupo")
+                .setShortLabel("Authoritarian Coalition")
                 .setIcon(groupIcon)
                 .build()
         }
