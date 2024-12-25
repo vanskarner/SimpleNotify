@@ -126,6 +126,7 @@ private fun withBubbles(activity: MainActivity) {
     SimpleNotify.with(activity)
         .asGroupMessaging {
             id = notifyId
+            contentIntent = activity.pendingIntentToCloseNotification(id ?: 0)
             conversationTitle = "Authoritarian Coalition"
             you = Person.Builder()
                 .setName("You")

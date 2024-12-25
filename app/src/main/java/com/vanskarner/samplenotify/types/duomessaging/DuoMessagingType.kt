@@ -112,6 +112,7 @@ private fun withBubbles(activity: MainActivity) {
     SimpleNotify.with(activity)
         .asDuoMessaging {
             id = notifyId
+            contentIntent = activity.pendingIntentToCloseNotification(id ?: 0)
             you = Person.Builder()
                 .setName("You")
                 .setIcon(activity.iconFromAssets("sample_avatar.jpg"))
