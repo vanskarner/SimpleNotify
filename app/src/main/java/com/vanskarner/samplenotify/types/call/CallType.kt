@@ -2,7 +2,6 @@ package com.vanskarner.samplenotify.types.call
 
 import android.content.Intent
 import android.widget.ArrayAdapter
-import com.vanskarner.samplenotify.CallNotificationService
 import com.vanskarner.samplenotify.MainActivity
 import com.vanskarner.samplenotify.databinding.MainActivityBinding
 

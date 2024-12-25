@@ -83,7 +83,7 @@ private fun stacking(activity: MainActivity) {
         .stackable {
             smallIcon = R.drawable.baseline_handshake_24
             title = "The Corrupt Pact"
-            summaryText = "Some Group"
+            summaryText = "Important"
         }
         .show()
 }

@@ -92,7 +92,7 @@ private fun withProgress(activity: MainActivity) {
             delay(1000)
             SimpleNotify.with(activity)
                 .asBigPicture {
-                    title = "Dina Boluarte's case file"
+                    title = if (progress < 100) "Downloading Dina's File" else "Dina Files Available"
                     text =
                         if (progress < 100) "Downloading investigations..." else "Investigations downloaded."
                     summaryText = if (progress < 100) "${100 - progress} seconds left"
@@ -115,7 +115,7 @@ private fun withIndeterminateProgress(activity: MainActivity) {
             delay(1000)
             SimpleNotify.with(activity)
                 .asBigPicture {
-                    title = "Dina Boluarte's case file"
+                    title = if (progress < 100) "Downloading Dina's File" else "Dina Files Available"
                     text =
                         if (progress < 100) "Downloading investigations..." else "Investigations downloaded."
                     summaryText =

@@ -66,7 +66,7 @@ private fun withActions(activity: MainActivity) {
             text = "An alleged criminal network dedicated to influence peddling"
             bigText =
                 "The \"Los Waykis in the shadows\" case has drawn significant attention in Peru. Judge Richard Concepción Carhuancho ordered 36 months of preventive detention for Nicanor Boluarte, the president’s brother, for alleged ties to a criminal group influencing political appointments."
-            subText = "Summary Text"
+            subText = "Trends"
         }
         .addReplyAction {
             title = "Respond"
@@ -90,7 +90,7 @@ private fun withProgress(activity: MainActivity) {
             delay(1000)
             SimpleNotify.with(activity)
                 .asBigText {
-                    title = "Downloading Dina's File"
+                    title = if (progress < 100) "Downloading Dina's File" else "Dina Files Available"
                     text = "5 Investigations in less than 2 years."
                     bigText = if (progress < 100) "${100 - progress} seconds left, please wait..."
                     else "Investigations downloaded: These include charges of abandonment of office, alleged corruption, deaths and massacres during protests, cover-up of a fugitive, and secret agreements with former National Prosecutor 'Vane'"
@@ -111,7 +111,7 @@ private fun withIndeterminateProgress(activity: MainActivity) {
             delay(1000)
             SimpleNotify.with(activity)
                 .asBigText {
-                    title = "Downloading Dina's File"
+                    title = if (progress < 100) "Downloading Dina's File" else "Dina Files Available"
                     text = "5 Investigations in less than 2 years."
                     bigText =
                         if (progress < 100) "Please wait while your request is being processed..."

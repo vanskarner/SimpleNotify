@@ -1,4 +1,4 @@
-package com.vanskarner.samplenotify
+package com.vanskarner.samplenotify.types.call
 
 import android.app.PendingIntent
 import android.app.Service
@@ -7,7 +7,7 @@ import android.graphics.BitmapFactory
 import android.os.IBinder
 import androidx.core.app.Person
 import androidx.core.graphics.drawable.IconCompat
-import com.vanskarner.samplenotify.types.call.EXTRA_CALL_TYPE
+import com.vanskarner.samplenotify.R
 import com.vanskarner.simplenotify.SimpleNotify
 
 class CallNotificationService : Service() {
@@ -56,7 +56,7 @@ class CallNotificationService : Service() {
                     type = "screening"
                     val image = BitmapFactory.decodeStream(assets.open("morgan.jpg"))
                     caller = Person.Builder()
-                        .setName("Morgan Rata")
+                        .setName("Morgan")
                         .setIcon(IconCompat.createWithBitmap(image))
                         .build()
                     answer = pendingIntentionHangupCall()
