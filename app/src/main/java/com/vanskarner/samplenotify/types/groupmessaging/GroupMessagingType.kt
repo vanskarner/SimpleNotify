@@ -132,7 +132,7 @@ private fun withBubbles(activity: MainActivity) {
                 .setName("You")
                 .setIcon(activity.iconFromAssets("sample_avatar.jpg"))
                 .build()
-            messages = GroupBubbleActivity.groupBubbleMsgSamples()
+            messages = GroupBubbleActivity.groupBubbleMsgSamples(activity)
             val contentUri =
                 "https://android.example.com/chat/yourGroupChatId".toUri()
             val bubbleIntent = PendingIntent.getActivity(

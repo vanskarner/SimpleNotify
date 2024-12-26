@@ -45,6 +45,7 @@ internal class CallNotify(
                 .setCategory(NotificationCompat.CATEGORY_CALL)
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE))
                 .setVibrate(longArrayOf(0, 500, 1000, 500))
+                .setOngoing(true)
                 .setStyle(style)
                 .addPerson(secondCaller)
         }

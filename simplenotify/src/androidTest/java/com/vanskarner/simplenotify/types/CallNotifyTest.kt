@@ -29,6 +29,7 @@ import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -348,6 +349,7 @@ class CallNotifyTest {
             Icon::class.java
         )
         val expectedSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
+        val actualOngoing = actualNotification.flags and NotificationCompat.FLAG_ONGOING_EVENT != 0
 
         assertEquals(expectedCallType, actualCallType)
         when (expectedCallType) {
@@ -396,6 +398,7 @@ class CallNotifyTest {
         assertEquals(expectedData.verificationText, actualVerificationText)
         assertNotNull(actualVerificationIcon)
         assertNotificationSound(expectedSound, actualNotification)
+        assertTrue(actualOngoing)
     }
 
 }
