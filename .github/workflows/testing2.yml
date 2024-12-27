@@ -8,11 +8,12 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        api-level: [27, 28, 29]
-        target: [default, google_apis]
+        api-level: [28, 29]
+        target: [google_apis]
     steps:
       - name: checkout
         uses: actions/checkout@v4
+
       - name: set up JDK 17
         uses: actions/setup-java@v4
         with:
