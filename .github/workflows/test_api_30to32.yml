@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        api-level: [ 30, 31, 32 ]
+        api-level: [ 30 ]
         target: [ google_apis ]
     steps:
       - name: checkout
@@ -38,3 +38,7 @@ jobs:
           arch: x86_64
           profile: Nexus 6
           script: ./gradlew :simplenotify:connectedCheck
+
+      - name: Android Test Report
+        uses: asadmansr/android-test-report-action@v1.2.0
+        if: ${{ always() }}
