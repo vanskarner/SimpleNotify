@@ -30,6 +30,15 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
+      - name: Debug environment
+        run: |
+          echo "JAVA Version:"
+          java -version
+          echo "Gradle Version:"
+          ./gradlew --version
+          echo "Available KVM Devices:"
+          ls -l /dev/kvm || echo "/dev/kvm not found!"          
+
       - name: run tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -39,6 +48,10 @@ jobs:
           profile: Nexus 6
           script: ./gradlew :simplenotify:connectedCheck
 
-      - name: Android Test Report
-        uses: asadmansr/android-test-report-action@v1.2.0
-        if: ${{ always() }}
+      - name: Capture logs on failure
+        if: failure()
+        run: |
+          echo "Gradle Build Logs:"
+          cat $(find . -name "*.log" | head -n 1) || echo "No build logs found."
+          echo "Logcat Output:"
+          adb logcat -d || echo "ADB logcat not available."
