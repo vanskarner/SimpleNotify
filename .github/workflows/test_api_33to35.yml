@@ -9,7 +9,7 @@ jobs:
     strategy:
       matrix:
         api-level: [ 33, 34, 35 ]
-        target: [ google_apis ]
+        target: [ playstore ]
     steps:
       - name: checkout
         uses: actions/checkout@v4
@@ -30,11 +30,27 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
+      - name: Debug environment
+        run: |
+          echo "JAVA Version:"
+          java -version
+          echo "Gradle Version:"
+          ./gradlew --version
+          echo "Available KVM Devices:"
+          ls -l /dev/kvm || echo "/dev/kvm not found!"          
+
       - name: run tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
           target: ${{ matrix.target }}
           arch: x86_64
-          profile: Nexus 6
+          profile: pixel_3a
           script: ./gradlew :simplenotify:connectedCheck
+
+      - name: Upload test report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-test-report-api_${{ matrix.api-level }}
+          path: simplenotify/build/reports/androidTests/connected/debug/

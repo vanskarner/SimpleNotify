@@ -1,4 +1,4 @@
-name: Android Testing 30-32
+name: Android Testing 26-27
 
 on:
   workflow_call:
@@ -8,8 +8,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        api-level: [ 30, 31, 32 ]
-        target: [ playstore ]
+        api-level: [ 26, 27 ]
+        target: [ google_apis ]
     steps:
       - name: checkout
         uses: actions/checkout@v4
@@ -44,8 +44,8 @@ jobs:
         with:
           api-level: ${{ matrix.api-level }}
           target: ${{ matrix.target }}
-          arch: x86_64
-          profile: pixel_3a
+          arch: x86
+          profile: Nexus 6
           script: ./gradlew :simplenotify:connectedCheck
 
       - name: Upload test report
