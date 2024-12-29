@@ -3,7 +3,6 @@
     <string name="description_send">Send</string>
     <string name="hint_input">Type a message…</string>
     <string name="permission_message">This app requires the notification permission.</string>
-    <string name="permission_rationale">Please grant the notification permission so that the app can demonstrate usage of the Notification APIs.</string>
     <string name="permission_grant">GRANT</string>
     <string name="reset_options">Reset Options</string>
     <string name="title_small_notification">Small notification, showing only a title</string>

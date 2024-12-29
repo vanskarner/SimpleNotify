@@ -13,7 +13,6 @@
         android:text="@string/title_large_notification" />
 
     <TextView
-        android:id="@+id/notification_body"
         style="@style/TextAppearance.Compat.Notification.Line2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
