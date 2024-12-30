@@ -22,6 +22,8 @@ import com.vanskarner.simplenotify.internal.types.InvalidNotify
  * and customize notification behavior to suit various scenarios.
  *
  * @param context The context used to access system notification services.
+ *
+ * @author Luis H. Olazo
  */
 class NotifyConfig(private val context: Context) {
     private var data: Data? = null

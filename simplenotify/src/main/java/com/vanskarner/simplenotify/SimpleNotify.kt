@@ -8,6 +8,8 @@ import com.vanskarner.simplenotify.internal.NotifyChannel
  *
  * Simplifies creating notifications, ensuring compatibility across devices and API levels.
  * Enables composing notification styles tailored to different scenarios with minimal effort.
+ *
+ * @author Luis H. Olazo
  */
 class SimpleNotify {
 
