@@ -26,4 +26,4 @@ androidx-rules = { group = "androidx.test", name = "rules", version.ref = "rules
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 android-library = { id = "com.android.library", version.ref = "agp" }
-
+vanniktech-mavenPublish = { id = "com.vanniktech.maven.publish", version = "0.29.0" }
